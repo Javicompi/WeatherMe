@@ -2,7 +2,10 @@ package com.example.android.weatherme.ui.search
 
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
+import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +14,6 @@ import com.example.android.weatherme.R
 class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -30,9 +28,5 @@ class SearchFragment : Fragment() {
             textView.text = it
         })
         return root
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.options_menu, menu)
     }
 }
