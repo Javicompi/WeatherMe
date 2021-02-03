@@ -3,6 +3,20 @@
     <string name="title_list">List</string>
     <string name="title_current">Current</string>
     <string name="title_search">Search</string>
+    
+    <!-- List Fragment -->
+    <string name="no_data_list">No elements to show</string>
 
+    <!-- Current Fragment -->
+    <string name="no_data_current">No weather to show</string>
+
+    <!-- Search Fragment -->
     <string name="search_textfield_hint">City name</string>
+    <string name="search_min_characthers">Type at least 3 characters</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="location_not_found">Unable to get the location</string>
+    <string name="location_error">Error getting the location</string>
+
+    <!-- MainViewModel -->
+    <string name="no_internet_connection">Unable to connect to internet</string>
 </resources>

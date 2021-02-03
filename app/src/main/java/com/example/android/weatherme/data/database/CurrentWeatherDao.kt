@@ -18,8 +18,14 @@ interface CurrentWeatherDao {
     @Query("SELECT * FROM currents WHERE `key` = :key")
     suspend fun getCurrentByKey(key: Long): CurrentEntity
 
+    @Query("SELECT * FROM currents LIMIT 1")
+    suspend fun getFirstCurrent(): CurrentEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrent(currentEntity: CurrentEntity): Long
+
+    @Query("DELETE FROM currents WHERE `key` = :key")
+    suspend fun deleteCurrent(key: Long)
 
     @Query("DELETE FROM currents")
     suspend fun deleteCurrents()

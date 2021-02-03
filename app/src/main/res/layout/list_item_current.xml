@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        
+        <variable
+            name="clickListener"
+            type="com.example.android.weatherme.ui.list.CurrentListener" />
+        
+        <variable
+            name="current"
+            type="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/list_item_current_margin"
+        android:onClick="@{() -> clickListener.onClick(current)}">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            style="@style/Widget.MaterialComponents.CardView"
+            app:layout_constraintDimensionRatio="H,2:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:currentBackground="@{current.icon}"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/list_current_icon"
+            android:elevation="2dp"
+            android:currentIcon="@{current.icon}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintWidth_percent="0.25"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_current_cityName"
+            android:elevation="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/list_current_icon"
+            android:layout_margin="@dimen/small_margin"
+            android:textSize="@dimen/list_item_current_location_text"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+            android:text="@{current.cityName}"
+            tools:text="Gran Alacant"
+            tools:textColor="@color/white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

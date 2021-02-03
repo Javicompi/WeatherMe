@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.*
 
 
 private val retrofit = Retrofit.Builder()
@@ -19,7 +20,7 @@ interface WeatherApiService {
     suspend fun getCurrentWeatherByName(
         @Query("q") location: String,
         @Query("units") units: String = "standard",
-        @Query("lang") language: String = "en"
+        @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
 
     @GET("weather?appid=${Constants.API_KEY}")
@@ -27,7 +28,7 @@ interface WeatherApiService {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("units") units: String = "standard",
-        @Query("lang") language: String = "en"
+        @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
 }
 

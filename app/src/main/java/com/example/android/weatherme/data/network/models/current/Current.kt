@@ -28,7 +28,7 @@ fun Current.toEntity(): CurrentEntity {
                 weatherId = weather[0].id,
                 shortDescription = weather[0].main.capitalize(),
                 description = weather[0].description.capitalize(),
-                icon = weather[0].icon,
+                icon = "_" + weather[0].icon,
                 temp = main.temp.roundToInt(),
                 tempMin = main.temp.roundToInt(),
                 tempMax = main.tempMax.roundToInt(),
