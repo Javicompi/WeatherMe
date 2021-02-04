@@ -23,6 +23,7 @@ data class Current(
 
 fun Current.toEntity(): CurrentEntity {
         return CurrentEntity(
+                key = 0,
                 latitude = coord.lat,
                 longitude = coord.lon,
                 weatherId = weather[0].id,

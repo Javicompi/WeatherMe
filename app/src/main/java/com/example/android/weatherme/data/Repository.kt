@@ -13,7 +13,7 @@ import com.example.android.weatherme.data.preferences.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class Repository(private val database: WeatherDatabase, private val dataStore: Preferences) {
+class Repository(private val database: WeatherDatabase) {
 
     private val TAG = "Repository"
 
@@ -21,7 +21,6 @@ class Repository(private val database: WeatherDatabase, private val dataStore: P
         var id: Long
         withContext(Dispatchers.IO) {
             id = database.currentWeatherDao().insertCurrent(current)
-            dataStore.storeCurrentSelected(id)
         }
         return id
     }
@@ -34,31 +33,13 @@ class Repository(private val database: WeatherDatabase, private val dataStore: P
         }
     }
 
-    suspend fun getCurrentByKey(key: Long = 0L): Result<CurrentEntity> = withContext(Dispatchers.IO) {
+    suspend fun getCurrentByKey(key: Long): Result<CurrentEntity> = withContext(Dispatchers.IO) {
         try {
-            val current: CurrentEntity
-            if (key == 0L) {
-                val savedKey = dataStore.getCurrentSelected()
-                if (savedKey == 0L) {
-                    current = database.currentWeatherDao().getFirstCurrent()
-                    if (current.isSuccess()) {
-                        dataStore.storeCurrentSelected(current.key)
-                        return@withContext Result.Success(current)
-                    } else {
-                        return@withContext Result.Error("Not found")
-                    }
-                } else {
-                    current = database.currentWeatherDao().getCurrentByKey(savedKey)
-                    return@withContext Result.Success(current)
-                }
+            val current = database.currentWeatherDao().getCurrentByKey(key)
+            if (current.isSuccess()) {
+                return@withContext Result.Success(current)
             } else {
-                current = database.currentWeatherDao().getCurrentByKey(key)
-                if (current.isSuccess()) {
-                    dataStore.storeCurrentSelected(current.key)
-                    return@withContext Result.Success(current)
-                } else {
-                    return@withContext Result.Error("Not found")
-                }
+                return@withContext Result.Error("Not found")
             }
         } catch (exception: Exception) {
             return@withContext Result.Error(exception.localizedMessage)
@@ -67,12 +48,10 @@ class Repository(private val database: WeatherDatabase, private val dataStore: P
 
     suspend fun deleteCurrent(key: Long) {
         database.currentWeatherDao().deleteCurrent(key)
-        dataStore.storeCurrentSelected(0)
     }
 
     suspend fun deleteCurrents() = withContext(Dispatchers.IO) {
         database.currentWeatherDao().deleteCurrents()
-        dataStore.storeCurrentSelected(0)
     }
 
     suspend fun searchCurrentByName(name: String): Current {
@@ -113,7 +92,7 @@ class Repository(private val database: WeatherDatabase, private val dataStore: P
                     "Weather.db"
                 ).build()
                 val dataStore = Preferences(app)
-                Repository(database, dataStore).also {
+                Repository(database).also {
                     INSTANCE = it
                 }
             }

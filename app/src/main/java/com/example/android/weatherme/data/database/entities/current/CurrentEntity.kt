@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "currents")
 data class CurrentEntity(
     @PrimaryKey(autoGenerate = true)
-    var key: Long = 0,
+    var key: Long = -1,
     val latitude: Double,
     val longitude: Double,
     val weatherId: Int,

@@ -19,27 +19,23 @@ class MainViewModel(private val app: Application) : ViewModel() {
     private val TAG = MainViewModel::class.java.simpleName
 
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
-
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    private val repository: Repository
-
     val listFragmentViewState: MutableLiveData<ViewState> = MutableLiveData()
-
     val currentFragmentViewState: MutableLiveData<ViewState> = MutableLiveData()
 
     val currentList = MutableLiveData<List<CurrentEntity>>()
-
     val currentSelected = MutableLiveData<CurrentEntity>()
 
     val setShowSaveFab: LiveData<Boolean> = Transformations.map(currentSelected) {
-        Log.d(TAG, "currentSelected changed: ${it.key}")
-        it.key == 0L //&& !currentExists()
+        it != null && it.key == 0L
     }
 
     val setShowClearFab: LiveData<Boolean> = Transformations.map(currentSelected) {
-        it.key > 0L //&& currentExists()
+        it != null && it.key > 0L
     }
+
+    private val repository: Repository
 
     init {
         Log.d(TAG, "init")
@@ -47,8 +43,8 @@ class MainViewModel(private val app: Application) : ViewModel() {
         currentFragmentViewState.value = ViewState()
         repository = Repository.getRepository(app)
         loadCurrentList()
-        loadCurrentSelected()
-        Log.d(TAG, "showFab: ${setShowSaveFab.value}")
+        setCurrentViewState(State.NODATA)
+        Log.d(TAG, "currentSelected: ${currentSelected.value}")
     }
 
     private fun loadCurrentList() {
@@ -77,7 +73,7 @@ class MainViewModel(private val app: Application) : ViewModel() {
         }
     }
 
-    private fun loadCurrentSelected(key: Long = 0) {
+    private fun loadCurrentSelected(key: Long) {
         Log.d(TAG, "loadCurrentSelected")
         setCurrentViewState(State.LOADING)
         viewModelScope.launch {
@@ -85,8 +81,8 @@ class MainViewModel(private val app: Application) : ViewModel() {
             when (result) {
                 is Result.Success<CurrentEntity> -> {
                     Log.d(TAG, "loadCurrentSelected Success")
-                    currentSelected.value = result.data
                     setCurrentViewState(State.LOADED)
+                    currentSelected.value = result.data
                 }
                 is Result.Error -> {
                     Log.d(TAG, "loadCurrentSelected Error")
@@ -100,6 +96,8 @@ class MainViewModel(private val app: Application) : ViewModel() {
         Log.d(TAG, "searchByName")
         if (isInternetAvailable(app)) {
             setCurrentViewState(State.LOADING)
+            currentSelected.value?.key = -1
+            currentSelected.notifyObserver()
             viewModelScope.launch {
                 try {
                     val result: Current
@@ -110,10 +108,11 @@ class MainViewModel(private val app: Application) : ViewModel() {
                     }
                     Log.d(TAG, "result: $result")
                     setCurrentViewState(State.LOADED)
-                    currentSelected.value = result.toEntity()
+                    currentSelected.postValue(result.toEntity())
                 } catch (exception: Exception) {
                     Log.e(TAG, exception.message.toString())
                     setCurrentViewState(State.NODATA)
+                    //currentSelected.value?.key = 0
                     showSnackBar.value = exception.localizedMessage
                 }
             }
@@ -124,24 +123,28 @@ class MainViewModel(private val app: Application) : ViewModel() {
     }
 
     fun saveCurrent() {
-        if (currentSelected.value != null && currentSelected.value!!.key == 0L) {
+        if (currentSelected.value != null && currentSelected.value?.key == 0L) {
             viewModelScope.launch {
                 val savedKey = repository.saveCurrent(currentSelected.value!!)
                 Log.d(TAG, "savedCurrent id: $savedKey")
                 loadCurrentList()
-                currentSelected.value!!.key = savedKey
-                currentSelected.notifyObserver()
+                currentSelected.value.let {
+                    it?.key = savedKey
+                    currentSelected.notifyObserver()
+                }
             }
         }
     }
 
     fun deleteCurrent() {
-        viewModelScope.launch {
-            repository.deleteCurrent(currentSelected.value?.key!!)
-            currentSelected.value!!.key = -1
-            currentSelected.notifyObserver()
-            loadCurrentList()
-            setCurrentViewState(State.NODATA)
+        if (currentSelected.value != null && currentSelected.value!!.key > 0) {
+            viewModelScope.launch {
+                repository.deleteCurrent(currentSelected.value?.key!!)
+                loadCurrentList()
+                setCurrentViewState(State.NODATA)
+                currentSelected.value?.key = -1
+                currentSelected.notifyObserver()
+            }
         }
     }
 
@@ -158,5 +161,11 @@ class MainViewModel(private val app: Application) : ViewModel() {
     private fun setCurrentViewState(state: State) {
         currentFragmentViewState.value?.setState(state)
         currentFragmentViewState.notifyObserver()
+    }
+
+    private fun currentAlreadySaved(id: Int) : Boolean {
+         return currentList.value?.find {
+            it.cityId == id
+        } != null
     }
 }

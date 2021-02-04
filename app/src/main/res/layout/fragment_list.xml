@@ -27,7 +27,8 @@
             android:clipToPadding="false"
             android:padding="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:fadeVisible="@{viewModel.listFragmentViewState.showData}"/>
+            android:fadeVisible="@{viewModel.listFragmentViewState.showData}"
+            tools:listitem="@layout/list_item_current"/>
 
         <TextView
             android:id="@+id/no_data_list_textview"

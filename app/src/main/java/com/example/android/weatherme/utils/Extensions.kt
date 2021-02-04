@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 
-//animate changing the view visibility
+//Animate changing the view visibility
 fun View.fadeIn() {
     this.visibility = View.VISIBLE
     this.alpha = 0f
@@ -23,7 +23,7 @@ fun View.fadeIn() {
     })
 }
 
-//animate changing the view visibility
+//Animate changing the view visibility
 fun View.fadeOut() {
     this.animate().alpha(0f).setListener(object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator) {
@@ -33,6 +33,7 @@ fun View.fadeOut() {
     })
 }
 
+//Check there is connectivity
 fun isInternetAvailable(context: Context): Boolean {
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val nw      = connectivityManager.activeNetwork ?: return false
@@ -55,6 +56,7 @@ fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+//Refresh the MutableLiveData value
 fun <T> MutableLiveData<T>.notifyObserver() {
     this.value = this.value
 }
