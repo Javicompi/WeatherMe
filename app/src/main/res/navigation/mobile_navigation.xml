@@ -9,7 +9,11 @@
         android:id="@+id/navigation_list"
         android:name="com.example.android.weatherme.ui.list.ListFragment"
         android:label="@string/title_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_navigation_list_to_navigation_current"
+            app:destination="@id/navigation_current" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_current"
@@ -17,17 +21,13 @@
         android:label="@string/title_current"
         tools:layout="@layout/fragment_current" >
         <argument
-            android:name="searchString"
-            app:argType="string" />
+            android:name="selectedCurrent"
+            app:argType="long" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.android.weatherme.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_navigation_search_to_navigation_current"
-            app:destination="@id/navigation_current" />
-    </fragment>
+        tools:layout="@layout/fragment_search" />
 </navigation>
