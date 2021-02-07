@@ -42,12 +42,12 @@ class MainViewModel(private val app: Application) : ViewModel() {
         listFragmentViewState.value = ViewState()
         currentFragmentViewState.value = ViewState()
         repository = Repository.getRepository(app)
-        loadCurrentList()
+        //loadCurrentList()
         setCurrentViewState(State.NODATA)
         Log.d(TAG, "currentSelected: ${currentSelected.value}")
     }
 
-    private fun loadCurrentList() {
+    /*private fun loadCurrentList() {
         Log.d(TAG, "loadCurrentList")
         setListViewState(State.LOADING)
         viewModelScope.launch {
@@ -71,9 +71,9 @@ class MainViewModel(private val app: Application) : ViewModel() {
                 }
             }
         }
-    }
+    }*/
 
-    private fun loadCurrentSelected(key: Long) {
+    /*private fun loadCurrentSelected(key: Long) {
         Log.d(TAG, "loadCurrentSelected")
         setCurrentViewState(State.LOADING)
         viewModelScope.launch {
@@ -90,9 +90,9 @@ class MainViewModel(private val app: Application) : ViewModel() {
                 }
             }
         }
-    }
+    }*/
 
-    fun searchCurrent(name: String?, lat: Double?, lon: Double?) {
+    /*fun searchCurrent(name: String?, lat: Double?, lon: Double?) {
         Log.d(TAG, "searchByName")
         if (isInternetAvailable(app)) {
             setCurrentViewState(State.LOADING)
@@ -120,9 +120,9 @@ class MainViewModel(private val app: Application) : ViewModel() {
             setCurrentViewState(State.NODATA)
             showSnackBarInt.value = R.string.no_internet_connection
         }
-    }
+    }*/
 
-    fun saveCurrent() {
+    /*fun saveCurrent() {
         if (currentSelected.value != null && currentSelected.value?.key == 0L) {
             viewModelScope.launch {
                 val savedKey = repository.saveCurrent(currentSelected.value!!)
@@ -146,12 +146,12 @@ class MainViewModel(private val app: Application) : ViewModel() {
                 currentSelected.notifyObserver()
             }
         }
-    }
+    }*/
 
-    fun onCurrentClicked(currentEntity: CurrentEntity) {
+    /*fun onCurrentClicked(currentEntity: CurrentEntity) {
         Log.d(TAG, "onCurrentClicked: ${currentEntity.cityName}")
         loadCurrentSelected(currentEntity.key)
-    }
+    }*/
 
     private fun setListViewState(state: State) {
         listFragmentViewState.value?.setState(state)

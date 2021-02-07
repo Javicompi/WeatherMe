@@ -38,8 +38,8 @@ class WeatherDatabaseTest {
         val current = createCurrent().toEntity()
         val key = database.currentWeatherDao().insertCurrent(current)
         val retrieved = database.currentWeatherDao().getCurrentByKey(key)
-        assertThat(retrieved, `is`(notNullValue()))
-        assertThat(retrieved.cityName, `is`(current.cityName))
+        assertThat(retrieved.value, `is`(notNullValue()))
+        assertThat(retrieved.value, `is`(current.cityName))
     }
 
     @Test
@@ -47,7 +47,7 @@ class WeatherDatabaseTest {
         val current = createCurrent().toEntity()
         database.currentWeatherDao().insertCurrent(current)
         val retrieved = database.currentWeatherDao().getCurrentByName(current.cityName)
-        assertThat(retrieved.cityName, `is`(current.cityName))
+        assertThat(retrieved.value?.cityName, `is`(current.cityName))
     }
 
     @Test
@@ -57,6 +57,6 @@ class WeatherDatabaseTest {
         val alternative = createCurrent().toEntity()
         database.currentWeatherDao().insertCurrent(alternative)
         val currents = database.currentWeatherDao().getCurrents()
-        assertThat(currents.size, `is`(2))
+        assertThat(currents.value, `is`(2))
     }
 }

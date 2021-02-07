@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentSearchBinding
 import com.example.android.weatherme.ui.MainViewModel
@@ -46,7 +48,7 @@ class SearchFragment : Fragment() {
         binding.searchButton.setOnClickListener {
             hideKeyboard()
             val searchText = binding.searchEdittext.text.toString()
-            searchCurrent(name = searchText)
+            searchByName(name = searchText)
         }
 
         binding.searchFab.setOnClickListener {
@@ -63,7 +65,7 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
 
         viewModel.showSnackBar.observe(this, {
@@ -73,9 +75,9 @@ class SearchFragment : Fragment() {
         viewModel.showSnackBarInt.observe(this, {
             Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
         })
-    }
+    }*/
 
-    private fun searchCurrent(name: String = "", lat: Double = 0.0, lon: Double = 0.0) {
+    /*private fun searchCurrent(name: String = "", lat: Double = 0.0, lon: Double = 0.0) {
         if (isInternetAvailable(requireContext())) {
             if (name.isNotEmpty()) {
                 viewModel.searchCurrent(name = name, lat, lon)
@@ -86,7 +88,7 @@ class SearchFragment : Fragment() {
         } else {
             viewModel.showSnackBarInt.postValue(R.string.no_internet_connection)
         }
-    }
+    }*/
 
     override fun onRequestPermissionsResult(
             requestCode: Int,
@@ -101,7 +103,7 @@ class SearchFragment : Fragment() {
                 getLocation()
             } else {
                 Log.d(TAG, "permissions denied")
-                viewModel.showSnackBarInt.postValue(R.string.location_permission_denied)
+                showSnackBar(R.string.location_permission_denied)
             }
         }
     }
@@ -118,16 +120,30 @@ class SearchFragment : Fragment() {
                 if (task.isSuccessful) {
                     lastKnownLocation = task.result
                     Log.d(TAG, "last Location found: ${lastKnownLocation.latitude}, ${lastKnownLocation.longitude}")
-                    searchCurrent(lat = lastKnownLocation.latitude, lon = lastKnownLocation.longitude)
+                    searchByLocation(lastKnownLocation)
                 } else {
                     Log.d(TAG, "last Location is null")
-                    viewModel.showSnackBarInt.postValue(R.string.location_not_found)
+                    showSnackBar(R.string.location_not_found)
                 }
             }
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
-            viewModel.showSnackBarInt.postValue(R.string.location_error)
+            showSnackBar(R.string.location_error)
         }
+    }
+
+    private fun searchByName(name: String) {
+        val action = SearchFragmentDirections.actionNavigationSearchToNavigationCurrent(searchName = name)
+        findNavController().navigate(action)
+    }
+
+    private fun searchByLocation(location: Location) {
+        val action = SearchFragmentDirections.actionNavigationSearchToNavigationCurrent(searchLocation = location)
+        findNavController().navigate(action)
+    }
+
+    private fun showSnackBar(resourceId: Int) {
+        Snackbar.make(requireView(), resourceId, Snackbar.LENGTH_LONG).show()
     }
 
     private fun locationPermissionGranted(): Boolean {

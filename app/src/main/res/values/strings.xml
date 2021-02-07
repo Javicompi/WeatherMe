@@ -9,6 +9,7 @@
 
     <!-- Current Fragment -->
     <string name="no_data_current">No weather to show</string>
+    <string name="already_saved">Location already saved</string>
 
     <!-- Search Fragment -->
     <string name="search_textfield_hint">City name</string>

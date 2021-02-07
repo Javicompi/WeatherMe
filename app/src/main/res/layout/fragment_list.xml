@@ -27,7 +27,7 @@
             android:clipToPadding="false"
             android:padding="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:fadeVisible="@{viewModel.listFragmentViewState.showData}"
+            android:fadeVisible="@{viewModel.showData}"
             tools:listitem="@layout/list_item_current"/>
 
         <TextView
@@ -37,7 +37,7 @@
             android:gravity="center"
             android:textSize="20sp"
             android:text="@string/no_data_list"
-            android:fadeVisible="@{viewModel.listFragmentViewState.showNoData}"
+            android:fadeVisible="@{!viewModel.showData}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:fadeVisible="@{viewModel.listFragmentViewState.showLoading}"
+            android:fadeVisible="@{viewModel.showLoading}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

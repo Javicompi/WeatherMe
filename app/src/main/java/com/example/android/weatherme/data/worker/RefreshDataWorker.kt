@@ -20,6 +20,7 @@ class RefreshDataWorker(context: Context, params: WorkerParameters)
         val database = getDatabase(applicationContext)
         val repository = Repository(database)
         return try {
+            //TODO to be fixed
             repository.updateCurrents()
             Log.d(WORK_NAME, "doWork done")
             Result.success()

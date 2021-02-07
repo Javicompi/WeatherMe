@@ -1,15 +1,14 @@
 package com.example.android.weatherme.data
 
 import android.app.Application
+import android.location.Location
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.example.android.weatherme.data.database.Result
 import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.network.api.WeatherApi
-import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
-import com.example.android.weatherme.data.preferences.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,28 +24,19 @@ class Repository(private val database: WeatherDatabase) {
         return id
     }
 
-    suspend fun getCurrents(): Result<List<CurrentEntity>> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            Result.Success(database.currentWeatherDao().getCurrents())
-        } catch (exception: Exception) {
-            Result.Error(exception.localizedMessage)
-        }
+    fun getCurrents(): LiveData<List<CurrentEntity>> {
+        return database.currentWeatherDao().getCurrents()
     }
 
-    suspend fun getCurrentByKey(key: Long): Result<CurrentEntity> = withContext(Dispatchers.IO) {
-        try {
-            val current = database.currentWeatherDao().getCurrentByKey(key)
-            if (current.isSuccess()) {
-                return@withContext Result.Success(current)
-            } else {
-                return@withContext Result.Error("Not found")
-            }
-        } catch (exception: Exception) {
-            return@withContext Result.Error(exception.localizedMessage)
-        }
+    fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
+        return database.currentWeatherDao().getCurrentByKey(key)
     }
 
-    suspend fun deleteCurrent(key: Long) {
+    fun getCurrentByKName(name: String): LiveData<CurrentEntity> {
+        return database.currentWeatherDao().getCurrentByName(name)
+    }
+
+    suspend fun deleteCurrent(key: Long) = withContext(Dispatchers.IO) {
         database.currentWeatherDao().deleteCurrent(key)
     }
 
@@ -54,27 +44,34 @@ class Repository(private val database: WeatherDatabase) {
         database.currentWeatherDao().deleteCurrents()
     }
 
-    suspend fun searchCurrentByName(name: String): Current {
-        return WeatherApi.retrofitService.getCurrentWeatherByName(name)
+    suspend fun searchCurrentByName(name: String): CurrentEntity {
+        val result = WeatherApi.retrofitService.getCurrentWeatherByName(name)
+        return result.toEntity()
     }
 
-    suspend fun searchCurrentByLatLon(lat: Double, lon: Double):Current {
-        return WeatherApi.retrofitService.getCurrentWeatherByLatLon(lat, lon)
+    suspend fun searchCurrentByLatLon(location: Location): CurrentEntity {
+        val result = WeatherApi.retrofitService.getCurrentWeatherByLatLon(location.latitude, location.longitude)
+        return result.toEntity()
     }
 
-    suspend fun updateCurrents() = withContext(Dispatchers.IO) {
+    suspend fun updateCurrents() {
         val currents = database.currentWeatherDao().getCurrents()
-        if (currents.isNotEmpty()) {
-            for (current in currents) {
+        if (currents.value != null && currents.value?.isNotEmpty() == true) {
+            for (current in currents.value!!) {
                 Log.d(TAG, "updating ${current.cityName}")
                 val updated = WeatherApi.retrofitService.getCurrentWeatherByName(current.cityName)
                 updated.let {
-                    val entity = updated.toEntity()
-                    entity.key = current.key
-                    database.currentWeatherDao().insertCurrent(entity)
+                    val newEntity = updated.toEntity()
+                    newEntity.key = current.key
+                    database.currentWeatherDao().insertCurrent(newEntity)
                 }
             }
         }
+    }
+
+    suspend fun currentExists(cityName: String): Boolean = withContext(Dispatchers.IO) {
+        val value = database.currentWeatherDao().count(cityName)
+        return@withContext value > 0
     }
 
     companion object {
@@ -91,7 +88,6 @@ class Repository(private val database: WeatherDatabase) {
                     WeatherDatabase::class.java,
                     "Weather.db"
                 ).build()
-                val dataStore = Preferences(app)
                 Repository(database).also {
                     INSTANCE = it
                 }

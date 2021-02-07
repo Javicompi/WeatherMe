@@ -1,5 +1,6 @@
 package com.example.android.weatherme.data.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,23 +11,26 @@ import com.example.android.weatherme.data.database.entities.current.CurrentEntit
 interface CurrentWeatherDao {
 
     @Query("SELECT * FROM currents")
-    suspend fun getCurrents(): List<CurrentEntity>
+    fun getCurrents(): LiveData<List<CurrentEntity>>
 
     @Query("SELECT * FROM currents WHERE cityName = :cityName")
-    suspend fun getCurrentByName(cityName: String): CurrentEntity
+    fun getCurrentByName(cityName: String): LiveData<CurrentEntity>
 
     @Query("SELECT * FROM currents WHERE `key` = :key")
-    suspend fun getCurrentByKey(key: Long): CurrentEntity
+    fun getCurrentByKey(key: Long): LiveData<CurrentEntity>
 
     @Query("SELECT * FROM currents LIMIT 1")
-    suspend fun getFirstCurrent(): CurrentEntity
+    fun getFirstCurrent(): LiveData<CurrentEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCurrent(currentEntity: CurrentEntity): Long
+    fun insertCurrent(currentEntity: CurrentEntity): Long
 
     @Query("DELETE FROM currents WHERE `key` = :key")
-    suspend fun deleteCurrent(key: Long)
+    fun deleteCurrent(key: Long)
 
     @Query("DELETE FROM currents")
-    suspend fun deleteCurrents()
+    fun deleteCurrents()
+
+    @Query("SELECT COUNT() FROM currents WHERE cityName = :cityName")
+    fun count(cityName: String): Int
 }

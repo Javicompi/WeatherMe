@@ -44,7 +44,7 @@ class RepositoryTest {
         //Get entity from database
         val retrieved = repository.getCurrentByKey(current.key)
         //Check retrieved is ok
-        assertThat(retrieved.succeeded, `is`(true))
+        assertThat(retrieved.value, `is`(true))
         //Cast retrieved as Entity
         retrieved as CurrentEntity
         //Check is the same item
