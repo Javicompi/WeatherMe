@@ -6,14 +6,15 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.android.weatherme.ui.MainViewModel" />
+            name="viewmodel"
+            type="com.example.android.weatherme.ui.search.SearchViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/fragment_search"
         tools:context=".ui.search.SearchFragment">
 
         <Button
@@ -24,7 +25,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="@dimen/medium_margin"
-            android:textSize="@dimen/button_textsize"/>
+            android:textSize="@dimen/button_textsize"
+            android:textColor="@color/white"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/search_textfield"
@@ -50,6 +52,16 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_progressbar"
+            android:fadeVisible="@{viewmodel.showLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/text_notifications"
             android:layout_width="match_parent"
@@ -70,7 +82,9 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@drawable/ic_location"
-            android:layout_margin="@dimen/small_margin"
+            app:backgroundTint="@color/primary_med"
+            app:tint="@null"
+            android:layout_margin="@dimen/medium_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

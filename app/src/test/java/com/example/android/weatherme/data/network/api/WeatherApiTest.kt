@@ -1,7 +1,10 @@
 package com.example.android.weatherme.data.network.api
 
+import com.example.android.weatherme.data.network.models.current.Current
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class WeatherApiTest : TestCase() {
@@ -13,7 +16,7 @@ class WeatherApiTest : TestCase() {
                 "metric",
                 "es"
             )
-        assert(result.name.equals("Gran Alacant"))
+        assertThat(result.name, `is`("Gran Alacant"))
     }
 
     @Test
@@ -24,6 +27,6 @@ class WeatherApiTest : TestCase() {
             "metric",
             "es"
         )
-        assert(result.name.equals("Gran Alacant"))
+        assertThat(result.name, `is`("Gran Alacant"))
     }
 }

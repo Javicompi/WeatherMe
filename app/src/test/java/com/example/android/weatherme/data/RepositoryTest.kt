@@ -5,7 +5,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.succeeded
 import com.example.android.weatherme.data.network.models.current.toEntity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -42,12 +41,12 @@ class RepositoryTest {
         //Save to database
         repository.saveCurrent(current)
         //Get entity from database
-        val retrieved = repository.getCurrentByKey(current.key)
+        val retrieved = repository.getCurrentByKey(current.cityId)
         //Check retrieved is ok
         assertThat(retrieved.value, `is`(true))
         //Cast retrieved as Entity
         retrieved as CurrentEntity
         //Check is the same item
-        assertThat(retrieved.key, `is`(current.key))
+        assertThat(retrieved.cityId, `is`(current.cityId))
     }
 }

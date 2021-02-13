@@ -31,7 +31,8 @@ class WeatherMeApplication : Application() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
-            .setRequiresDeviceIdle(true)
+                //TODO for testing purpose
+            //.setRequiresDeviceIdle(true)
             .build()
 
         val repeatingRequest =

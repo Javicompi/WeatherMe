@@ -16,8 +16,8 @@ interface CurrentWeatherDao {
     @Query("SELECT * FROM currents WHERE cityName = :cityName")
     fun getCurrentByName(cityName: String): LiveData<CurrentEntity>
 
-    @Query("SELECT * FROM currents WHERE `key` = :key")
-    fun getCurrentByKey(key: Long): LiveData<CurrentEntity>
+    @Query("SELECT * FROM currents WHERE `cityId` = :id")
+    fun getCurrentByKey(id: Long): LiveData<CurrentEntity>
 
     @Query("SELECT * FROM currents LIMIT 1")
     fun getFirstCurrent(): LiveData<CurrentEntity>
@@ -25,12 +25,15 @@ interface CurrentWeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrent(currentEntity: CurrentEntity): Long
 
-    @Query("DELETE FROM currents WHERE `key` = :key")
-    fun deleteCurrent(key: Long)
+    @Query("DELETE FROM currents WHERE `cityId` = :id")
+    fun deleteCurrent(id: Long)
 
     @Query("DELETE FROM currents")
     fun deleteCurrents()
 
     @Query("SELECT COUNT() FROM currents WHERE cityName = :cityName")
     fun count(cityName: String): Int
+
+    @Query("SELECT cityId FROM currents")
+    fun getCityIds(): List<Long>
 }

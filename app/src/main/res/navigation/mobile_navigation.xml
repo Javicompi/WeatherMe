@@ -28,15 +28,6 @@
             android:name="selectedCurrent"
             app:argType="long"
             android:defaultValue="0L" />
-        <argument
-            android:name="searchName"
-            app:argType="string"
-            android:defaultValue="_" />
-        <argument
-            android:name="searchLocation"
-            app:argType="android.location.Location"
-            android:defaultValue="@null"
-            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -45,11 +36,29 @@
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_navigation_search_to_navigation_current"
+            android:id="@+id/action_navigation_search_to_resultSearchFragment"
+            app:destination="@id/resultSearchFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_open_exit"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultSearchFragment"
+        android:name="com.example.android.weatherme.ui.search.ResultSearchFragment"
+        android:label="@string/title_result" >
+        <argument
+            android:name="current"
+            app:argType="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
+        <action
+            android:id="@+id/action_resultSearchFragment_to_navigation_current"
             app:destination="@id/navigation_current"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit" />
+            app:popExitAnim="@anim/fragment_open_exit"
+            app:popUpTo="@id/navigation_current" />
     </fragment>
 </navigation>

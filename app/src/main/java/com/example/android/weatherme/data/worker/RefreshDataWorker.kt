@@ -2,10 +2,15 @@ package com.example.android.weatherme.data.worker
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.Transformations
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.getDatabase
+import com.example.android.weatherme.data.network.api.WeatherApi
+import com.example.android.weatherme.data.network.models.current.toEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 class RefreshDataWorker(context: Context, params: WorkerParameters)
@@ -20,7 +25,6 @@ class RefreshDataWorker(context: Context, params: WorkerParameters)
         val database = getDatabase(applicationContext)
         val repository = Repository(database)
         return try {
-            //TODO to be fixed
             repository.updateCurrents()
             Log.d(WORK_NAME, "doWork done")
             Result.success()

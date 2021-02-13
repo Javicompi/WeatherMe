@@ -6,8 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.weatherme.data.network.models.current.toEntity
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.*
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -46,7 +45,7 @@ class WeatherDatabaseTest {
     fun insertCurrentAndRetrieveByName() = runBlocking {
         val current = createCurrent().toEntity()
         database.currentWeatherDao().insertCurrent(current)
-        val retrieved = database.currentWeatherDao().getCurrentByName(current.cityName)
+        val retrieved = database.currentWeatherDao().getCurrentByName(current.cityName!!)
         assertThat(retrieved.value?.cityName, `is`(current.cityName))
     }
 
@@ -58,5 +57,14 @@ class WeatherDatabaseTest {
         database.currentWeatherDao().insertCurrent(alternative)
         val currents = database.currentWeatherDao().getCurrents()
         assertThat(currents.value, `is`(2))
+    }
+
+    @Test
+    fun retrieveIds() = runBlocking {
+        val current = createCurrent().toEntity()
+        database.currentWeatherDao().insertCurrent(current)
+        val ids = database.currentWeatherDao().getCityIds()
+        assertThat(ids, not(emptyList()))
+        assertThat(ids.size, `is`(1))
     }
 }

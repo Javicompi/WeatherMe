@@ -7,12 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApi
+import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
-class Repository(private val database: WeatherDatabase) {
+class Repository(private val database: WeatherDatabase) : BaseRepository() {
 
     private val TAG = "Repository"
 
@@ -44,30 +48,59 @@ class Repository(private val database: WeatherDatabase) {
         database.currentWeatherDao().deleteCurrents()
     }
 
-    suspend fun searchCurrentByName(name: String): CurrentEntity {
-        val result = WeatherApi.retrofitService.getCurrentWeatherByName(name)
-        return result.toEntity()
+    suspend fun searchCurrentByName(name: String): Result<Current> {
+        return safeApiCall(Dispatchers.IO) {
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByName(name)
+        }
     }
 
-    suspend fun searchCurrentByLatLon(location: Location): CurrentEntity {
-        val result = WeatherApi.retrofitService.getCurrentWeatherByLatLon(location.latitude, location.longitude)
-        return result.toEntity()
+    suspend fun searchCurrentByLatLon(location: Location): Result<Current> {
+        return safeApiCall(Dispatchers.IO) {
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByLatLon(location.latitude, location.longitude)
+        }
     }
 
-    suspend fun updateCurrents() {
+    suspend fun searchCurrentByCityId(id: Long): Result<Current> {
+        return safeApiCall(Dispatchers.IO) {
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherById(id)
+        }
+    }
+
+    /*suspend fun updateCurrents() {
         val currents = database.currentWeatherDao().getCurrents()
         if (currents.value != null && currents.value?.isNotEmpty() == true) {
             for (current in currents.value!!) {
                 Log.d(TAG, "updating ${current.cityName}")
-                val updated = WeatherApi.retrofitService.getCurrentWeatherByName(current.cityName)
+                val updated = safeApiCall(Dispatchers.Main) {
+                    current.cityName?.let { WeatherApi.retrofitService.getCurrentWeatherByName(it) }
+                }
                 updated.let {
-                    val newEntity = updated.toEntity()
-                    newEntity.key = current.key
-                    database.currentWeatherDao().insertCurrent(newEntity)
+                    if (updated is Result.Success) {
+                        updated.value?.let { it1 -> database.currentWeatherDao().insertCurrent(it1.toEntity()) }
+                    }
+                }
+            }
+        }
+    }*/
+
+    suspend fun updateCurrents() {
+        withContext(Dispatchers.IO) {
+            Log.d(TAG, "updatingCurrents")
+            val cityIds = database.currentWeatherDao().getCityIds()
+            Log.d(TAG, "ids in database: ${cityIds.size}")
+            val currents = cityIds.map { id ->
+                WeatherApi.retrofitService.getCurrentWeatherById(id)
+            }
+            Log.d(TAG, "downloaded values: ${currents.size}")
+            for (current in currents) {
+                if (current.id > 0) {
+                    val entity = current.toEntity()
+                    database.currentWeatherDao().insertCurrent(entity)
                 }
             }
         }
     }
+
 
     suspend fun currentExists(cityName: String): Boolean = withContext(Dispatchers.IO) {
         val value = database.currentWeatherDao().count(cityName)

@@ -23,7 +23,6 @@ data class Current(
 
 fun Current.toEntity(): CurrentEntity {
         return CurrentEntity(
-                key = 0,
                 latitude = coord.lat,
                 longitude = coord.lon,
                 weatherId = weather[0].id,
@@ -47,7 +46,7 @@ fun Current.toEntity(): CurrentEntity {
                 sunrise = sys.sunrise.toLong() * 1000,
                 sunset = sys.sunset.toLong() * 1000,
                 timeZone = timezone,
-                cityId = id,
+                cityId = id.toLong(),
                 cityName = name,
                 deltaTime = dt.toLong() * 1000,
                 visibility = visibility

@@ -45,7 +45,7 @@ class CurrentListener(val clickListener: (current: CurrentEntity) -> Unit) {
 class CurrentDiffCallback : DiffUtil.ItemCallback<CurrentEntity>() {
 
     override fun areItemsTheSame(oldItem: CurrentEntity, newItem: CurrentEntity): Boolean {
-        return oldItem.key == newItem.key
+        return oldItem.cityId == newItem.cityId
     }
 
     override fun areContentsTheSame(oldItem: CurrentEntity, newItem: CurrentEntity): Boolean {

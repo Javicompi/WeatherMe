@@ -8,8 +8,12 @@
     <dimen name="button_height">60dp</dimen>
     <dimen name="bottom_navigation_view_height">56dp</dimen>
 
-    <dimen name="list_item_height">200dp</dimen>
-    <dimen name="list_item_current_margin">8dp</dimen>
+    <dimen name="list_item_height">150dp</dimen>
+    <dimen name="list_item_icon_size">75dp</dimen>
+    <dimen name="list_item_current_margin">16dp</dimen>
+    <dimen name="list_item_current_margin_bottom">8dp</dimen>
+    <dimen name="list_item_current_padding">16dp</dimen>
     <dimen name="list_item_current_location_text">32sp</dimen>
     <dimen name="list_item_corner_radius">4dp</dimen>
+    <dimen name="list_item_small_text_size">28sp</dimen>
 </resources>

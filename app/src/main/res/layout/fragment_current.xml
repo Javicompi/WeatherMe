@@ -16,6 +16,25 @@
         android:layout_height="match_parent"
         tools:context=".ui.current.CurrentFragment">
 
+        <include
+            android:id="@+id/loaded_current"
+            layout="@layout/current"
+            app:current="@{viewModel.currentSelected}"
+            android:fadeVisible="@{viewModel.setShowData}"/>
+
+        <!-- <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/current_background"
+            android:scaleType="centerCrop"
+            android:currentBackground="@{viewModel.currentSelected.icon}"
+            android:fadeVisible="@{viewModel.setShowData}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@drawable/f01d"/> -->
+
         <TextView
             android:id="@+id/no_data_current_textview"
             android:layout_width="match_parent"
@@ -33,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:id="@+id/progress_bar"
-            android:background="@color/black"
+            android:background="@color/white"
             android:alpha="0.2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,29 +67,19 @@
 
         </FrameLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/save_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_input_add"
-            android:fadeVisible="@{viewModel.setShowSaveFab}"
-            android:layout_margin="@dimen/small_margin"
-            android:onClick="@{() -> viewModel.saveCurrent()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@drawable/ic_clear"
             android:fadeVisible="@{viewModel.setShowClearFab}"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/medium_margin"
+            app:backgroundTint="@color/primary_med"
+            app:tint="@null"
             android:onClick="@{() -> viewModel.deleteCurrent()}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"/> -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

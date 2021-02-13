@@ -1,42 +1,62 @@
 package com.example.android.weatherme.utils
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.contains
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 object BindingAdapters {
 
     @BindingAdapter("android:currentBackground")
     @JvmStatic
-    fun CardView.setCurrentBackground(icon: String) {
+    fun View.setCurrentBackground(icon: String) {
         icon.let {
             val context = this.context
-            if (icon.contains("n")) {
-                this.setBackgroundColor(context.getColor(R.color.black))
-            } else if (
-                    icon.contains("01") ||
-                    icon.contains("02") ||
-                    icon.contains("03")
-            ) {
+            if (icon.equals("_01d") || icon.equals("_02d")) {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_dayclear))
+            } else if (icon.equals("_03d") || icon.equals("_10d") || icon.equals("_50d")) {
+                this.setBackgroundColor(context.getColor(R.color.list_item_current_background_dayscatered))
+            } else if (icon.equals("_04d") || icon.equals("_09d") || icon.equals("_11d") || icon.equals("_13d")) {
+                this.setBackgroundColor(context.getColor(R.color.list_item_current_background_daycloudy))
+            } else if (icon.equals("_01n") || icon.equals("_02n")) {
+                this.setBackgroundColor(context.getColor(R.color.list_item_current_background_nightclear))
             } else {
-                this.setBackgroundColor(context.getColor(R.color.list_item_current_background_daydark))
+                this.setBackgroundColor(context.getColor(R.color.list_item_current_background_nightcloudy))
             }
         }
     }
 
     @BindingAdapter("android:currentIcon")
     @JvmStatic
-    fun ImageView.setCurrentIcon(icon: String) {
+    fun ImageView.setCurrentIcon(icon: String?) {
         icon.let {
-            val context = this.context
-            val resourceId = context.resIdByName(icon, "drawable")
-            this.setImageResource(resourceId)
+            if (!icon.isNullOrEmpty()) {
+                val context = this.context
+                val resourceName = icon.replace("_", "i")
+                val resourceId = context.resIdByName(resourceName, "drawable")
+                this.setImageResource(resourceId)
+            }
+        }
+    }
+
+    @BindingAdapter("android:currentBackground")
+    @JvmStatic
+    fun ImageView.setCurrentBackground(icon: String?) {
+        icon.let {
+            if (!icon.isNullOrEmpty()) {
+                val context = this.context
+                val resourceName = icon.replace("_", "f")
+                val resourceId = context.resIdByName(resourceName, "drawable")
+                this.setImageResource(resourceId)
+            }
         }
     }
 
