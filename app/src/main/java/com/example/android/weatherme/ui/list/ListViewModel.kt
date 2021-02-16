@@ -3,13 +3,14 @@ package com.example.android.weatherme.ui.list
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
+import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import kotlinx.coroutines.launch
 
 
 class ListViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repository = Repository.getRepository(app)
+    private val repository = Repository(WeatherDatabase.getDatabase(app))
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 

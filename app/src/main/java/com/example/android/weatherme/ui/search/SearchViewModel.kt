@@ -2,10 +2,12 @@ package com.example.android.weatherme.ui.search
 
 import android.app.Application
 import android.location.Location
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
+import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.utils.SingleLiveEvent
@@ -14,9 +16,7 @@ import java.util.*
 
 class SearchViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val TAG = SearchViewModel::class.java.simpleName
-
-    private val repository: Repository
+    private val repository = Repository(WeatherDatabase.getDatabase(app))
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -25,17 +25,11 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
 
     val current: SingleLiveEvent<Current> = SingleLiveEvent()
 
-    init {
-        repository = Repository.getRepository(app)
-    }
-
     fun searchByName(name: String) {
         showLoading.postValue(true)
         viewModelScope.launch {
-            val result = repository.searchCurrentByName(name)
-            when (result) {
+            when (val result = repository.searchCurrentByName(name)) {
                 is Result.Success -> {
-                    Log.d(TAG, "searchByName: ${result.value.name}")
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {
@@ -53,10 +47,8 @@ class SearchViewModel(app: Application) : AndroidViewModel(app) {
     fun searchByLocation(location: Location) {
         showLoading.postValue(true)
         viewModelScope.launch {
-            val result = repository.searchCurrentByLatLon(location)
-            when (result) {
+            when (val result = repository.searchCurrentByLatLon(location)) {
                 is Result.Success -> {
-                    Log.d(TAG, "searchByLocation: ${result.value.name}")
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {

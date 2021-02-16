@@ -18,12 +18,11 @@ import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.databinding.FragmentSearchBinding
 import com.example.android.weatherme.utils.Constants
 import com.example.android.weatherme.utils.hideKeyboard
+import com.example.android.weatherme.utils.isInternetAvailable
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 
 class SearchFragment : Fragment() {
-
-    private val TAG = SearchFragment::class.java.simpleName
 
     private val viewModel: SearchViewModel by lazy {
         val activity = requireNotNull(this.activity)
@@ -41,34 +40,38 @@ class SearchFragment : Fragment() {
         binding.viewmodel = viewModel
 
         binding.searchButton.setOnClickListener {
-            hideKeyboard()
-            val searchText = binding.searchEdittext.text.toString()
-            //searchByName(name = searchText)
-            viewModel.searchByName(searchText)
+            if (!isInternetAvailable(this.requireActivity())) {
+                showSnackBar(R.string.no_internet_connection)
+            } else {
+                hideKeyboard()
+                val searchText = binding.searchEdittext.text.toString()
+                viewModel.searchByName(searchText)
+            }
         }
 
         binding.searchFab.setOnClickListener {
-            if (locationPermissionGranted()) {
-                getLocation()
-            } else {
+            if (!isInternetAvailable(this.requireActivity())) {
+                showSnackBar(R.string.no_internet_connection)
+            } else if (!locationPermissionGranted()) {
                 val permissionArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
                 requestPermissions(permissionArray, Constants.REQUEST_LOCATION_PERMISSION_CODE)
+            } else {
+                getLocation()
             }
         }
 
         viewModel.current.observe(viewLifecycleOwner, {
-            Log.d(TAG, "current changed: ${it.name}")
             val action = SearchFragmentDirections.actionNavigationSearchToResultSearchFragment(current = it.toEntity())
             findNavController().navigate(action)
         })
 
         viewModel.showSnackBarInt.observe(viewLifecycleOwner, {
-            Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
+            //Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
             showSnackBar(resourceId = it)
         })
 
         viewModel.showSnackBar.observe(viewLifecycleOwner, {
-            Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
+            //Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
             showSnackBar(message = it)
         })
 

@@ -19,16 +19,35 @@
     <string name="location_permission_denied">Location permission denied</string>
     <string name="location_not_found">Unable to get the location</string>
     <string name="location_error">Error getting the location</string>
+    <string name="no_internet_connection">Unable to connect to internet</string>
 
     <!-- Current Search ViewModel -->
     <string name="error_saving">Error trying to save it</string>
-
-    <!-- MainViewModel -->
-    <string name="no_internet_connection">Unable to connect to internet</string>
 
     <!-- List Item -->
     <string name="degrees_character">%s°</string>
 
     <!-- Current Layout -->
     <string name="current_layout_title">%s, %s</string>
+    <string name="current_percent">%d%%</string>
+    <string name="current_speed">%dm/s</string>
+    <string name="current_mms">%dmm</string>
+    
+    <!-- Wind directions -->
+    <string name="north">N</string>
+    <string name="north_north_east">NNE</string>
+    <string name="north_east">NE</string>
+    <string name="east_north_east">ENE</string>
+    <string name="east">E</string>
+    <string name="east_south_east">ESE</string>
+    <string name="south_east">SE</string>
+    <string name="south_south_east">SSE</string>
+    <string name="south">S</string>
+    <string name="south_south_west">SSW</string>
+    <string name="south_west">SW</string>
+    <string name="west_south_west">WSW</string>
+    <string name="west">W</string>
+    <string name="west_north_west">WNW</string>
+    <string name="north_west">NW</string>
+    <string name="north_north_west">NNW</string>
 </resources>

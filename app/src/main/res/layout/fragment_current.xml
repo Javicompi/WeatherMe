@@ -22,19 +22,6 @@
             app:current="@{viewModel.currentSelected}"
             android:fadeVisible="@{viewModel.setShowData}"/>
 
-        <!-- <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/current_background"
-            android:scaleType="centerCrop"
-            android:currentBackground="@{viewModel.currentSelected.icon}"
-            android:fadeVisible="@{viewModel.setShowData}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:src="@drawable/f01d"/> -->
-
         <TextView
             android:id="@+id/no_data_current_textview"
             android:layout_width="match_parent"
@@ -66,20 +53,6 @@
                 android:layout_gravity="center"/>
 
         </FrameLayout>
-
-        <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/delete_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_clear"
-            android:fadeVisible="@{viewModel.setShowClearFab}"
-            android:layout_margin="@dimen/medium_margin"
-            app:backgroundTint="@color/primary_med"
-            app:tint="@null"
-            android:onClick="@{() -> viewModel.deleteCurrent()}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/> -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

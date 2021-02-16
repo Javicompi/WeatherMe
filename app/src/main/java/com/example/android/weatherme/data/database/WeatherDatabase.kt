@@ -5,13 +5,32 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.network.models.current.Weather
 
 @Database(entities = [CurrentEntity::class], version = 1, exportSchema = false)
 abstract class WeatherDatabase : RoomDatabase() {
 
     abstract fun currentWeatherDao(): CurrentWeatherDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: WeatherDatabase? = null
+
+        fun getDatabase(context: Context): WeatherDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        WeatherDatabase::class.java,
+                        "Weather.db"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
 }
 
+/*@Volatile
 private lateinit var INSTANCE: WeatherDatabase
 
 fun getDatabase(context: Context): WeatherDatabase {
@@ -25,4 +44,4 @@ fun getDatabase(context: Context): WeatherDatabase {
         }
     }
     return INSTANCE
-}
+}*/

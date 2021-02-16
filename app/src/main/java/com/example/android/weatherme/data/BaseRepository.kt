@@ -1,17 +1,12 @@
 package com.example.android.weatherme.data
 
-import retrofit2.Response
-import java.io.IOException
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.models.ErrorResponse
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapterFactory
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 open class BaseRepository {
 

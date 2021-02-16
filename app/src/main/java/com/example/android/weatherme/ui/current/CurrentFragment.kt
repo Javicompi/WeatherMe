@@ -1,13 +1,11 @@
 package com.example.android.weatherme.ui.current
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
@@ -15,8 +13,6 @@ import com.example.android.weatherme.databinding.FragmentCurrentBinding
 import com.google.android.material.snackbar.Snackbar
 
 class CurrentFragment : Fragment() {
-
-    private val TAG = CurrentFragment::class.java.simpleName
 
     private val viewModel: CurrentViewModel by lazy {
         val activity = requireNotNull(this.activity)
@@ -57,7 +53,6 @@ class CurrentFragment : Fragment() {
         super.onStart()
         arguments.let {
             if (it.selectedCurrent > 0) {
-                //viewModel.loadCurrent(it.selectedCurrent)
                 viewModel.loadNewCurrent.value = it.selectedCurrent
             }
         }

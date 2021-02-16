@@ -1,6 +1,7 @@
 package com.example.android.weatherme.data.network.models.current
 
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import java.util.*
 import kotlin.math.roundToInt
 
 data class Current(
@@ -26,8 +27,8 @@ fun Current.toEntity(): CurrentEntity {
                 latitude = coord.lat,
                 longitude = coord.lon,
                 weatherId = weather[0].id,
-                shortDescription = weather[0].main.capitalize(),
-                description = weather[0].description.capitalize(),
+                shortDescription = weather[0].main.capitalize(Locale.getDefault()),
+                description = weather[0].description.capitalize(Locale.getDefault()),
                 icon = "_" + weather[0].icon,
                 temp = main.temp.roundToInt(),
                 tempMin = main.temp.roundToInt(),
@@ -43,9 +44,9 @@ fun Current.toEntity(): CurrentEntity {
                 snowOneHour = snow?.oneHour ?: 0,
                 snowThreeHours = snow?.threeHours ?: 0,
                 country = sys.country,
-                sunrise = sys.sunrise.toLong() * 1000,
-                sunset = sys.sunset.toLong() * 1000,
-                timeZone = timezone,
+                timeZone = timezone * 1000,
+                sunrise = (sys.sunrise.toLong() * 1000),
+                sunset = (sys.sunset.toLong() * 1000),
                 cityId = id.toLong(),
                 cityName = name,
                 deltaTime = dt.toLong() * 1000,

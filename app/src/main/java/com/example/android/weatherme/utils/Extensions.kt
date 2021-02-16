@@ -10,7 +10,7 @@ import android.net.NetworkCapabilities
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
+import java.util.*
 
 //Animate changing the view visibility
 fun View.fadeIn() {
@@ -54,11 +54,6 @@ fun Fragment.hideKeyboard() {
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-}
-
-//Refresh the MutableLiveData value
-fun <T> MutableLiveData<T>.notifyObserver() {
-    this.value = this.value
 }
 
 //Usage: val drawableResId = context.resIdByName("ic_edit_black_24dp", "drawable")

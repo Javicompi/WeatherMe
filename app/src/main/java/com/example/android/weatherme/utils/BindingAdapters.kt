@@ -1,17 +1,13 @@
 package com.example.android.weatherme.utils
 
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.view.View
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.contains
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
 
 object BindingAdapters {
 
@@ -20,13 +16,13 @@ object BindingAdapters {
     fun View.setCurrentBackground(icon: String) {
         icon.let {
             val context = this.context
-            if (icon.equals("_01d") || icon.equals("_02d")) {
+            if (icon == "_01d" || icon == "_02d") {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_dayclear))
-            } else if (icon.equals("_03d") || icon.equals("_10d") || icon.equals("_50d")) {
+            } else if (icon == "_03d" || icon == "_10d" || icon == "_50d") {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_dayscatered))
-            } else if (icon.equals("_04d") || icon.equals("_09d") || icon.equals("_11d") || icon.equals("_13d")) {
+            } else if (icon == "_04d" || icon == "_09d" || icon == "_11d" || icon == "_13d") {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_daycloudy))
-            } else if (icon.equals("_01n") || icon.equals("_02n")) {
+            } else if (icon == "_01n" || icon == "_02n") {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_nightclear))
             } else {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_nightcloudy))
@@ -78,13 +74,29 @@ object BindingAdapters {
         }
     }
 
-    @BindingAdapter("android:setFabIcon")
-    fun FloatingActionButton.setFabIcon(isSaved: Boolean) {
-        val context = this.context
-        if (isSaved) {
-            setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clear))
-        } else {
-            setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_input_add))
-        }
+    @BindingAdapter("android:windDirectionString")
+    @JvmStatic
+    fun TextView.degreesToString(value: Int) {
+        var degrees = value
+        if (degrees > 360) { degrees -= 360 }
+        val degreesArray = resources.getStringArray(R.array.wind_directions_strings)
+        val index = ((degrees / 22.5).toInt())
+        text = degreesArray[index]
+    }
+
+    @BindingAdapter("android:windDirection")
+    @JvmStatic
+    fun ImageView.direction(value: Int) {
+        rotation = (value + 180).toFloat()
+    }
+
+    @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
+    @JvmStatic
+    fun TextView.valueToDate(time: Long, offset: Int) {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeZone.rawOffset = offset
+        calendar.timeInMillis = time
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.US)
+        text = dateFormat.format(calendar)
     }
 }
