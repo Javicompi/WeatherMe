@@ -40,10 +40,10 @@ class SearchFragment : Fragment() {
         binding.viewmodel = viewModel
 
         binding.searchButton.setOnClickListener {
+            hideKeyboard()
             if (!isInternetAvailable(this.requireActivity())) {
                 showSnackBar(R.string.no_internet_connection)
             } else {
-                hideKeyboard()
                 val searchText = binding.searchEdittext.text.toString()
                 viewModel.searchByName(searchText)
             }
@@ -66,12 +66,10 @@ class SearchFragment : Fragment() {
         })
 
         viewModel.showSnackBarInt.observe(viewLifecycleOwner, {
-            //Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
             showSnackBar(resourceId = it)
         })
 
         viewModel.showSnackBar.observe(viewLifecycleOwner, {
-            //Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
             showSnackBar(message = it)
         })
 

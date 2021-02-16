@@ -9,9 +9,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- List Item Current -->
-    <color name="list_item_current_background_dayclear">#756ADCDC</color>
-    <color name="list_item_current_background_dayscatered">#7547B7B7</color>
-    <color name="list_item_current_background_daycloudy">#751B7171</color>
+    <color name="list_item_current_background_dayclear">#906ADCDC</color>
+    <color name="list_item_current_background_dayscatered">#9047B7B7</color>
+    <color name="list_item_current_background_daycloudy">#901B7171</color>
     <color name="list_item_current_background_nightcloudy">#90000000</color>
     <color name="list_item_current_background_nightclear">#70000000</color>
     <color name="list_item_current_text_color">#FFFFFFFF</color>
