@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,9 @@ import com.example.android.weatherme.databinding.FragmentSearchBinding
 import com.example.android.weatherme.utils.Constants
 import com.example.android.weatherme.utils.hideKeyboard
 import com.example.android.weatherme.utils.isInternetAvailable
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 
@@ -27,8 +31,10 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by lazy {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(activity, SearchViewModelFactory(activity.application))
-            .get(SearchViewModel::class.java)
+                .get(SearchViewModel::class.java)
     }
+
+    private lateinit var locationCallback: LocationCallback
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -73,6 +79,17 @@ class SearchFragment : Fragment() {
             showSnackBar(message = it)
         })
 
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                stopLocationUpdates()
+                if (locationResult != null && locationResult.locations.isNotEmpty()) {
+                    viewModel.searchByLocation(locationResult.locations[0])
+                } else {
+                    showSnackBar(resourceId = R.string.location_not_found)
+                }
+            }
+        }
+
         return binding.root
     }
 
@@ -104,7 +121,7 @@ class SearchFragment : Fragment() {
                     //searchByLocation(lastKnownLocation)
                     viewModel.searchByLocation(lastKnownLocation)
                 } else {
-                    showSnackBar(resourceId = R.string.location_not_found)
+                    startLocationUpdates()
                 }
             }
         } catch (e: SecurityException) {
@@ -113,10 +130,32 @@ class SearchFragment : Fragment() {
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        LocationServices.getFusedLocationProviderClient(requireActivity()).requestLocationUpdates(
+                createLocationRequest(),
+                locationCallback,
+                Looper.getMainLooper()
+        )
+    }
+
+    private fun stopLocationUpdates() {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+                .removeLocationUpdates(locationCallback)
+    }
+
+    private fun createLocationRequest(): LocationRequest {
+        return LocationRequest().apply {
+            setInterval(Constants.LOCATION_REQUEST_INTERVAL)
+            setFastestInterval(Constants.LOCATION_REQUEST_FASTEST_INTERVAL)
+            setPriority(LocationRequest.PRIORITY_LOW_POWER)
+        }
+    }
+
     private fun showSnackBar(resourceId: Int? = 0, message: String? = "") {
         if (resourceId != null && resourceId > 0) {
             Snackbar.make(requireView(), resourceId, Snackbar.LENGTH_LONG).show()
-        }else if (message != null && message.isNotEmpty()) {
+        } else if (message != null && message.isNotEmpty()) {
             Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
         }
     }
