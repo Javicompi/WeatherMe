@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
 import com.example.android.weatherme.R
 
@@ -25,8 +24,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
         setPreferencesFromResource(R.xml.preferences, rootKey)
         autUpdatePreference = findPreference(getString(R.string.pref_automatic_update_key))!!
         automaticUpdate = autUpdatePreference.isChecked
+        automaticUpdateNew = automaticUpdate
         unitsPreference = findPreference(getString(R.string.pref_units_key))!!
         units = unitsPreference.value
+        unitsNew = units
         preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
@@ -48,5 +49,19 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onPause() {
         super.onPause()
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (automaticUpdate != automaticUpdateNew) {
+            if (automaticUpdateNew) {
+                Log.d(TAG, "automatic update changed, launch coroutine worker")
+            } else {
+                Log.d(TAG, "automatic update changed, cancel coroutine worker")
+            }
+        }
+        if (units != unitsNew) {
+            Log.d(TAG, "units changed, launch repository refresh")
+        }
     }
 }
