@@ -145,9 +145,9 @@ class SearchFragment : Fragment() {
 
     private fun createLocationRequest(): LocationRequest {
         return LocationRequest().apply {
-            setInterval(Constants.LOCATION_REQUEST_INTERVAL)
-            setFastestInterval(Constants.LOCATION_REQUEST_FASTEST_INTERVAL)
-            setPriority(LocationRequest.PRIORITY_LOW_POWER)
+            interval = Constants.LOCATION_REQUEST_INTERVAL
+            fastestInterval = Constants.LOCATION_REQUEST_FASTEST_INTERVAL
+            priority = LocationRequest.PRIORITY_LOW_POWER
         }
     }
 
