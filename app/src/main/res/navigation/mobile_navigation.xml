@@ -61,4 +61,8 @@
             app:popExitAnim="@anim/fragment_open_exit"
             app:popUpTo="@id/navigation_current" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.android.weatherme.ui.settings.SettingsFragment"
+        android:label="@string/title_settings" />
 </navigation>

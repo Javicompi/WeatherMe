@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <array name="wind_directions_strings">
         <item>@string/north</item>
         <item>@string/north_north_east</item>
@@ -17,5 +18,17 @@
         <item>@string/west_north_west</item>
         <item>@string/north_west</item>
         <item>@string/north_north_west</item>
+    </array>
+
+    <array name="units_strings">
+        <item>@string/pref_units_standard_summary</item>
+        <item>@string/pref_units_metric_summary</item>
+        <item>@string/pref_units_imperial_summary</item>
+    </array>
+
+    <array name="units_values">
+        <item>@string/pref_units_standard</item>
+        <item>@string/pref_units_metric</item>
+        <item>@string/pref_units_imperial</item>
     </array>
 </resources>
