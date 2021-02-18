@@ -118,7 +118,6 @@ class SearchFragment : Fragment() {
             locationResult.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     lastKnownLocation = task.result
-                    //searchByLocation(lastKnownLocation)
                     viewModel.searchByLocation(lastKnownLocation)
                 } else {
                     startLocationUpdates()
