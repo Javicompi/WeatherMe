@@ -43,19 +43,22 @@ class Repository(private val database: WeatherDatabase) : BaseRepository() {
 
     suspend fun searchCurrentByName(name: String): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
-            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByName(name)
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByName(location = name)
         }
     }
 
     suspend fun searchCurrentByLatLon(location: Location): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
-            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByLatLon(location.latitude, location.longitude)
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByLatLon(
+                    latitude = location.latitude,
+                    longitude = location.longitude
+            )
         }
     }
 
     suspend fun searchCurrentByCityId(id: Long): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
-            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherById(id)
+            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherById(id = id)
         }
     }
 
@@ -63,7 +66,7 @@ class Repository(private val database: WeatherDatabase) : BaseRepository() {
         withContext(Dispatchers.IO) {
             val cityIds = database.currentWeatherDao().getCityIds()
             val currents = cityIds.map { id ->
-                WeatherApi.retrofitService.getCurrentWeatherById(id)
+                WeatherApi.retrofitService.getCurrentWeatherById(id = id)
             }
             for (current in currents) {
                 if (current.id > 0) {

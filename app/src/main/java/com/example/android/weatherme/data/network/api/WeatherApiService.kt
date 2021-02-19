@@ -19,7 +19,7 @@ interface WeatherApiService {
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherByName(
             @Query("q") location: String,
-            @Query("units") units: String = "metric",
+            @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
 
@@ -27,14 +27,14 @@ interface WeatherApiService {
     suspend fun getCurrentWeatherByLatLon(
             @Query("lat") latitude: Double,
             @Query("lon") longitude: Double,
-            @Query("units") units: String = "metric",
+            @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
 
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherById(
             @Query("id") id: Long,
-            @Query("units") units: String = "metric",
+            @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
 }
