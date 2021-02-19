@@ -7,25 +7,32 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.example.android.weatherme.R
+import com.example.android.weatherme.data.Repository
+import com.example.android.weatherme.data.database.WeatherDatabase
+import com.example.android.weatherme.utils.Constants
 
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val TAG = SettingsFragment::class.java.simpleName
 
+    private lateinit var repository: Repository
+
     private var automaticUpdate: Boolean = false
     private var automaticUpdateNew = automaticUpdate
+
     private lateinit var units: String
     private lateinit var unitsNew: String
+
     private lateinit var autUpdatePreference: SwitchPreferenceCompat
     private lateinit var unitsPreference: ListPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
-        autUpdatePreference = findPreference(getString(R.string.pref_automatic_update_key))!!
+        autUpdatePreference = findPreference(Constants.PREF_AUT_UPDATE)!!
         automaticUpdate = autUpdatePreference.isChecked
         automaticUpdateNew = automaticUpdate
-        unitsPreference = findPreference(getString(R.string.pref_units_key))!!
+        unitsPreference = findPreference(Constants.PREF_UNITS)!!
         units = unitsPreference.value
         unitsNew = units
         preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
@@ -62,6 +69,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
         if (units != unitsNew) {
             Log.d(TAG, "units changed, launch repository refresh")
+            repository = Repository(WeatherDatabase.getDatabase(requireActivity()))
         }
     }
 }

@@ -11,4 +11,10 @@ object Constants {
     const val LOCATION_REQUEST_INTERVAL = 2000L
 
     const val LOCATION_REQUEST_FASTEST_INTERVAL = 2000L
+
+    const val PREF_LAST_UPDATE = "prefLastUpdateKey"
+
+    const val PREF_AUT_UPDATE = "prefAutomaticUpdateKey"
+
+    const val PREF_UNITS = "prefUnitsKey"
 }
