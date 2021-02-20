@@ -63,3 +63,7 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
     }
     throw Resources.NotFoundException()
 }
+
+fun shouldUpdate(lastUpdate: Long): Boolean {
+    return System.currentTimeMillis() - lastUpdate > 900000
+}

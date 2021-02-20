@@ -2,6 +2,7 @@ package com.example.android.weatherme.data
 
 import android.content.SharedPreferences
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.WeatherDatabase
@@ -83,6 +84,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun updateCurrents() {
+        Log.d("Repository", "updating currents")
         withContext(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             val cityIds = currentWeatherDao.getCityIds()
@@ -95,6 +97,7 @@ class Repository @Inject constructor(
                     currentWeatherDao.insertCurrent(entity)
                 }
             }
+            preferencesHelper.setLastUpdate(System.currentTimeMillis())
         }
     }
 }

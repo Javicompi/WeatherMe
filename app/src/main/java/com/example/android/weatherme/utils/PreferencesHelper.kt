@@ -18,4 +18,16 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     fun setUnits(units: String) {
         prefs.edit().putString(Constants.PREF_UNITS, units).apply()
     }
+
+    fun getLastUpdate(): Long {
+        return prefs.getLong(Constants.PREF_LAST_UPDATE, 0)
+    }
+
+    fun setLastUpdate(time: Long) {
+        prefs.edit().putLong(Constants.PREF_LAST_UPDATE, time).apply()
+    }
+
+    fun getAutUpdate(): Boolean {
+        return prefs.getBoolean(Constants.PREF_AUT_UPDATE, false)
+    }
 }
