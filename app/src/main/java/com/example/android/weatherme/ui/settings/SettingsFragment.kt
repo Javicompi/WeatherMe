@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.utils.Constants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -49,7 +54,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
             automaticUpdateNew = sharedPreferences.getBoolean(key, false)
         } else if (key == resources.getString(R.string.pref_units_key)) {
             Log.d(TAG, "units changed")
-            unitsNew = sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
+            unitsNew =
+                sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
         }
     }
 
@@ -69,7 +75,19 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
         if (units != unitsNew) {
             Log.d(TAG, "units changed, launch repository refresh")
-            repository = Repository(WeatherDatabase.getDatabase(requireActivity()))
+            GlobalScope.launch {
+                launchUpdates()
+            }
+        }
+    }
+
+    private suspend fun launchUpdates() {
+        withContext(Dispatchers.Main) {
+            repository = Repository(
+                WeatherDatabase.getDatabase(requireActivity()),
+                PreferenceManager.getDefaultSharedPreferences(requireActivity())
+            )
+            repository.updateCurrents()
         }
     }
 }

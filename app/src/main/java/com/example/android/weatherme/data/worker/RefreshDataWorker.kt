@@ -2,6 +2,7 @@ package com.example.android.weatherme.data.worker
 
 import android.content.Context
 import android.util.Log
+import androidx.preference.PreferenceManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.android.weatherme.data.Repository
@@ -17,7 +18,8 @@ class RefreshDataWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doWork(): Result {
         val database = WeatherDatabase.getDatabase(applicationContext)
-        val repository = Repository(database)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val repository = Repository(database, preferences)
         return try {
             repository.updateCurrents()
             Result.success()

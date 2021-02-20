@@ -1,10 +1,12 @@
 package com.example.android.weatherme.ui.search
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.WeatherDatabase
@@ -17,7 +19,10 @@ class ResultSearchViewModel(app: Application) : AndroidViewModel(app) {
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
     val navigateToCurrentFragment: SingleLiveEvent<Long> = SingleLiveEvent()
 
-    private val repository = Repository(WeatherDatabase.getDatabase(app))
+    private val repository = Repository(
+        WeatherDatabase.getDatabase(app),
+        PreferenceManager.getDefaultSharedPreferences(app)
+    )
 
     private val _current: MutableLiveData<CurrentEntity> = MutableLiveData()
     val current: LiveData<CurrentEntity>

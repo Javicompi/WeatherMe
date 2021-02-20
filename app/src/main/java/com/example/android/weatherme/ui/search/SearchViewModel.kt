@@ -5,6 +5,7 @@ import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.WeatherDatabase
@@ -16,7 +17,10 @@ import java.util.*
 
 class SearchViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repository = Repository(WeatherDatabase.getDatabase(app))
+    private val repository = Repository(
+        WeatherDatabase.getDatabase(app),
+        PreferenceManager.getDefaultSharedPreferences(app)
+    )
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
