@@ -11,10 +11,7 @@ import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.utils.Constants
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -75,7 +72,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
         if (units != unitsNew) {
             Log.d(TAG, "units changed, launch repository refresh")
-            GlobalScope.launch {
+            val scope = CoroutineScope(Dispatchers.Default)
+            scope.launch {
                 launchUpdates()
             }
         }
