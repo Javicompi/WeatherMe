@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (prefs.getAutUpdate() && shouldUpdate(prefs.getLastUpdate())) {
+        if (!prefs.getAutUpdate() && shouldUpdate(prefs.getLastUpdate())) {
             Log.d("MainActivity", "should update")
             launchDatabaseRefresh()
         } else {
