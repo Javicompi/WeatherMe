@@ -7,18 +7,25 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
+import androidx.work.*
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.WeatherDatabase
+import com.example.android.weatherme.data.worker.RefreshDataWorker
 import com.example.android.weatherme.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val TAG = SettingsFragment::class.java.simpleName
 
-    private lateinit var repository: Repository
+    @Inject
+    lateinit var repository: Repository
 
     private var automaticUpdate: Boolean = false
     private var automaticUpdateNew = automaticUpdate
@@ -66,8 +73,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (automaticUpdate != automaticUpdateNew) {
             if (automaticUpdateNew) {
                 Log.d(TAG, "automatic update changed, launch coroutine worker")
+                setRefreshDataWorker()
             } else {
                 Log.d(TAG, "automatic update changed, cancel coroutine worker")
+                cancelRefreshDataWorker()
             }
         }
         if (units != unitsNew) {
@@ -81,11 +90,30 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     private suspend fun launchUpdates() {
         withContext(Dispatchers.Main) {
-            repository = Repository(
-                WeatherDatabase.getDatabase(requireActivity()),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
             repository.updateCurrents()
         }
+    }
+
+    private fun setRefreshDataWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            //.setRequiresDeviceIdle(true)
+            .build()
+
+        val repeatingRequest =
+            PeriodicWorkRequestBuilder<RefreshDataWorker>(15, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(requireActivity().applicationContext).enqueueUniquePeriodicWork(
+            RefreshDataWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
+        )
+    }
+
+    private fun cancelRefreshDataWorker() {
+        WorkManager.getInstance(requireActivity().applicationContext).cancelUniqueWork(RefreshDataWorker.WORK_NAME)
     }
 }

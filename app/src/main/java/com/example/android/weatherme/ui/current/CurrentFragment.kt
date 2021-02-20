@@ -6,19 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentCurrentBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CurrentFragment : Fragment() {
 
-    private val viewModel: CurrentViewModel by lazy {
+    /*private val viewModel: CurrentViewModel by lazy {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(activity, CurrentViewModelFactory(activity.application))
                 .get(CurrentViewModel::class.java)
-    }
+    }*/
+    private val viewModel: CurrentViewModel by viewModels()
 
     private val arguments: CurrentFragmentArgs by navArgs()
 

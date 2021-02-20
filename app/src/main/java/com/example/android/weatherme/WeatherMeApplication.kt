@@ -2,20 +2,33 @@ package com.example.android.weatherme
 
 import android.app.Application
 import android.util.Log
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import com.example.android.weatherme.data.worker.RefreshDataWorker
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class WeatherMeApplication : Application() {
+@HiltAndroidApp
+class WeatherMeApplication : Application(), Configuration.Provider {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()
-        delayedInit()
+        //delayedInit()
     }
 
     private fun delayedInit() {
@@ -31,11 +44,11 @@ class WeatherMeApplication : Application() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
-            .setRequiresDeviceIdle(true)
+            //.setRequiresDeviceIdle(true)
             .build()
 
         val repeatingRequest =
-            PeriodicWorkRequestBuilder<RefreshDataWorker>(60, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<RefreshDataWorker>(15, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
 
