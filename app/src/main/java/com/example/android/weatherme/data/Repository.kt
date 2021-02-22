@@ -14,6 +14,7 @@ import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.utils.Constants
 import com.example.android.weatherme.utils.PreferencesHelper
+import com.example.android.weatherme.utils.shouldUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -98,6 +99,15 @@ class Repository @Inject constructor(
                 }
             }
             preferencesHelper.setLastUpdate(System.currentTimeMillis())
+        }
+    }
+
+    private suspend fun onStart() {
+        if (!preferencesHelper.getAutUpdate() && shouldUpdate(preferencesHelper.getLastUpdate())) {
+            Log.d("Repository", "should update")
+            updateCurrents()
+        } else {
+            Log.d("Repository", "should not update")
         }
     }
 }
