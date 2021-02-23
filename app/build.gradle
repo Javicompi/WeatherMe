@@ -18,6 +18,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Please ensure you have a valid API Key from OpenWeatherMap
+        buildConfigField("String", "API_KEY", api_key)
     }
 
     buildTypes {
