@@ -1,18 +1,14 @@
 package com.example.android.weatherme.data
 
-import android.content.SharedPreferences
 import android.location.Location
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
-import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.network.api.Result
-import com.example.android.weatherme.data.network.api.WeatherApi
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
-import com.example.android.weatherme.utils.Constants
 import com.example.android.weatherme.utils.PreferencesHelper
 import com.example.android.weatherme.utils.shouldUpdate
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +19,10 @@ class Repository @Inject constructor(
     private val currentWeatherDao: CurrentWeatherDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
-) : BaseRepository() {
+) : BaseRepository(){
 
     suspend fun saveCurrent(current: CurrentEntity): Long {
+        Log.d("Repository", "save current")
         var id: Long
         withContext(Dispatchers.IO) {
             id = currentWeatherDao.insertCurrent(current)
@@ -84,30 +81,42 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun updateCurrents() {
-        Log.d("Repository", "updating currents")
+    suspend fun updateCurrent(key: Long) {
+        Log.d("Repository", "update current")
         withContext(Dispatchers.IO) {
-            val units = preferencesHelper.getUnits()
-            val cityIds = currentWeatherDao.getCityIds()
-            val currents = cityIds.map { id ->
-                weatherApiService.getCurrentWeatherById(id = id, units = units)
+            val result = searchCurrentByCityId(key)
+            if (result is Result.Success) {
+                saveCurrent(result.value.toEntity())
             }
-            for (current in currents) {
-                if (current.id > 0) {
-                    val entity = current.toEntity()
-                    currentWeatherDao.insertCurrent(entity)
-                }
-            }
-            preferencesHelper.setLastUpdate(System.currentTimeMillis())
         }
     }
 
-    private suspend fun onStart() {
+    suspend fun shouldUpdateCurrents() {
+        Log.d("Repository", "updating currents")
         if (!preferencesHelper.getAutUpdate() && shouldUpdate(preferencesHelper.getLastUpdate())) {
-            Log.d("Repository", "should update")
-            updateCurrents()
-        } else {
-            Log.d("Repository", "should not update")
+            Log.d("Repository", "should update currents")
+            withContext(Dispatchers.IO) {
+                val units = preferencesHelper.getUnits()
+                val cityIds = currentWeatherDao.getCityIds()
+                val currents = cityIds.map { id ->
+                    weatherApiService.getCurrentWeatherById(id = id, units = units)
+                }
+                for (current in currents) {
+                    if (current.id > 0) {
+                        val entity = current.toEntity()
+                        currentWeatherDao.insertCurrent(entity)
+                    }
+                }
+                preferencesHelper.setLastUpdate(System.currentTimeMillis())
+            }
+        }
+    }
+
+    suspend fun shouldUpdateCurrent(current: CurrentEntity) {
+        Log.d("Repository", "updating current")
+        if (!preferencesHelper.getAutUpdate() && shouldUpdate(current.deltaTime)) {
+            Log.d("Repository", "should update current")
+            updateCurrent(current.cityId)
         }
     }
 }

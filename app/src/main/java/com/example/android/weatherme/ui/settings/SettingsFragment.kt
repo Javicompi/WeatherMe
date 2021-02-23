@@ -2,27 +2,25 @@ package com.example.android.weatherme.ui.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import androidx.work.*
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.WeatherDatabase
-import com.example.android.weatherme.data.worker.RefreshDataWorker
+import com.example.android.weatherme.data.worker.RefreshCurrentsWorker
 import com.example.android.weatherme.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private val TAG = SettingsFragment::class.java.simpleName
 
     @Inject
     lateinit var repository: Repository
@@ -54,10 +52,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == resources.getString(R.string.pref_automatic_update_key)) {
-            Log.d(TAG, "automatic updates changed")
             automaticUpdateNew = sharedPreferences.getBoolean(key, false)
         } else if (key == resources.getString(R.string.pref_units_key)) {
-            Log.d(TAG, "units changed")
             unitsNew =
                 sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
         }
@@ -72,15 +68,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
         super.onStop()
         if (automaticUpdate != automaticUpdateNew) {
             if (automaticUpdateNew) {
-                Log.d(TAG, "automatic update changed, launch coroutine worker")
                 setRefreshDataWorker()
             } else {
-                Log.d(TAG, "automatic update changed, cancel coroutine worker")
-                cancelRefreshDataWorker()
+                cancelRefreshCurrentsWorker()
             }
         }
         if (units != unitsNew) {
-            Log.d(TAG, "units changed, launch repository refresh")
             val scope = CoroutineScope(Dispatchers.Default)
             scope.launch {
                 launchUpdates()
@@ -89,8 +82,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     private suspend fun launchUpdates() {
-        withContext(Dispatchers.Main) {
-            repository.updateCurrents()
+        withContext(Dispatchers.IO) {
+            repository.shouldUpdateCurrents()
         }
     }
 
@@ -102,18 +95,18 @@ class SettingsFragment : PreferenceFragmentCompat(),
             .build()
 
         val repeatingRequest =
-            PeriodicWorkRequestBuilder<RefreshDataWorker>(15, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<RefreshCurrentsWorker>(15, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
 
         WorkManager.getInstance(requireActivity().applicationContext).enqueueUniquePeriodicWork(
-            RefreshDataWorker.WORK_NAME,
+            RefreshCurrentsWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             repeatingRequest
         )
     }
 
-    private fun cancelRefreshDataWorker() {
-        WorkManager.getInstance(requireActivity().applicationContext).cancelUniqueWork(RefreshDataWorker.WORK_NAME)
+    private fun cancelRefreshCurrentsWorker() {
+        WorkManager.getInstance(requireActivity().applicationContext).cancelUniqueWork(RefreshCurrentsWorker.WORK_NAME)
     }
 }

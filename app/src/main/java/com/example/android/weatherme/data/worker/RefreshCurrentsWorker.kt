@@ -10,7 +10,7 @@ import com.example.android.weatherme.data.Repository
 import retrofit2.HttpException
 
 
-class RefreshDataWorker @WorkerInject constructor(
+class RefreshCurrentsWorker @WorkerInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     val repository: Repository
@@ -23,7 +23,7 @@ class RefreshDataWorker @WorkerInject constructor(
     override suspend fun doWork(): Result {
         Log.d(WORK_NAME, "do Work")
         return try {
-            repository.updateCurrents()
+            repository.shouldUpdateCurrents()
             Log.d(WORK_NAME, "success")
             Result.success()
         } catch (e: HttpException) {

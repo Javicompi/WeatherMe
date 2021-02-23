@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
+import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
@@ -18,6 +19,12 @@ class CurrentViewModel @ViewModelInject constructor(
 
     val currentSelected = loadNewCurrent.switchMap { value ->
         repository.getCurrentByKey(value)
+    }
+
+    val shouldUpdate = Transformations.map(currentSelected) {
+        viewModelScope.launch {
+            repository.shouldUpdateCurrent(it)
+        }
     }
 
     val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {

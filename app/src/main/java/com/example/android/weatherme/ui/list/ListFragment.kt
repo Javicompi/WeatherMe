@@ -14,11 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ListFragment : Fragment() {
 
-    /*private val viewModel: ListViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(activity, ListViewModelFactory(activity.application))
-            .get(ListViewModel::class.java)
-    }*/
     private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
@@ -44,5 +39,10 @@ class ListFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.updateCurrents()
     }
 }

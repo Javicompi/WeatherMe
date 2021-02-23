@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class RefreshDataWorkerTest {
+class RefreshCurrentsWorkerTest {
 
     private lateinit var context: Context
 
@@ -23,7 +23,7 @@ class RefreshDataWorkerTest {
 
     @Test
     fun testDataWorker() {
-        val worker = TestListenableWorkerBuilder<RefreshDataWorker>(context).build()
+        val worker = TestListenableWorkerBuilder<RefreshCurrentsWorker>(context).build()
         val result = worker.startWork().get()
         assertThat(result, `is`(ListenableWorker.Result.success()))
     }

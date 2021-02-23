@@ -1,5 +1,7 @@
 package com.example.android.weatherme.di
 
+import android.content.Context
+import androidx.lifecycle.Lifecycle
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.network.api.WeatherApiService
@@ -8,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Singleton
 
 @InstallIn(ApplicationComponent::class)

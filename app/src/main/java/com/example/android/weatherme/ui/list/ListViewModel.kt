@@ -33,4 +33,10 @@ class ListViewModel @ViewModelInject constructor(
             showLoading.postValue(false)
         }
     }
+
+    fun updateCurrents() {
+        viewModelScope.launch {
+            repository.shouldUpdateCurrents()
+        }
+    }
 }
