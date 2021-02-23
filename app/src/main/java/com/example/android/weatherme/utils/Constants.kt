@@ -19,4 +19,6 @@ object Constants {
     const val PREF_UNITS = "prefUnitsKey"
 
     const val PREF_LAST_UPDATE = "prefLastUpdate"
+
+    const val PERIODIC_REQUEST_DELAY_MINS = 60L
 }

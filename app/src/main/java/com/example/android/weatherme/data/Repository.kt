@@ -91,32 +91,19 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun shouldUpdateCurrents() {
-        Log.d("Repository", "updating currents")
-        if (!preferencesHelper.getAutUpdate() && shouldUpdate(preferencesHelper.getLastUpdate())) {
-            Log.d("Repository", "should update currents")
-            withContext(Dispatchers.IO) {
-                val units = preferencesHelper.getUnits()
-                val cityIds = currentWeatherDao.getCityIds()
-                val currents = cityIds.map { id ->
-                    weatherApiService.getCurrentWeatherById(id = id, units = units)
-                }
-                for (current in currents) {
-                    if (current.id > 0) {
-                        val entity = current.toEntity()
-                        currentWeatherDao.insertCurrent(entity)
-                    }
-                }
-                preferencesHelper.setLastUpdate(System.currentTimeMillis())
+    suspend fun updateCurrents() {
+        withContext(Dispatchers.IO) {
+            val units = preferencesHelper.getUnits()
+            val cityIds = currentWeatherDao.getCityIds()
+            val currents = cityIds.map { id ->
+                weatherApiService.getCurrentWeatherById(id = id, units = units)
             }
-        }
-    }
-
-    suspend fun shouldUpdateCurrent(current: CurrentEntity) {
-        Log.d("Repository", "updating current")
-        if (!preferencesHelper.getAutUpdate() && shouldUpdate(current.deltaTime)) {
-            Log.d("Repository", "should update current")
-            updateCurrent(current.cityId)
+            for (current in currents) {
+                if (current.id > 0) {
+                    val entity = current.toEntity()
+                    currentWeatherDao.insertCurrent(entity)
+                }
+            }
         }
     }
 }

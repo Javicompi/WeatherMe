@@ -21,12 +21,6 @@ class CurrentViewModel @ViewModelInject constructor(
         repository.getCurrentByKey(value)
     }
 
-    val shouldUpdate = Transformations.map(currentSelected) {
-        viewModelScope.launch {
-            repository.shouldUpdateCurrent(it)
-        }
-    }
-
     val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
         it != null && it.cityName?.isNotEmpty() ?: false
     }

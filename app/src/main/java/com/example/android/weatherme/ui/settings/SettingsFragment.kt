@@ -4,18 +4,14 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
-import androidx.work.*
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.worker.RefreshCurrentsWorker
 import com.example.android.weatherme.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,20 +21,13 @@ class SettingsFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var repository: Repository
 
-    private var automaticUpdate: Boolean = false
-    private var automaticUpdateNew = automaticUpdate
-
     private lateinit var units: String
     private lateinit var unitsNew: String
 
-    private lateinit var autUpdatePreference: SwitchPreferenceCompat
     private lateinit var unitsPreference: ListPreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
-        autUpdatePreference = findPreference(Constants.PREF_AUT_UPDATE)!!
-        automaticUpdate = autUpdatePreference.isChecked
-        automaticUpdateNew = automaticUpdate
         unitsPreference = findPreference(Constants.PREF_UNITS)!!
         units = unitsPreference.value
         unitsNew = units
@@ -51,11 +40,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == resources.getString(R.string.pref_automatic_update_key)) {
-            automaticUpdateNew = sharedPreferences.getBoolean(key, false)
-        } else if (key == resources.getString(R.string.pref_units_key)) {
-            unitsNew =
-                sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
+        if (key == resources.getString(R.string.pref_units_key)) {
+            unitsNew = sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
         }
     }
 
@@ -66,13 +52,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onStop() {
         super.onStop()
-        if (automaticUpdate != automaticUpdateNew) {
-            if (automaticUpdateNew) {
-                setRefreshDataWorker()
-            } else {
-                cancelRefreshCurrentsWorker()
-            }
-        }
         if (units != unitsNew) {
             val scope = CoroutineScope(Dispatchers.Default)
             scope.launch {
@@ -83,30 +62,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     private suspend fun launchUpdates() {
         withContext(Dispatchers.IO) {
-            repository.shouldUpdateCurrents()
+            repository.updateCurrents()
         }
-    }
-
-    private fun setRefreshDataWorker() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            //.setRequiresDeviceIdle(true)
-            .build()
-
-        val repeatingRequest =
-            PeriodicWorkRequestBuilder<RefreshCurrentsWorker>(15, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-
-        WorkManager.getInstance(requireActivity().applicationContext).enqueueUniquePeriodicWork(
-            RefreshCurrentsWorker.WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
-            repeatingRequest
-        )
-    }
-
-    private fun cancelRefreshCurrentsWorker() {
-        WorkManager.getInstance(requireActivity().applicationContext).cancelUniqueWork(RefreshCurrentsWorker.WORK_NAME)
     }
 }
