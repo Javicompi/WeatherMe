@@ -3,6 +3,7 @@ package com.example.android.weatherme.utils
 import android.content.Context
 import androidx.preference.PreferenceManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,5 +30,10 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun getAutUpdate(): Boolean {
         return prefs.getBoolean(Constants.PREF_AUT_UPDATE, false)
+    }
+
+    fun shouldUpdateCurrents(): Boolean {
+        val updateDelay = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
+        return !getAutUpdate() && System.currentTimeMillis() - getLastUpdate() > updateDelay
     }
 }

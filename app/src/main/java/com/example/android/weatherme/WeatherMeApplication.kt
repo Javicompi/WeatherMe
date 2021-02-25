@@ -15,15 +15,15 @@ import javax.inject.Inject
 @HiltAndroidApp
 class WeatherMeApplication : Application(), Configuration.Provider {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    //val applicationScope = CoroutineScope(Dispatchers.Default)
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
-    override fun onCreate() {
+    /*override fun onCreate() {
         super.onCreate()
         delayedInit()
-    }
+    }*/
 
     override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()
@@ -31,7 +31,7 @@ class WeatherMeApplication : Application(), Configuration.Provider {
             .build()
     }
 
-    private fun delayedInit() {
+    /*private fun delayedInit() {
         applicationScope.launch {
             setUpRefreshCurrentsWorker()
         }
@@ -54,5 +54,5 @@ class WeatherMeApplication : Application(), Configuration.Provider {
             ExistingPeriodicWorkPolicy.KEEP,
             repeatingRequest
         )
-    }
+    }*/
 }

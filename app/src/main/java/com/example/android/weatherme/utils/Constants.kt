@@ -20,5 +20,6 @@ object Constants {
 
     const val PREF_LAST_UPDATE = "prefLastUpdate"
 
-    const val PERIODIC_REQUEST_DELAY_MINS = 60L
+    //TODO for testing, only 15 minutes
+    const val PERIODIC_REQUEST_DELAY_MINS = 15L
 }

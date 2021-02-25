@@ -1,6 +1,7 @@
 package com.example.android.weatherme.ui.list
 
 import android.app.Application
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
@@ -9,8 +10,8 @@ import kotlinx.coroutines.launch
 
 class ListViewModel @ViewModelInject constructor(
     app: Application,
-    val repository: Repository
-) : AndroidViewModel(app) {
+    val repository: Repository,
+) : AndroidViewModel(app), LifecycleObserver {
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -31,6 +32,14 @@ class ListViewModel @ViewModelInject constructor(
                 currentList.value = it
             }
             showLoading.postValue(false)
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onStart() {
+        Log.d("ListViewModel", "onStart")
+        viewModelScope.launch {
+            repository.shouldUpdateCurrents()
         }
     }
 }

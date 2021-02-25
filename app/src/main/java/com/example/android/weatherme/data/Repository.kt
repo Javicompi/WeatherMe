@@ -10,7 +10,6 @@ import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.utils.PreferencesHelper
-import com.example.android.weatherme.utils.shouldUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,10 +18,12 @@ class Repository @Inject constructor(
     private val currentWeatherDao: CurrentWeatherDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
-) : BaseRepository(){
+) : BaseRepository() {
+
+    private val TAG = Repository::class.java.simpleName
 
     suspend fun saveCurrent(current: CurrentEntity): Long {
-        Log.d("Repository", "save current")
+        Log.d(TAG, "save current")
         var id: Long
         withContext(Dispatchers.IO) {
             id = currentWeatherDao.insertCurrent(current)
@@ -82,7 +83,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun updateCurrent(key: Long) {
-        Log.d("Repository", "update current")
+        Log.d(TAG, "update current")
         withContext(Dispatchers.IO) {
             val result = searchCurrentByCityId(key)
             if (result is Result.Success) {
@@ -92,6 +93,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun updateCurrents() {
+        Log.d(TAG, "updateCurrents")
         withContext(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             val cityIds = currentWeatherDao.getCityIds()
@@ -103,6 +105,17 @@ class Repository @Inject constructor(
                     val entity = current.toEntity()
                     currentWeatherDao.insertCurrent(entity)
                 }
+            }
+            preferencesHelper.setLastUpdate(System.currentTimeMillis())
+        }
+    }
+
+    suspend fun shouldUpdateCurrents() {
+        Log.d(TAG, "shouldUpdateCurrents")
+        if (preferencesHelper.shouldUpdateCurrents()) {
+            Log.d(TAG, "should update currents")
+            withContext(Dispatchers.IO) {
+                updateCurrents()
             }
         }
     }
