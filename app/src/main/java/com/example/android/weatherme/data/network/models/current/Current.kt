@@ -1,9 +1,11 @@
 package com.example.android.weatherme.data.network.models.current
 
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.squareup.moshi.JsonClass
 import java.util.*
 import kotlin.math.roundToInt
 
+@JsonClass(generateAdapter = true)
 data class Current(
         val coord: Coord,
         val weather: List<Weather>,

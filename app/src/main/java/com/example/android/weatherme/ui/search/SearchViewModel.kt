@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.network.api.Result
-import com.example.android.weatherme.data.network.models.current.Current
+import com.example.android.weatherme.data.network.models.current.NewCurrent
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import java.util.*
@@ -24,7 +24,7 @@ class SearchViewModel @ViewModelInject constructor(
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
 
-    val current: SingleLiveEvent<Current> = SingleLiveEvent()
+    val current: SingleLiveEvent<NewCurrent> = SingleLiveEvent()
 
     fun searchByName(name: String) {
         showLoading.postValue(true)

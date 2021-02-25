@@ -1,6 +1,5 @@
 package com.example.android.weatherme.data.network.api
 
-import com.example.android.weatherme.data.network.models.current.Current
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`

@@ -14,7 +14,7 @@ class CurrentTest {
         //Create the model
         val currentModel = createCurrent()
         //Check is the right type
-        assertThat(currentModel, isA(Current::class.java))
+        assertThat(currentModel, isA(NewCurrent::class.java))
         //Check values are correct
         assertThat(currentModel.name, `is`("Gran Alacant"))
         assertThat(currentModel.id, `is`(6697298))

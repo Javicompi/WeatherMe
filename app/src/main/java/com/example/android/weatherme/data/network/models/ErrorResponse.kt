@@ -1,8 +1,8 @@
 package com.example.android.weatherme.data.network.models
 
+//import com.squareup.moshi.JsonClass
 
-import com.google.gson.annotations.SerializedName
-
+//@JsonClass(generateAdapter = true)
 data class ErrorResponse(
     val cod: Int,
     val message: String

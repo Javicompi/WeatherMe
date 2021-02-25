@@ -102,15 +102,15 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
-    //Datastore
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha06"
-
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    //implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     //Moshi
-    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    //implementation "com.squareup.moshi:moshi-kotlin:1.11.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'

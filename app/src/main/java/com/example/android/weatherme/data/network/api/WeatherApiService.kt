@@ -1,6 +1,6 @@
 package com.example.android.weatherme.data.network.api
 
-import com.example.android.weatherme.data.network.models.current.Current
+import com.example.android.weatherme.data.network.models.current.NewCurrent
 import com.example.android.weatherme.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -21,7 +21,7 @@ interface WeatherApiService {
             @Query("q") location: String,
             @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
-    ): Current
+    ): NewCurrent
 
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherByLatLon(
@@ -29,14 +29,14 @@ interface WeatherApiService {
             @Query("lon") longitude: Double,
             @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
-    ): Current
+    ): NewCurrent
 
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherById(
             @Query("id") id: Long,
             @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
-    ): Current
+    ): NewCurrent
 }
 
 object WeatherApi {
