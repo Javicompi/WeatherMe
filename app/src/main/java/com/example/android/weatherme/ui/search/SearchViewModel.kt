@@ -29,11 +29,13 @@ class SearchViewModel @ViewModelInject constructor(
     fun searchByName(name: String) {
         showLoading.postValue(true)
         viewModelScope.launch {
-            when (val result = repository.searchCurrentByName(name)) {
+            val result = repository.searchCurrentByName(name)
+            when (result) {
                 is Result.Success -> {
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {
+                    //val error = result.errorResponse?.message?.capitalize(Locale.getDefault())
                     val errorMessage = result.error?.message?.capitalize(Locale.getDefault())
                     showSnackBar.postValue(errorMessage)
                 }
@@ -53,6 +55,7 @@ class SearchViewModel @ViewModelInject constructor(
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {
+                    //val error = result.errorResponse?.message?.capitalize(Locale.getDefault())
                     val errorMessage = result.error?.message?.capitalize(Locale.getDefault())
                     showSnackBar.postValue(errorMessage)
                 }

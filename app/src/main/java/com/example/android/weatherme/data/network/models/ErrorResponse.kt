@@ -4,6 +4,6 @@ package com.example.android.weatherme.data.network.models
 
 //@JsonClass(generateAdapter = true)
 data class ErrorResponse(
-    val cod: Int,
-    val message: String
+    val cod: Int = 0,
+    val message: String = "Unknown Error"
 )

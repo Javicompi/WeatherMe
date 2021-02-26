@@ -16,8 +16,8 @@ data class Current(
     val visibility: Int,
     val wind: Wind,
     val clouds: Clouds,
-    val rain: Rain?,
-    val snow: Snow?,
+    val rain: Rain? = null,
+    val snow: Snow? = null,
     val dt: Int,
     val sys: Sys,
     val timezone: Int,
@@ -75,17 +75,17 @@ data class Current(
     @JsonClass(generateAdapter = true)
     data class Rain(
         @Json(name = "1h")
-        val oneHour: Double,
+        val oneHour: Double? = null,
         @Json(name = "3h")
-        val threeHours: Double
+        val threeHours: Double? = null
     )
 
     @JsonClass(generateAdapter = true)
     data class Snow(
         @Json(name = "1h")
-        val oneHour: Double,
+        val oneHour: Double? = null,
         @Json(name = "3h")
-        val threeHours: Double
+        val threeHours: Double? = null
     )
 }
 

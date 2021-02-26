@@ -31,7 +31,7 @@
     <string name="current_layout_title">%s, %s</string>
     <string name="current_percent">%d%%</string>
     <string name="current_speed">%dm/s</string>
-    <string name="current_mms">%dmm</string>
+    <string name="current_mms">%.1fmm</string>
     
     <!-- Wind directions -->
     <string name="north">N</string>
