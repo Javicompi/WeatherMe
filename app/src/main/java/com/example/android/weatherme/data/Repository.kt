@@ -7,7 +7,7 @@ import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
-import com.example.android.weatherme.data.network.models.current.NewCurrent
+import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.utils.PreferencesHelper
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +51,7 @@ class Repository @Inject constructor(
         currentWeatherDao.deleteCurrents()
     }
 
-    suspend fun searchCurrentByName(name: String): Result<NewCurrent> {
+    suspend fun searchCurrentByName(name: String): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByName(
@@ -61,7 +61,7 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun searchCurrentByLatLon(location: Location): Result<NewCurrent> {
+    suspend fun searchCurrentByLatLon(location: Location): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByLatLon(
@@ -72,7 +72,7 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun searchCurrentByCityId(id: Long): Result<NewCurrent> {
+    suspend fun searchCurrentByCityId(id: Long): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherById(

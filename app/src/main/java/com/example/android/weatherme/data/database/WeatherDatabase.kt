@@ -28,19 +28,3 @@ abstract class WeatherDatabase : RoomDatabase() {
         }
     }
 }
-
-/*@Volatile
-private lateinit var INSTANCE: WeatherDatabase
-
-fun getDatabase(context: Context): WeatherDatabase {
-    synchronized(WeatherDatabase::class.java) {
-        if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(
-                context.applicationContext,
-                WeatherDatabase::class.java,
-                "database"
-            ).build()
-        }
-    }
-    return INSTANCE
-}*/

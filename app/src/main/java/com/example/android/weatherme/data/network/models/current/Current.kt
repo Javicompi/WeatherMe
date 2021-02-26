@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.math.roundToInt
 
 @JsonClass(generateAdapter = true)
-data class NewCurrent(
+data class Current(
     val coord: Coord,
     val weather: List<Weather>,
     val base: String,
@@ -89,7 +89,7 @@ data class NewCurrent(
     )
 }
 
-fun NewCurrent.toEntity(): CurrentEntity {
+fun Current.toEntity(): CurrentEntity {
     return CurrentEntity(
         latitude = coord.lat,
         longitude = coord.lon,
