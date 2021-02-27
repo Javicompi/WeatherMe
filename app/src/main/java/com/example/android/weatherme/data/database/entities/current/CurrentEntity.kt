@@ -1,6 +1,5 @@
 package com.example.android.weatherme.data.database.entities.current
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
