@@ -1,5 +1,6 @@
 package com.example.android.weatherme.data.network.api
 
+import com.example.android.weatherme.data.network.models.perhour.PerHour
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -9,7 +10,7 @@ import org.junit.Test
 class WeatherApiTest : TestCase() {
 
     @Test
-    fun testApiByName() = runBlocking {
+    fun testCurrentByName() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentWeatherByName(
                 "gran alacant",
                 "metric",
@@ -19,7 +20,7 @@ class WeatherApiTest : TestCase() {
     }
 
     @Test
-    fun testApiByLatLon() = runBlocking {
+    fun testCurrentByLatLon() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentWeatherByLatLon(
             38.232394006633555,
             -0.5470151195289806,
@@ -27,5 +28,16 @@ class WeatherApiTest : TestCase() {
             "es"
         )
         assertThat(result.name, `is`("Gran Alacant"))
+    }
+
+    @Test
+    fun testPerHourByName() = runBlocking {
+        val result = WeatherApi.retrofitService.getPerHourByLatLon(
+                38.232394006633555,
+                -0.5470151195289806,
+                "metric",
+                "es"
+        )
+        assertThat(result.hourly.size, `is`(48))
     }
 }

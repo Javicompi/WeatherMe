@@ -1,6 +1,7 @@
 package com.example.android.weatherme.data.network.api
 
 import com.example.android.weatherme.data.network.models.current.Current
+import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -37,6 +38,14 @@ interface WeatherApiService {
             @Query("units") units: String? = "metric",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): Current
+
+    @GET("onecall?appid=${Constants.API_KEY}")
+    suspend fun getPerHourByLatLon(
+            @Query("lat") latitude: Double,
+            @Query("lon") longitude: Double,
+            @Query("units") units: String? = "metric",
+            @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
+    ): PerHour
 }
 
 object WeatherApi {
