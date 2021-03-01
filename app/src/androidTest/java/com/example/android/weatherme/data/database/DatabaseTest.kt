@@ -5,9 +5,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.MediumTest
 import androidx.test.filters.SmallTest
 import com.example.android.weatherme.data.network.models.current.toEntity
+import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
+import com.example.android.weatherme.data.network.models.perhour.toPerHourEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -71,6 +72,11 @@ class DatabaseTest {
 
     @Test
     fun savePerHourRetrievePerHour() = testScope.runBlockingTest {
-
+        val result = createPerHour()
+        db.perHourWeatherDao().insertPerHour(result.toPerHourEntity(6697298))
+        db.perHourWeatherDao().insertHourlys(result.hourly.toHourlyEntityList(6697298))
+        val perHour = db.perHourWeatherDao().getPerHourbyKey(6697298).getOrAwaitValue()
+        assertThat(perHour.perHourEntity.cityId, `is`(6697298))
+        assertThat(perHour.hourlyEntities.size, `is`(48))
     }
 }

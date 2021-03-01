@@ -79,6 +79,7 @@ fun PerHour.toPerHourEntity(id: Long): PerHourEntity {
 fun List<Hourly>.toHourlyEntityList(id: Long): List<HourlyEntity> {
     return map {
         HourlyEntity(
+                id = null,
                 cityId = id,
                 deltaTime = it.dt.toLong() * 1000,
                 temp = it.temp.roundToInt(),

@@ -8,7 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "hourlys")
 data class HourlyEntity(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
+        val id: Long?,
         val cityId: Long,
         val deltaTime: Long,
         val temp: Int,
