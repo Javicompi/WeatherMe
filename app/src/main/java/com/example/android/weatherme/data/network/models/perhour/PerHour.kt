@@ -68,7 +68,6 @@ data class PerHour(
 
 fun PerHour.toPerHourEntity(id: Long): PerHourEntity {
     return PerHourEntity(
-            hourlyId = null,
             cityId = id,
             lat = lat,
             lon = lon,

@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 
 @Dao
 interface PerHourDao {
 
     @Transaction
     @Query("SELECT * FROM perHours WHERE `cityId` = :id")
-    fun getPerHourbyKey(id: Long): LiveData<PerHourEntity>
+    fun getPerHourbyKey(id: Long): LiveData<PerHourWithHourly>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerHour(perHourEntity: PerHourEntity): Long
