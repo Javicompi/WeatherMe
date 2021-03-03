@@ -22,4 +22,6 @@ object Constants {
 
     //TODO for testing, only 15 minutes
     const val PERIODIC_REQUEST_DELAY_MINS = 15L
+
+    const val CURRENT_SELECTED = "prefCurrentSelected"
 }

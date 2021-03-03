@@ -42,7 +42,6 @@ class CurrentViewModel @ViewModelInject constructor(
     fun deleteCurrent() {
         viewModelScope.launch {
             currentSelected.value?.let { repository.deleteCurrent(it.cityId) }
-            savedStateHandle.set("cityId", 0L)
         }
     }
 }

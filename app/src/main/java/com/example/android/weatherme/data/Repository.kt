@@ -38,7 +38,12 @@ class Repository @Inject constructor(
     }
 
     fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
-        return currentWeatherDao.getCurrentByKey(key)
+        if (key > 0) {
+            preferencesHelper.setCurrentSelected(key)
+            return currentWeatherDao.getCurrentByKey(key)
+        } else {
+            return currentWeatherDao.getCurrentByKey(preferencesHelper.getCurrentSelected())
+        }
     }
 
     fun getCurrentByKName(name: String): LiveData<CurrentEntity> {
@@ -46,10 +51,12 @@ class Repository @Inject constructor(
     }
 
     suspend fun deleteCurrent(key: Long) = withContext(Dispatchers.IO) {
+        preferencesHelper.setCurrentSelected(0)
         currentWeatherDao.deleteCurrent(key)
     }
 
     suspend fun deleteCurrents() = withContext(Dispatchers.IO) {
+        preferencesHelper.setCurrentSelected(0)
         currentWeatherDao.deleteCurrents()
     }
 

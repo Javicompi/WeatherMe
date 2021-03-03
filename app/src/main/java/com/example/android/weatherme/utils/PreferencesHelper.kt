@@ -36,4 +36,12 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         val updateDelay = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
         return !getAutUpdate() && System.currentTimeMillis() - getLastUpdate() > updateDelay
     }
+
+    fun setCurrentSelected(value: Long) {
+        prefs.edit().putLong(Constants.CURRENT_SELECTED, value).apply()
+    }
+
+    fun getCurrentSelected(): Long {
+        return prefs.getLong(Constants.CURRENT_SELECTED, 0)
+    }
 }
