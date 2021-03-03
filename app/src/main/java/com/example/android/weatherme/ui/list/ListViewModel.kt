@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ListViewModel @ViewModelInject constructor(
     app: Application,
-    val repository: Repository,
+    private val repository: Repository,
 ) : AndroidViewModel(app), LifecycleObserver {
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()

@@ -2,6 +2,7 @@ package com.example.android.weatherme.data
 
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.models.ErrorResponse
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -22,6 +23,10 @@ open class BaseRepository {
                         val errorResponse = convertErrorBody(throwable)
                         Result.GenericError(code, errorResponse)
                     }
+                    is JsonDataException -> {
+                        val errorResponse = convertJsonException(throwable)
+                        Result.GenericError(0, errorResponse)
+                    }
                     else -> {
                         Result.GenericError(null, null)
                     }
@@ -38,6 +43,14 @@ open class BaseRepository {
             }
         } catch (exception: Exception) {
             null
+        }
+    }
+
+    private fun convertJsonException(throwable: JsonDataException): ErrorResponse? {
+        return try {
+                ErrorResponse(0, throwable.localizedMessage ?: "Error parsing the data")
+            } catch (exception: Exception) {
+                return null
         }
     }
 }

@@ -78,7 +78,7 @@ object BindingAdapters {
     @JvmStatic
     fun TextView.degreesToString(value: Int) {
         var degrees = value
-        if (degrees > 360) { degrees -= 360 }
+        if (degrees >= 360) { degrees -= 360 }
         val degreesArray = resources.getStringArray(R.array.wind_directions_strings)
         val index = ((degrees / 22.5).toInt())
         text = degreesArray[index]

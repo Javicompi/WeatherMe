@@ -2,6 +2,7 @@ package com.example.android.weatherme.di
 
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.CurrentWeatherDao
+import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.utils.PreferencesHelper
 import dagger.Module
@@ -18,9 +19,10 @@ object RepositoryModule {
     @Provides
     fun provideRepository(
         currentWeatherDao: CurrentWeatherDao,
+        perHourDao: PerHourDao,
         weatherApiService: WeatherApiService,
         preferencesHelper: PreferencesHelper,
     ): Repository {
-        return Repository(currentWeatherDao, weatherApiService, preferencesHelper)
+        return Repository(currentWeatherDao, perHourDao, weatherApiService, preferencesHelper)
     }
 }

@@ -4,6 +4,7 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
+import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val currentWeatherDao: CurrentWeatherDao,
+    private val perHourDao: PerHourDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
 ) : BaseRepository() {

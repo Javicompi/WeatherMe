@@ -1,6 +1,9 @@
 package com.example.android.weatherme.ui.current
 
 import android.app.Application
+import android.util.Log
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
@@ -9,16 +12,25 @@ import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class CurrentViewModel @ViewModelInject constructor(
-    app: Application,
-    val repository: Repository
-) : AndroidViewModel(app) {
+        private val repository: Repository,
+        @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    init {
+        Log.d("CurrentViewModel", "test")
+    }
 
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
     val loadNewCurrent: SingleLiveEvent<Long> = SingleLiveEvent()
+    //val loadNewCurrent: MutableLiveData<Long> = MutableLiveData(0L)
 
-    val currentSelected = loadNewCurrent.switchMap { value ->
-        repository.getCurrentByKey(value)
+    /*val currentSelected: LiveData<CurrentEntity> = savedStateHandle.getLiveData<Long>("cityId").switchMap { cityId ->
+        Log.d("CurrentViewModel", "cityId: $cityId")
+        repository.getCurrentByKey(cityId)
+    }*/
+    val currentSelected = loadNewCurrent.switchMap { cityId ->
+        repository.getCurrentByKey(cityId)
     }
 
     val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
@@ -30,6 +42,7 @@ class CurrentViewModel @ViewModelInject constructor(
     fun deleteCurrent() {
         viewModelScope.launch {
             currentSelected.value?.let { repository.deleteCurrent(it.cityId) }
+            savedStateHandle.set("cityId", 0L)
         }
     }
 }
