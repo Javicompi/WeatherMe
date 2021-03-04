@@ -26,11 +26,13 @@ object RoomModule {
         ).build()
     }
 
+    @Singleton
     @Provides
     fun provideCurrentWeatherDao(database: WeatherDatabase): CurrentWeatherDao {
         return database.currentWeatherDao()
     }
 
+    @Singleton
     @Provides
     fun providePerHourDao(database: WeatherDatabase): PerHourDao {
         return database.perHourWeatherDao()
