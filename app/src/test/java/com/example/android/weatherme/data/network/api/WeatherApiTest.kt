@@ -19,6 +19,12 @@ class WeatherApiTest : TestCase() {
     }
 
     @Test
+    fun testCurrentById() = runBlocking {
+        val result = WeatherApi.retrofitService.getCurrentWeatherById(6697298)
+        assertThat(result.name, `is`("Gran Alacant"))
+    }
+
+    @Test
     fun testCurrentByLatLon() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentWeatherByLatLon(
             38.232394006633555,
@@ -30,7 +36,7 @@ class WeatherApiTest : TestCase() {
     }
 
     @Test
-    fun testPerHourByName() = runBlocking {
+    fun testPerHourByLatLon() = runBlocking {
         val result = WeatherApi.retrofitService.getPerHourByLatLon(
                 38.232394006633555,
                 -0.5470151195289806,
