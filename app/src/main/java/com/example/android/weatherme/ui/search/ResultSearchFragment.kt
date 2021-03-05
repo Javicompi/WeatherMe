@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
@@ -21,11 +20,6 @@ class ResultSearchFragment : Fragment() {
 
     private val arguments: ResultSearchFragmentArgs by navArgs()
 
-    /*private val viewModel: ResultSearchViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(activity, ResultSearchViewModelFactory(activity.application))
-                .get(ResultSearchViewModel::class.java)
-    }*/
     private val viewModel: ResultSearchViewModel by viewModels()
 
     override fun onCreateView(
