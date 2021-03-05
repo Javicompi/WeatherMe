@@ -56,11 +56,11 @@ class Repository @Inject constructor(
         return id
     }
 
-    fun getCurrents(): LiveData<List<CurrentEntity>> {
+    suspend fun getCurrents(): LiveData<List<CurrentEntity>> {
         return currentWeatherDao.getCurrents()
     }
 
-    fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
+    suspend fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
         if (key > 0) {
             preferencesHelper.setCurrentSelected(key)
             return currentWeatherDao.getCurrentByKey(key)
@@ -69,7 +69,7 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
+    suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
         if (key > 0) {
             return perHourDao.getPerHourbyKey(key)
         } else {
@@ -77,7 +77,7 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getCurrentByKName(name: String): LiveData<CurrentEntity> {
+    suspend fun getCurrentByName(name: String): LiveData<CurrentEntity> {
         return currentWeatherDao.getCurrentByName(name)
     }
 
