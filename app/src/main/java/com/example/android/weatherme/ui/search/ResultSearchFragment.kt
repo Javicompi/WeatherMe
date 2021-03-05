@@ -31,6 +31,7 @@ class ResultSearchFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         viewModel.setCurrent(arguments.current)
+        viewModel.searchPerHour(arguments.current)
 
         binding.searchedCurrent.currentFab.setImageDrawable(
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_input_add, context?.theme)

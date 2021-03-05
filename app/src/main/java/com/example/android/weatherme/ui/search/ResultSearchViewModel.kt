@@ -1,14 +1,17 @@
 package com.example.android.weatherme.ui.search
 
 import android.app.Application
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
+import com.example.android.weatherme.data.network.api.Result
+import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
+import com.example.android.weatherme.data.network.models.perhour.toPerHourEntity
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
@@ -24,8 +27,26 @@ class ResultSearchViewModel @ViewModelInject constructor(
     val current: LiveData<CurrentEntity>
         get() = _current
 
+    private val _perHour: MutableLiveData<PerHourWithHourly> = MutableLiveData()
+    val perHour: LiveData<PerHourWithHourly>
+        get() = _perHour
+
     fun setCurrent(current: CurrentEntity) {
         _current.postValue(current)
+    }
+
+    fun searchPerHour(current: CurrentEntity) {
+        viewModelScope.launch {
+            val result = repository.searchPerHourByLatLon(current.latitude, current.longitude)
+            when(result) {
+                is Result.Success -> {
+                    val perHourEntity = result.value.toPerHourEntity(current.cityId)
+                    val hourlyEntity = result.value.toHourlyEntityList(current.cityId)
+                    val perHourAndHourlys = PerHourWithHourly(perHourEntity, hourlyEntity)
+                    _perHour.value = perHourAndHourlys
+                }
+            }
+        }
     }
 
     fun saveCurrent() {

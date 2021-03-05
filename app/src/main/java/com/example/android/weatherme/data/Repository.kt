@@ -6,10 +6,12 @@ import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
+import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.utils.PreferencesHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -84,9 +86,17 @@ class Repository @Inject constructor(
     suspend fun searchCurrentByCityId(id: Long): Result<Current> {
         return safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
-            return@safeApiCall weatherApiService.getCurrentWeatherById(
-                id = id,
-                units = units
+            return@safeApiCall weatherApiService.getCurrentWeatherById(id = id, units = units)
+        }
+    }
+
+    suspend fun searchPerHourByLatLon(lat: Double, lon: Double): Result<PerHour> {
+        return safeApiCall(Dispatchers.IO) {
+            val units = preferencesHelper.getUnits()
+            return@safeApiCall weatherApiService.getPerHourByLatLon(
+                    latitude = lat,
+                    longitude = lon,
+                    units = units
             )
         }
     }
@@ -117,6 +127,10 @@ class Repository @Inject constructor(
             }
             preferencesHelper.setLastUpdate(System.currentTimeMillis())
         }
+    }
+
+    suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
+        return perHourDao.getPerHourbyKey(key)
     }
 
     suspend fun shouldUpdateCurrents() {

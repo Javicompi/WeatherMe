@@ -76,8 +76,8 @@ fun PerHour.toPerHourEntity(id: Long): PerHourEntity {
     )
 }
 
-fun List<Hourly>.toHourlyEntityList(id: Long): List<HourlyEntity> {
-    return map {
+fun PerHour.toHourlyEntityList(id: Long): List<HourlyEntity> {
+    return hourly.map {
         HourlyEntity(
                 id = null,
                 cityId = id,
