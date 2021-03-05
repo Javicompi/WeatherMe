@@ -20,6 +20,7 @@
             android:id="@+id/loaded_current"
             layout="@layout/current"
             app:current="@{viewModel.currentSelected}"
+            app:perHour="@{viewModel.perHour}"
             android:fadeVisible="@{viewModel.setShowData}"/>
 
         <TextView

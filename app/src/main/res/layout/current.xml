@@ -9,6 +9,10 @@
             name="current"
             type="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
 
+        <variable
+            name="perHour"
+            type="com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
