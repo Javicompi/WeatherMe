@@ -28,57 +28,45 @@ class Repository @Inject constructor(
 
     private val TAG = Repository::class.java.simpleName
 
-    suspend fun saveCurrent(current: CurrentEntity): Long {
+    suspend fun saveCurrent(current: CurrentEntity): Long = withContext(Dispatchers.IO) {
         Log.d(TAG, "save current")
-        var id: Long
-        withContext(Dispatchers.IO) {
-            id = currentWeatherDao.insertCurrent(current)
-        }
-        return id
+        return@withContext currentWeatherDao.insertCurrent(current)
     }
 
-    suspend fun savePerHour(perHour: PerHourEntity): Long {
+    suspend fun savePerHour(perHour: PerHourEntity): Long = withContext(Dispatchers.IO) {
         Log.d(TAG, "save perHour")
-        var id: Long
-        withContext(Dispatchers.IO) {
-            id = perHourDao.insertPerHour(perHour)
-        }
-        return id
+        return@withContext perHourDao.insertPerHour(perHour)
     }
 
-    suspend fun saveHourlys(hourlys: List<HourlyEntity>): List<Long> {
+    suspend fun saveHourlys(hourlys: List<HourlyEntity>): List<Long> = withContext(Dispatchers.IO) {
         Log.d(TAG, "save hourlys")
-        var id: List<Long>
-        withContext(Dispatchers.IO) {
-            perHourDao.deleteHourlys(hourlys.first().cityId)
-            id = perHourDao.insertHourlys(hourlys)
-        }
-        return id
+        perHourDao.deleteHourlys(hourlys.first().cityId)
+        return@withContext perHourDao.insertHourlys(hourlys)
     }
 
-    suspend fun getCurrents(): LiveData<List<CurrentEntity>> {
-        return currentWeatherDao.getCurrents()
+    suspend fun getCurrents(): LiveData<List<CurrentEntity>> = withContext(Dispatchers.IO) {
+        return@withContext currentWeatherDao.getCurrents()
     }
 
-    suspend fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
-        if (key > 0) {
+    suspend fun getCurrentByKey(key: Long): LiveData<CurrentEntity> = withContext(Dispatchers.IO) {
+        return@withContext if (key > 0) {
             preferencesHelper.setCurrentSelected(key)
-            return currentWeatherDao.getCurrentByKey(key)
+            currentWeatherDao.getCurrentByKey(key)
         } else {
-            return currentWeatherDao.getCurrentByKey(preferencesHelper.getCurrentSelected())
+            currentWeatherDao.getCurrentByKey(preferencesHelper.getCurrentSelected())
         }
     }
 
-    suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
-        if (key > 0) {
-            return perHourDao.getPerHourbyKey(key)
+    suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> = withContext(Dispatchers.IO) {
+        return@withContext if (key > 0) {
+            perHourDao.getPerHourbyKey(key)
         } else {
-            return perHourDao.getPerHourbyKey(preferencesHelper.getCurrentSelected())
+            perHourDao.getPerHourbyKey(preferencesHelper.getCurrentSelected())
         }
     }
 
-    suspend fun getCurrentByName(name: String): LiveData<CurrentEntity> {
-        return currentWeatherDao.getCurrentByName(name)
+    suspend fun getCurrentByName(name: String): LiveData<CurrentEntity> = withContext(Dispatchers.IO) {
+        return@withContext currentWeatherDao.getCurrentByName(name)
     }
 
     suspend fun deleteCurrent(key: Long) = withContext(Dispatchers.IO) {
@@ -91,8 +79,8 @@ class Repository @Inject constructor(
         currentWeatherDao.deleteCurrents()
     }
 
-    suspend fun searchCurrentByName(name: String): Result<Current> {
-        return safeApiCall(Dispatchers.IO) {
+    suspend fun searchCurrentByName(name: String): Result<Current> = withContext(Dispatchers.IO) {
+        return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByName(
                 location = name,
@@ -101,8 +89,8 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun searchCurrentByLatLon(location: Location): Result<Current> {
-        return safeApiCall(Dispatchers.IO) {
+    suspend fun searchCurrentByLatLon(location: Location): Result<Current> = withContext(Dispatchers.IO) {
+        return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByLatLon(
                 latitude = location.latitude,
@@ -112,15 +100,15 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun searchCurrentByCityId(id: Long): Result<Current> {
-        return safeApiCall(Dispatchers.IO) {
+    suspend fun searchCurrentByCityId(id: Long): Result<Current> = withContext(Dispatchers.IO) {
+        return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherById(id = id, units = units)
         }
     }
 
-    suspend fun searchPerHourByLatLon(lat: Double, lon: Double): Result<PerHour> {
-        return safeApiCall(Dispatchers.IO) {
+    suspend fun searchPerHourByLatLon(lat: Double, lon: Double): Result<PerHour> = withContext(Dispatchers.IO) {
+        return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getPerHourByLatLon(
                     latitude = lat,
@@ -130,41 +118,35 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun updateCurrent(key: Long) {
+    suspend fun updateCurrent(key: Long) = withContext(Dispatchers.IO) {
         Log.d(TAG, "update current")
-        withContext(Dispatchers.IO) {
-            val result = searchCurrentByCityId(key)
-            if (result is Result.Success) {
-                saveCurrent(result.value.toEntity())
-            }
+        val result = searchCurrentByCityId(key)
+        if (result is Result.Success) {
+            saveCurrent(result.value.toEntity())
         }
     }
 
-    suspend fun updateCurrents() {
+    suspend fun updateCurrents() = withContext(Dispatchers.IO) {
         Log.d(TAG, "updateCurrents")
-        withContext(Dispatchers.IO) {
-            val units = preferencesHelper.getUnits()
-            val cityIds = currentWeatherDao.getCityIds()
-            val currents = cityIds.map { id ->
-                weatherApiService.getCurrentWeatherById(id = id, units = units)
-            }
-            for (current in currents) {
-                if (current.id > 0) {
-                    val entity = current.toEntity()
-                    currentWeatherDao.insertCurrent(entity)
-                }
-            }
-            preferencesHelper.setLastUpdate(System.currentTimeMillis())
+        val units = preferencesHelper.getUnits()
+        val cityIds = currentWeatherDao.getCityIds()
+        val currents = cityIds.map { id ->
+            weatherApiService.getCurrentWeatherById(id = id, units = units)
         }
+        for (current in currents) {
+            if (current.id > 0) {
+                val entity = current.toEntity()
+                currentWeatherDao.insertCurrent(entity)
+            }
+        }
+        preferencesHelper.setLastUpdate(System.currentTimeMillis())
     }
 
-    suspend fun shouldUpdateCurrents() {
+    suspend fun shouldUpdateCurrents() = withContext(Dispatchers.IO) {
         Log.d(TAG, "shouldUpdateCurrents")
         if (preferencesHelper.shouldUpdateCurrents()) {
             Log.d(TAG, "should update currents")
-            withContext(Dispatchers.IO) {
-                updateCurrents()
-            }
+            updateCurrents()
         }
     }
 }
