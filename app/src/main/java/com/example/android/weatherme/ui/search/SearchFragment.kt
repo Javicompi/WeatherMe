@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.network.models.current.toEntity
@@ -30,12 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
-
-    /*private val viewModel: SearchViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(activity, SearchViewModelFactory(activity.application))
-                .get(SearchViewModel::class.java)
-    }*/
 
     private val viewModel: SearchViewModel by viewModels()
 
