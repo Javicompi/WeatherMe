@@ -6,6 +6,8 @@ import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
@@ -35,6 +37,25 @@ class Repository @Inject constructor(
         return id
     }
 
+    suspend fun savePerHour(perHour: PerHourEntity): Long {
+        Log.d(TAG, "save perHour")
+        var id: Long
+        withContext(Dispatchers.IO) {
+            id = perHourDao.insertPerHour(perHour)
+        }
+        return id
+    }
+
+    suspend fun saveHourlys(hourlys: List<HourlyEntity>): List<Long> {
+        Log.d(TAG, "save hourlys")
+        var id: List<Long>
+        withContext(Dispatchers.IO) {
+            perHourDao.deleteHourlys(hourlys.first().cityId)
+            id = perHourDao.insertHourlys(hourlys)
+        }
+        return id
+    }
+
     fun getCurrents(): LiveData<List<CurrentEntity>> {
         return currentWeatherDao.getCurrents()
     }
@@ -45,6 +66,14 @@ class Repository @Inject constructor(
             return currentWeatherDao.getCurrentByKey(key)
         } else {
             return currentWeatherDao.getCurrentByKey(preferencesHelper.getCurrentSelected())
+        }
+    }
+
+    fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
+        if (key > 0) {
+            return perHourDao.getPerHourbyKey(key)
+        } else {
+            return perHourDao.getPerHourbyKey(preferencesHelper.getCurrentSelected())
         }
     }
 
@@ -127,10 +156,6 @@ class Repository @Inject constructor(
             }
             preferencesHelper.setLastUpdate(System.currentTimeMillis())
         }
-    }
-
-    suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> {
-        return perHourDao.getPerHourbyKey(key)
     }
 
     suspend fun shouldUpdateCurrents() {

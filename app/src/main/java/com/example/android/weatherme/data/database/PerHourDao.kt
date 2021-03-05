@@ -17,7 +17,7 @@ interface PerHourDao {
     fun insertPerHour(perHourEntity: PerHourEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertHourlys(hourlys: List<HourlyEntity>)
+    fun insertHourlys(hourlys: List<HourlyEntity>): List<Long>
 
     @Query("DELETE FROM perHours WHERE `cityId` = :id")
     fun deletePerHour(id: Long)

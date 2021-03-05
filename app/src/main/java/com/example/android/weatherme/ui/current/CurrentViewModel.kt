@@ -18,6 +18,10 @@ class CurrentViewModel @ViewModelInject constructor(
         repository.getCurrentByKey(cityId)
     }
 
+    val perHour = loadNewCurrent.switchMap { cityId ->
+        repository.getPerHourByKey(cityId)
+    }
+
     val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
         it != null && it.cityName?.isNotEmpty() ?: false
     }

@@ -36,12 +36,19 @@ class ResultSearchFragment : Fragment() {
         binding.searchedCurrent.currentFab.setImageDrawable(
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_input_add, context?.theme)
         )
+
         binding.searchedCurrent.currentFab.setOnClickListener {
-            viewModel.saveCurrent()
+            viewModel.saveData()
         }
+
         viewModel.showSnackBarInt.observe(viewLifecycleOwner, {
-            Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
+            showSnackBar(resourceId = it)
         })
+
+        viewModel.showSnackBarMessage.observe(viewLifecycleOwner, {
+            showSnackBar(message = it)
+        })
+
         viewModel.navigateToCurrentFragment.observe(viewLifecycleOwner, { id ->
             val action = ResultSearchFragmentDirections.actionResultSearchFragmentToNavigationCurrent(id)
             findNavController().navigate(action)
@@ -50,6 +57,14 @@ class ResultSearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    private fun showSnackBar(resourceId: Int? = 0, message: String? = "") {
+        if (resourceId != null && resourceId > 0) {
+            Snackbar.make(requireView(), resourceId, Snackbar.LENGTH_LONG).show()
+        } else if (message != null && message.isNotEmpty()) {
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

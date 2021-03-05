@@ -22,6 +22,7 @@ class ResultSearchViewModel @ViewModelInject constructor(
 ) : AndroidViewModel(app) {
 
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
+    val showSnackBarMessage: SingleLiveEvent<String> = SingleLiveEvent()
     val navigateToCurrentFragment: SingleLiveEvent<Long> = SingleLiveEvent()
 
     private val _current: MutableLiveData<CurrentEntity> = MutableLiveData()
@@ -46,15 +47,29 @@ class ResultSearchViewModel @ViewModelInject constructor(
                     val perHourAndHourlys = PerHourWithHourly(perHourEntity, hourlyEntity)
                     _perHour.value = perHourAndHourlys
                 }
+                is Result.GenericError -> {
+                    showSnackBarMessage.postValue(result.error?.message)
+                }
+                is Result.NetworkError -> {
+                    showSnackBarInt.postValue(R.string.connectivity_error)
+                }
             }
         }
     }
 
-    fun saveCurrent() {
+    fun saveData() {
         viewModelScope.launch {
-            val id = _current.value?.let { repository.saveCurrent(it) }
-            if (id != null && id > 0) {
-                navigateToCurrentFragment.postValue(id)
+            val currentId = _current.value?.let { repository.saveCurrent(it) }
+            val perHourEntity = _perHour.value?.perHourEntity
+            if (perHourEntity != null && perHourEntity.cityId > 0) {
+                repository.savePerHour(perHourEntity)
+            }
+            val hourlyEntities = _perHour.value?.hourlyEntities
+            if (hourlyEntities != null && hourlyEntities.isNotEmpty()) {
+                repository.saveHourlys(hourlyEntities)
+            }
+            if (currentId != null && currentId > 0) {
+                navigateToCurrentFragment.postValue(currentId)
             } else {
                 showSnackBarInt.postValue(R.string.error_saving)
             }

@@ -74,7 +74,7 @@ class DatabaseTest {
     fun savePerHourRetrievePerHour() = testScope.runBlockingTest {
         val result = createPerHour()
         db.perHourWeatherDao().insertPerHour(result.toPerHourEntity(6697298))
-        db.perHourWeatherDao().insertHourlys(result.hourly.toHourlyEntityList(6697298))
+        db.perHourWeatherDao().insertHourlys(result.toHourlyEntityList(6697298))
         val perHour = db.perHourWeatherDao().getPerHourbyKey(6697298).getOrAwaitValue()
         assertThat(perHour.perHourEntity.cityId, `is`(6697298))
         assertThat(perHour.hourlyEntities.size, `is`(48))
