@@ -1,13 +1,14 @@
 package com.example.android.weatherme.ui.search
 
 import android.app.Application
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
