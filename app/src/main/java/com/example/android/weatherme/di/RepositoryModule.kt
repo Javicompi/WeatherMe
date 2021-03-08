@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @InstallIn(ApplicationComponent::class)
@@ -18,11 +19,19 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideRepository(
-        currentWeatherDao: CurrentWeatherDao,
-        perHourDao: PerHourDao,
-        weatherApiService: WeatherApiService,
-        preferencesHelper: PreferencesHelper,
+            @IoDispatcher
+            dbDispatcher: CoroutineDispatcher,
+            currentWeatherDao: CurrentWeatherDao,
+            perHourDao: PerHourDao,
+            weatherApiService: WeatherApiService,
+            preferencesHelper: PreferencesHelper,
     ): Repository {
-        return Repository(currentWeatherDao, perHourDao, weatherApiService, preferencesHelper)
+        return Repository(
+                dbDispatcher,
+                currentWeatherDao,
+                perHourDao,
+                weatherApiService,
+                preferencesHelper
+        )
     }
 }

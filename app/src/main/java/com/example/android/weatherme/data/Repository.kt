@@ -15,15 +15,17 @@ import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.utils.PreferencesHelper
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-    private val currentWeatherDao: CurrentWeatherDao,
-    private val perHourDao: PerHourDao,
-    private val weatherApiService: WeatherApiService,
-    private val preferencesHelper: PreferencesHelper
+        private val dbDispatcher: CoroutineDispatcher,
+        private val currentWeatherDao: CurrentWeatherDao,
+        private val perHourDao: PerHourDao,
+        private val weatherApiService: WeatherApiService,
+        private val preferencesHelper: PreferencesHelper
 ) : BaseRepository() {
 
     private val TAG = Repository::class.java.simpleName
@@ -83,8 +85,8 @@ class Repository @Inject constructor(
         return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByName(
-                location = name,
-                units = units
+                    location = name,
+                    units = units
             )
         }
     }
@@ -93,9 +95,9 @@ class Repository @Inject constructor(
         return@withContext safeApiCall(Dispatchers.IO) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByLatLon(
-                latitude = location.latitude,
-                longitude = location.longitude,
-                units = units
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    units = units
             )
         }
     }
