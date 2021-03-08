@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.utils.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CurrentViewModel @ViewModelInject constructor(
@@ -16,13 +15,13 @@ class CurrentViewModel @ViewModelInject constructor(
     val loadNewCurrent: SingleLiveEvent<Long> = SingleLiveEvent()
 
     val currentSelected = loadNewCurrent.switchMap { cityId ->
-        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+        liveData {
             emitSource(repository.getCurrentByKey(cityId))
         }
     }
 
     val perHour = loadNewCurrent.switchMap { cityId ->
-        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+        liveData {
             emitSource(repository.getPerHourByKey(cityId))
         }
     }
@@ -33,9 +32,10 @@ class CurrentViewModel @ViewModelInject constructor(
 
     val setShowLoading: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun deleteCurrent() {
+    fun deleteEntry() {
         viewModelScope.launch {
             currentSelected.value?.let { repository.deleteCurrent(it.cityId) }
+            perHour.value?.let { repository.deletePerHour(it.perHourEntity.cityId) }
         }
     }
 }

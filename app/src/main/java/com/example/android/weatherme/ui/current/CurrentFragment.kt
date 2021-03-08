@@ -33,7 +33,7 @@ class CurrentFragment : Fragment() {
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_clear, context?.theme)
         )
         binding.loadedCurrent.currentFab.setOnClickListener {
-            viewModel.deleteCurrent()
+            viewModel.deleteEntry()
         }
 
         viewModel.showSnackBar.observe(viewLifecycleOwner, { message ->

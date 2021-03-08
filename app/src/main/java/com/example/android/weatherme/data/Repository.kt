@@ -76,6 +76,11 @@ class Repository @Inject constructor(
         currentWeatherDao.deleteCurrent(key)
     }
 
+    suspend fun deletePerHour(key: Long) = withContext(dbDispatcher) {
+        perHourDao.deletePerHour(key)
+        perHourDao.deleteHourlys(key)
+    }
+
     suspend fun deleteCurrents() = withContext(dbDispatcher) {
         preferencesHelper.setCurrentSelected(0)
         currentWeatherDao.deleteCurrents()
