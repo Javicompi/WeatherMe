@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.utils.SingleLiveEvent
+import com.example.android.weatherme.utils.shouldUpdate
 import kotlinx.coroutines.launch
 
 class CurrentViewModel @ViewModelInject constructor(
@@ -20,9 +21,10 @@ class CurrentViewModel @ViewModelInject constructor(
         }
     }
 
-    val perHour = loadNewCurrent.switchMap { cityId ->
+    val perHour = currentSelected.switchMap { current ->
         liveData {
-            emitSource(repository.getPerHourByKey(cityId))
+            emitSource(repository.getPerHourByKey(current.cityId))
+            repository.shouldUpdatePerHour(current)
         }
     }
 

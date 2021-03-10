@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -63,4 +64,10 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
         return resources.getIdentifier(it, resType, packageName)
     }
     throw Resources.NotFoundException()
+}
+
+//Returns true if more than 1 hour difference.
+fun shouldUpdate(time: Long): Boolean {
+    val difference = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
+    return (System.currentTimeMillis() - difference) > time
 }
