@@ -144,25 +144,4 @@ class Repository @Inject constructor(
             updateData()
         }
     }
-
-    /*suspend fun shouldUpdatePerHour(perHour: PerHourWithHourly) = withContext(dbDispatcher) {
-        Log.d(TAG, "shouldUpdatePerHour")
-        if (perHour != null && shouldUpdate(perHour.hourlyEntities[0].deltaTime)) {
-            Log.d(TAG, "updating")
-            val units = preferencesHelper.getUnits()
-            val lat = perHour.perHourEntity.lat
-            val lon = perHour.perHourEntity.lon
-            val cityId = perHour.perHourEntity.cityId
-            val result = safeApiCall(dbDispatcher) {
-                weatherApiService.getPerHourByLatLon(
-                        lat,
-                        lon,
-                        units
-                )
-            }
-            if (result is Result.Success) {
-                perHourDao.insertPerHour(result.value.toPerHourEntity(cityId))
-            }
-        }
-    }*/
 }
