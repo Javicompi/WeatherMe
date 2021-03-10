@@ -87,7 +87,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     private suspend fun refreshCurrents() {
-        repository.updateCurrents()
+        repository.updateData()
     }
 
     private fun launchAutomaticUpdates() {

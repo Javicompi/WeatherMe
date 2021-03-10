@@ -21,10 +21,9 @@ class CurrentViewModel @ViewModelInject constructor(
         }
     }
 
-    val perHour = currentSelected.switchMap { current ->
+    val perHour = loadNewCurrent.switchMap { cityId ->
         liveData {
-            emitSource(repository.getPerHourByKey(current.cityId))
-            repository.shouldUpdatePerHour(current)
+            emitSource(repository.getPerHourByKey(cityId))
         }
     }
 
