@@ -129,9 +129,11 @@ class Repository @Inject constructor(
             weatherApiService.getPerHourByLatLon(latitude = lat, longitude = lon, units = units)
         }
         for (i in cityIds.indices) {
-            val perHourEntity = perHours[i].toPerHourEntity(cityIds[i])
+            val cityId = cityIds[i]
+            val perHourEntity = perHours[i].toPerHourEntity(cityId)
             perHourDao.insertPerHour(perHourEntity)
-            val hourlyEntity = perHours[i].toHourlyEntityList(cityIds[i])
+            perHourDao.deleteHourlys(cityId)
+            val hourlyEntity = perHours[i].toHourlyEntityList(cityId)
             perHourDao.insertHourlys(hourlyEntity)
         }
         preferencesHelper.setLastUpdate(System.currentTimeMillis())

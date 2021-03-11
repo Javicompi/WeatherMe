@@ -44,6 +44,7 @@ interface WeatherApiService {
             @Query("lat") latitude: Double,
             @Query("lon") longitude: Double,
             @Query("units") units: String? = "metric",
+            @Query("exclude") exclude: String? = "current,minutely,daily,alerts",
             @Query("lang") language: String = Locale.getDefault().toString().subSequence(0, 2).toString()
     ): PerHour
 }

@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/rounded_rectangle"/>
 
-                <TextView
+                <!-- <TextView
                     android:id="@+id/current_layout_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -70,7 +70,13 @@
                     android:layout_margin="@dimen/small_margin"
                     android:textColor="@color/current_text_color"
                     android:text="@{current.description}"
-                    tools:text="Clear sky"/>
+                    tools:text="Clear sky"/> -->
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:id="@+id/temp_chart_view"
+                    android:layout_margin="@dimen/small_margin"/>
 
             </LinearLayout>
 

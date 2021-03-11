@@ -81,12 +81,12 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (units != unitsNew) {
             Log.d(TAG, "units changed, launch repository refresh")
             viewLifecycleOwner.lifecycleScope.launch(NonCancellable) {
-                refreshCurrents()
+                refreshData()
             }
         }
     }
 
-    private suspend fun refreshCurrents() {
+    private suspend fun refreshData() {
         repository.updateData()
     }
 
