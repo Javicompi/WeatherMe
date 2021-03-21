@@ -102,7 +102,6 @@ dependencies {
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    //implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
     //Moshi
     implementation "com.squareup.moshi:moshi:$moshiVersion"
@@ -116,4 +115,8 @@ dependencies {
 
     //MPAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //Lifecycle
+    implementation "android.arch.lifecycle:runtime:1.1.1"
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
 }

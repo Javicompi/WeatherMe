@@ -23,7 +23,7 @@ class RefreshCurrentsWorker @WorkerInject constructor(
     override suspend fun doWork(): Result {
         Log.d(WORK_NAME, "do Work")
         return try {
-            repository.updateData()
+            repository.updateData(forced = false)
             Log.d(WORK_NAME, "success")
             Result.success()
         } catch (e: HttpException) {

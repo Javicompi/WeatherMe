@@ -6,17 +6,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentResultSearchBinding
+import com.example.android.weatherme.ui.base.ChartFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ResultSearchFragment : Fragment() {
+class ResultSearchFragment : ChartFragment() {
 
     private val arguments: ResultSearchFragmentArgs by navArgs()
 
@@ -52,6 +52,14 @@ class ResultSearchFragment : Fragment() {
         viewModel.navigateToCurrentFragment.observe(viewLifecycleOwner, { id ->
             val action = ResultSearchFragmentDirections.actionResultSearchFragmentToNavigationCurrent(id)
             findNavController().navigate(action)
+        })
+
+        val tempChart = binding.searchedCurrent.tempChartView
+
+        viewModel.perHour.observe(viewLifecycleOwner, { perHour ->
+            if (perHour != null) {
+                setupTempChart(perHour, tempChart)
+            }
         })
 
         setHasOptionsMenu(true)

@@ -15,13 +15,13 @@ interface CurrentWeatherDao {
     fun getCurrents(): LiveData<List<CurrentEntity>>
 
     @Query("SELECT * FROM currents WHERE cityName = :cityName")
-    fun getCurrentByName(cityName: String): LiveData<CurrentEntity>
+    fun getCurrentByName(cityName: String): CurrentEntity
 
     @Query("SELECT * FROM currents WHERE `cityId` = :id")
     fun getCurrentByKey(id: Long): LiveData<CurrentEntity>
 
     @Query("SELECT * FROM currents LIMIT 1")
-    fun getFirstCurrent(): LiveData<CurrentEntity>
+    fun getFirstCurrent(): CurrentEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrent(currentEntity: CurrentEntity): Long

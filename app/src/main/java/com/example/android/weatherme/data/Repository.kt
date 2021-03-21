@@ -17,6 +17,7 @@ import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
 import com.example.android.weatherme.data.network.models.perhour.toPerHourEntity
 import com.example.android.weatherme.utils.PreferencesHelper
+import com.example.android.weatherme.utils.shouldUpdate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -36,47 +37,49 @@ class Repository @Inject constructor(
         return@withContext currentWeatherDao.insertCurrent(current)
     }
 
-    suspend fun savePerHour(perHour: PerHourEntity): Long = withContext(dbDispatcher) {
-        Log.d(TAG, "save perHour")
-        return@withContext perHourDao.insertPerHour(perHour)
-    }
-
-    suspend fun saveHourlys(hourlys: List<HourlyEntity>): List<Long> = withContext(dbDispatcher) {
-        Log.d(TAG, "save hourlys")
-        perHourDao.deleteHourlys(hourlys.first().cityId)
-        return@withContext perHourDao.insertHourlys(hourlys)
+    suspend fun savePerHourWithHourly(perHour: PerHourWithHourly) = withContext(dbDispatcher) {
+        Log.d(TAG, "save perHourWithHourly")
+        perHourDao.insertPerHour(perHour)
     }
 
     suspend fun getCurrents(): LiveData<List<CurrentEntity>> = withContext(dbDispatcher) {
-        return@withContext currentWeatherDao.getCurrents()
+        Log.d(TAG, "getCurrents")
+        return@withContext liveData {
+            emitSource(currentWeatherDao.getCurrents())
+            shouldUpdateCurrents()
+        }
     }
 
     suspend fun getCurrentByKey(key: Long): LiveData<CurrentEntity> = withContext(dbDispatcher) {
-        return@withContext if (key > 0) {
-            preferencesHelper.setCurrentSelected(key)
-            currentWeatherDao.getCurrentByKey(key)
-        } else {
-            currentWeatherDao.getCurrentByKey(preferencesHelper.getCurrentSelected())
+        Log.d(TAG, "getCurrentByKey")
+        val cityId = if (key > 0) key else preferencesHelper.getCurrentSelected()
+        return@withContext liveData {
+            emitSource(currentWeatherDao.getCurrentByKey(cityId))
         }
     }
 
     suspend fun getPerHourByKey(key: Long): LiveData<PerHourWithHourly> = withContext(dbDispatcher) {
         Log.d(TAG, "getPerHourByKey")
         val cityId = if (key > 0) key else preferencesHelper.getCurrentSelected()
-        return@withContext perHourDao.getPerHourbyKey(cityId)
+        return@withContext liveData {
+            emitSource(perHourDao.getPerHourbyKey(cityId))
+            shouldUpdatePerHour(cityId)
+        }
     }
 
     suspend fun deleteCurrent(key: Long) = withContext(dbDispatcher) {
+        Log.d(TAG, "deleteCurrent")
         preferencesHelper.setCurrentSelected(0)
         currentWeatherDao.deleteCurrent(key)
     }
 
-    suspend fun deletePerHour(key: Long) = withContext(dbDispatcher) {
-        perHourDao.deletePerHour(key)
-        perHourDao.deleteHourlys(key)
+    suspend fun deletePerHour(cityId: Long) = withContext(dbDispatcher) {
+        Log.d(TAG, "deletePerHour")
+        perHourDao.deletePerHourByKey(cityId)
     }
 
     suspend fun searchCurrentByName(name: String): Result<Current> = withContext(dbDispatcher) {
+        Log.d(TAG, "searchCurrentByName")
         return@withContext safeApiCall(dbDispatcher) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByName(
@@ -87,63 +90,88 @@ class Repository @Inject constructor(
     }
 
     suspend fun searchCurrentByLatLon(location: Location): Result<Current> = withContext(dbDispatcher) {
+        Log.d(TAG, "searchCurrentByLatLon")
         return@withContext safeApiCall(dbDispatcher) {
-            val units = preferencesHelper.getUnits()
-            return@safeApiCall weatherApiService.getCurrentWeatherByLatLon(
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    units = units
+            weatherApiService.getCurrentWeatherByLatLon(
+                    location.latitude,
+                    location.longitude,
+                    preferencesHelper.getUnits()
             )
         }
     }
 
     suspend fun searchPerHourByLatLon(lat: Double, lon: Double): Result<PerHour> = withContext(dbDispatcher) {
+        Log.d(TAG, "searchPerHourByLatLon")
         return@withContext safeApiCall(dbDispatcher) {
-            val units = preferencesHelper.getUnits()
-            return@safeApiCall weatherApiService.getPerHourByLatLon(
+            weatherApiService.getPerHourByLatLon(
                     latitude = lat,
                     longitude = lon,
-                    units = units
+                    units = preferencesHelper.getUnits()
             )
         }
     }
 
-    suspend fun updateData() = withContext(dbDispatcher) {
+    suspend fun updateData(forced: Boolean? = false) = withContext(dbDispatcher) {
         Log.d(TAG, "updateData")
+        updateCurrents()
+        if (forced == true) {
+            val perHourEntities = perHourDao.getRawPerHours()
+            for (perHourWithHourly in perHourEntities) {
+                updatePerHour(perHourWithHourly)
+            }
+        }
+    }
+
+    private suspend fun shouldUpdateCurrents() {
+        Log.d(TAG, "shouldUpdateCurrents")
+        if (!preferencesHelper.getAutUpdate() && shouldUpdate(preferencesHelper.getLastUpdate())) {
+            updateCurrents()
+        }
+    }
+
+    private suspend fun shouldUpdatePerHour(cityId: Long) = withContext(dbDispatcher) {
+        Log.d(TAG, "shouldUpdatePerHour")
+        val rawHourly = perHourDao.getRawHourlyByKey(cityId)
+        if (shouldUpdate(rawHourly.hourlyEntities[0].deltaTime)) {
+            updatePerHour(rawHourly)
+        }
+    }
+
+    private suspend fun updateCurrents() = withContext(dbDispatcher) {
+        Log.d(TAG, "updateCurrents")
         val units = preferencesHelper.getUnits()
         val cityIds = currentWeatherDao.getCityIds()
         val currents = cityIds.map { id ->
-            weatherApiService.getCurrentWeatherById(id = id, units = units)
-        }
-        val latLons = mutableListOf<Pair<Double, Double>>()
-        for (current in currents) {
-            if (current.id > 0) {
-                val entity = current.toEntity()
-                currentWeatherDao.insertCurrent(entity)
-                latLons.add(Pair(entity.latitude, entity.longitude))
+            safeApiCall(dbDispatcher) {
+                weatherApiService.getCurrentWeatherById(id = id, units = units)
             }
         }
-        val perHours = latLons.map { latLon ->
-            val lat = latLon.first
-            val lon = latLon.second
-            weatherApiService.getPerHourByLatLon(latitude = lat, longitude = lon, units = units)
-        }
-        for (i in cityIds.indices) {
-            val cityId = cityIds[i]
-            val perHourEntity = perHours[i].toPerHourEntity(cityId)
-            perHourDao.insertPerHour(perHourEntity)
-            perHourDao.deleteHourlys(cityId)
-            val hourlyEntity = perHours[i].toHourlyEntityList(cityId)
-            perHourDao.insertHourlys(hourlyEntity)
+        for (current in currents) {
+            if (current is Result.Success) {
+                val entity = current.value.toEntity()
+                currentWeatherDao.insertCurrent(entity)
+            }
         }
         preferencesHelper.setLastUpdate(System.currentTimeMillis())
     }
 
-    suspend fun shouldUpdateCurrents() = withContext(dbDispatcher) {
-        Log.d(TAG, "shouldUpdateCurrents")
-        if (preferencesHelper.shouldUpdateCurrents()) {
-            Log.d(TAG, "should update currents")
-            updateData()
+    private suspend fun updatePerHour(perHour: PerHourWithHourly) {
+        Log.d(TAG, "updatePerHour")
+        val units = preferencesHelper.getUnits()
+        val lastUpdate = perHour.hourlyEntities[0].deltaTime
+        val newPerHour = safeApiCall(dbDispatcher) {
+            val lat = perHour.perHourEntity.lat
+            val lon = perHour.perHourEntity.lon
+            weatherApiService.getPerHourByLatLon(latitude = lat, longitude = lon, units)
+        }
+        if (newPerHour is Result.Success && newPerHour.value.hourly[0].dt.toLong() * 1000 > lastUpdate) {
+            Log.d(TAG, "updatingPerHour")
+            val cityId = perHour.perHourEntity.cityId
+            val newPerHourWithHourly = PerHourWithHourly(
+                    newPerHour.value.toPerHourEntity(cityId),
+                    newPerHour.value.toHourlyEntityList(cityId)
+            )
+            perHourDao.updatePerHourByKey(newPerHourWithHourly)
         }
     }
 }

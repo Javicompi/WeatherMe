@@ -13,6 +13,33 @@ interface PerHourDao {
     @Query("SELECT * FROM perHours WHERE `cityId` = :id")
     fun getPerHourbyKey(id: Long): LiveData<PerHourWithHourly>
 
+    @Transaction
+    @Query("SELECT * FROM perHours WHERE `cityId` = :id LIMIT 1")
+    fun getRawHourlyByKey(id: Long): PerHourWithHourly
+
+    @Transaction
+    @Query("SELECT * FROM perHours")
+    fun getRawPerHours(): List<PerHourWithHourly>
+
+    @Transaction
+    fun updatePerHourByKey(perHourWithHourly: PerHourWithHourly) {
+        insertPerHour(perHourWithHourly.perHourEntity)
+        deleteHourlys(perHourWithHourly.perHourEntity.cityId)
+        insertHourlys(perHourWithHourly.hourlyEntities)
+    }
+
+    @Transaction
+    fun insertPerHour(perHourWithHourly: PerHourWithHourly) {
+        insertPerHour(perHourWithHourly.perHourEntity)
+        insertHourlys(perHourWithHourly.hourlyEntities)
+    }
+
+    @Transaction
+    fun deletePerHourByKey(cityId: Long) {
+        deletePerHour(cityId)
+        deleteHourlys(cityId)
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerHour(perHourEntity: PerHourEntity): Long
 

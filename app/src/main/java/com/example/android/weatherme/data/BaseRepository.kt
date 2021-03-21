@@ -20,11 +20,16 @@ open class BaseRepository {
                     is IOException -> Result.NetworkError
                     is HttpException -> {
                         val code = throwable.code()
-                        val errorResponse = convertErrorBody(throwable)
+                        val message = throwable.message()
+                        //val errorResponse = convertErrorBody(throwable)
+                        val errorResponse = ErrorResponse(code, message)
                         Result.GenericError(code, errorResponse)
                     }
                     is JsonDataException -> {
-                        val errorResponse = convertJsonException(throwable)
+                        val code = 0
+                        val message = throwable.message ?: "Error parsing the data"
+                        //val errorResponse = convertJsonException(throwable)
+                        val errorResponse = ErrorResponse(code, message)
                         Result.GenericError(0, errorResponse)
                     }
                     else -> {

@@ -54,7 +54,7 @@ class DatabaseTest {
     fun saveCurrentRetrieveCurrent() = testScope.runBlockingTest {
         val result = createCurrent()
         db.currentWeatherDao().insertCurrent(result.toEntity())
-        val retrieved = db.currentWeatherDao().getCurrentByName(result.name).getOrAwaitValue()
+        val retrieved = db.currentWeatherDao().getCurrentByName(result.name)
         assertThat(retrieved.cityName, `is`("Gran Alacant"))
     }
 
@@ -64,10 +64,10 @@ class DatabaseTest {
         val resultSecond = createCurrent("Elche", 6697299)
         db.currentWeatherDao().insertCurrent(resultFirst.toEntity())
         db.currentWeatherDao().insertCurrent(resultSecond.toEntity())
-        val currents = db.currentWeatherDao().getCurrents().getOrAwaitValue()
-        assertThat(currents.size, `is`(2))
-        assertThat(currents.find { it.cityName == "Gran Alacant" }, `is`(notNullValue()))
-        assertThat(currents.find { it.cityName == "Elche" }, `is`(notNullValue()))
+        val currents = db.currentWeatherDao().getCurrents()
+        assertThat(currents.value, `is`(2))
+        assertThat(currents.value?.find { it.cityName == "Gran Alacant" }, `is`(notNullValue()))
+        assertThat(currents.value?.find { it.cityName == "Elche" }, `is`(notNullValue()))
     }
 
     @Test
@@ -75,8 +75,8 @@ class DatabaseTest {
         val result = createPerHour()
         db.perHourWeatherDao().insertPerHour(result.toPerHourEntity(6697298))
         db.perHourWeatherDao().insertHourlys(result.toHourlyEntityList(6697298))
-        val perHour = db.perHourWeatherDao().getPerHourbyKey(6697298).getOrAwaitValue()
-        assertThat(perHour.perHourEntity.cityId, `is`(6697298))
-        assertThat(perHour.hourlyEntities.size, `is`(48))
+        val perHour = db.perHourWeatherDao().getPerHourbyKey(6697298)
+        assertThat(perHour.value?.perHourEntity?.cityId, `is`(6697298))
+        assertThat(perHour.value?.hourlyEntities?.size, `is`(48))
     }
 }

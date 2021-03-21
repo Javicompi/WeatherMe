@@ -108,9 +108,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 ExistingPeriodicWorkPolicy.KEEP,
                 repeatingRequest
         )
-        viewLifecycleOwner.lifecycleScope.launch(NonCancellable) {
+        /*viewLifecycleOwner.lifecycleScope.launch(NonCancellable) {
             repository.shouldUpdateCurrents()
-        }
+        }*/
     }
 
     private fun cancelAutomaticUpdates() {

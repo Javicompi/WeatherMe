@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.provider.Settings
@@ -70,4 +72,14 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
 fun shouldUpdate(time: Long): Boolean {
     val difference = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
     return (System.currentTimeMillis() - difference) > time
+}
+
+//Turn a Long value into a Time String value
+fun longToStringDate(time: Long, timeZone: String): String {
+    val calendar = Calendar.getInstance()
+    //calendar.timeZone = TimeZone.getTimeZone(timeZone)
+    calendar.timeInMillis = time
+    val dateFormatter = SimpleDateFormat("HH:mm")
+    dateFormatter.timeZone = TimeZone.getTimeZone(timeZone)
+    return dateFormatter.format(calendar.timeInMillis)
 }

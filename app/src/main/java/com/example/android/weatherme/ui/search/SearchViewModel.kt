@@ -35,7 +35,6 @@ class SearchViewModel @ViewModelInject constructor(
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {
-                    //val error = result.errorResponse?.message?.capitalize(Locale.getDefault())
                     val errorMessage = result.error?.message?.capitalize(Locale.getDefault())
                     showSnackBar.postValue(errorMessage)
                 }

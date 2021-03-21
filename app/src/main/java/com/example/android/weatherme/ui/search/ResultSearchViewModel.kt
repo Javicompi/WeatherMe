@@ -45,7 +45,7 @@ class ResultSearchViewModel @ViewModelInject constructor(
                     val perHourEntity = result.value.toPerHourEntity(current.cityId)
                     val hourlyEntity = result.value.toHourlyEntityList(current.cityId)
                     val perHourAndHourlys = PerHourWithHourly(perHourEntity, hourlyEntity)
-                    _perHour.value = perHourAndHourlys
+                    _perHour.postValue(perHourAndHourlys)
                 }
                 is Result.GenericError -> {
                     showSnackBarMessage.postValue(result.error?.message)
@@ -60,15 +60,14 @@ class ResultSearchViewModel @ViewModelInject constructor(
     fun saveData() {
         viewModelScope.launch {
             val currentId = _current.value?.let { repository.saveCurrent(it) }
-            val perHourEntity = _perHour.value?.perHourEntity
-            if (perHourEntity != null && perHourEntity.cityId > 0) {
-                repository.savePerHour(perHourEntity)
-            }
-            val hourlyEntities = _perHour.value?.hourlyEntities
-            if (hourlyEntities != null && hourlyEntities.isNotEmpty()) {
-                repository.saveHourlys(hourlyEntities)
-            }
             if (currentId != null && currentId > 0) {
+                _perHour.value?.let {
+                    val newPerHourWithHourly = PerHourWithHourly(
+                            it.perHourEntity,
+                            it.hourlyEntities
+                    )
+                    repository.savePerHourWithHourly(newPerHourWithHourly)
+                }
                 navigateToCurrentFragment.postValue(currentId)
             } else {
                 showSnackBarInt.postValue(R.string.error_saving)

@@ -20,21 +20,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         prefs.edit().putString(Constants.PREF_UNITS, units).apply()
     }
 
-    fun getLastUpdate(): Long {
-        return prefs.getLong(Constants.PREF_LAST_UPDATE, 0)
-    }
-
-    fun setLastUpdate(time: Long) {
-        prefs.edit().putLong(Constants.PREF_LAST_UPDATE, time).apply()
-    }
-
     fun getAutUpdate(): Boolean {
         return prefs.getBoolean(Constants.PREF_AUT_UPDATE, false)
-    }
-
-    fun shouldUpdateCurrents(): Boolean {
-        val updateDelay = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
-        return !getAutUpdate() && System.currentTimeMillis() - getLastUpdate() > updateDelay
     }
 
     fun setCurrentSelected(value: Long) {
@@ -43,5 +30,13 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
 
     fun getCurrentSelected(): Long {
         return prefs.getLong(Constants.CURRENT_SELECTED, 0)
+    }
+
+    fun setLastUpdate(time: Long) {
+        prefs.edit().putLong(Constants.PREF_LAST_UPDATE, time).apply()
+    }
+
+    fun getLastUpdate(): Long {
+        return prefs.getLong(Constants.PREF_LAST_UPDATE, 0)
     }
 }

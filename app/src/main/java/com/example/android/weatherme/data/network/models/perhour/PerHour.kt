@@ -72,15 +72,15 @@ fun PerHour.toPerHourEntity(id: Long): PerHourEntity {
             lat = lat,
             lon = lon,
             timezone = timezone,
-            timezoneOffset = timezoneOffset
+            timezoneOffset = timezoneOffset.toLong() * 1000
     )
 }
 
-fun PerHour.toHourlyEntityList(id: Long): List<HourlyEntity> {
+fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
     return hourly.map {
         HourlyEntity(
                 id = null,
-                cityId = id,
+                cityId = cityId,
                 deltaTime = it.dt.toLong() * 1000,
                 temp = it.temp.roundToInt(),
                 feelsLike = it.temp.roundToInt(),
@@ -103,4 +103,31 @@ fun PerHour.toHourlyEntityList(id: Long): List<HourlyEntity> {
                 icon = it.weather[0].icon
         )
     }
+}
+
+fun Hourly.toHourlyEntity(id: Long, cityId: Long): HourlyEntity {
+    return HourlyEntity(
+            id = id,
+            cityId = cityId,
+            deltaTime = dt.toLong() * 1000,
+            temp = temp.roundToInt(),
+            feelsLike = feelsLike.roundToInt(),
+            pressure = pressure,
+            humidity = humidity,
+            dewPoint = dewPoint,
+            uvi = uvi,
+            clouds = clouds,
+            visibility = visibility,
+            windSpeed = windSpeed.roundToInt(),
+            windDegrees = windDeg,
+            pop = pop,
+            rainOneHour = rain?.oneHour ?: 0.0,
+            rainThreeHours = rain?.threeHours ?: 0.0,
+            snowOneHour = snow?.oneHour ?: 0.0,
+            snowThreeHours = snow?.threeHours ?: 0.0,
+            weatherId = weather[0].id,
+            shortDescription = weather[0].main.capitalize(Locale.getDefault()),
+            description = weather[0].description.capitalize(Locale.getDefault()),
+            icon = weather[0].icon
+    )
 }
