@@ -6,8 +6,6 @@ import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
-import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
@@ -34,7 +32,9 @@ class Repository @Inject constructor(
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(dbDispatcher) {
         Log.d(TAG, "save current")
-        return@withContext currentWeatherDao.insertCurrent(current)
+        val id = currentWeatherDao.insertCurrent(current)
+        preferencesHelper.setCurrentSelected(id)
+        return@withContext id
     }
 
     suspend fun savePerHourWithHourly(perHour: PerHourWithHourly) = withContext(dbDispatcher) {
@@ -52,7 +52,9 @@ class Repository @Inject constructor(
 
     suspend fun getCurrentByKey(key: Long): LiveData<CurrentEntity> = withContext(dbDispatcher) {
         Log.d(TAG, "getCurrentByKey")
-        val cityId = if (key > 0) key else preferencesHelper.getCurrentSelected()
+        val cityId = if (key > 0) {
+            key.also { preferencesHelper.setCurrentSelected(it) }
+        } else preferencesHelper.getCurrentSelected()
         return@withContext liveData {
             emitSource(currentWeatherDao.getCurrentByKey(cityId))
         }
@@ -132,7 +134,7 @@ class Repository @Inject constructor(
     private suspend fun shouldUpdatePerHour(cityId: Long) = withContext(dbDispatcher) {
         Log.d(TAG, "shouldUpdatePerHour")
         val rawHourly = perHourDao.getRawHourlyByKey(cityId)
-        if (shouldUpdate(rawHourly.hourlyEntities[0].deltaTime)) {
+        if (rawHourly != null && shouldUpdate(rawHourly.hourlyEntities[0].deltaTime)) {
             updatePerHour(rawHourly)
         }
     }

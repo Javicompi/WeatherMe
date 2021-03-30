@@ -44,11 +44,11 @@ class ResultSearchViewModel @ViewModelInject constructor(
                 is Result.Success -> {
                     val perHourEntity = result.value.toPerHourEntity(current.cityId)
                     val hourlyEntity = result.value.toHourlyEntityList(current.cityId)
-                    val perHourAndHourlys = PerHourWithHourly(perHourEntity, hourlyEntity)
-                    _perHour.postValue(perHourAndHourlys)
+                    val perHourWithHourly = PerHourWithHourly(perHourEntity, hourlyEntity)
+                    _perHour.postValue(perHourWithHourly)
                 }
                 is Result.GenericError -> {
-                    showSnackBarMessage.postValue(result.error?.message)
+                    showSnackBarMessage.postValue(result.error)
                 }
                 is Result.NetworkError -> {
                     showSnackBarInt.postValue(R.string.connectivity_error)

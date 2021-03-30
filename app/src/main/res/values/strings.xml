@@ -32,6 +32,9 @@
     <string name="current_percent">%d%%</string>
     <string name="current_speed">%dm/s</string>
     <string name="current_mms">%.1fmm</string>
+    <string name="current_temp">%d°</string>
+    <string name="current_feels_like">Feels like %d°</string>
+    <string name="current_max_min">%d° | %d°</string>
     
     <!-- Wind directions -->
     <string name="north">N</string>

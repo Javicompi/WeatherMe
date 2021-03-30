@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="huge_margin">32dp</dimen>
     <dimen name="large_margin">24dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="small_margin">8dp</dimen>
@@ -18,5 +19,13 @@
     <dimen name="list_item_corner_radius">4dp</dimen>
     <dimen name="list_item_small_text_size">28sp</dimen>
 
-    <dimen name="detail_icon_size">40dp</dimen>
+    <dimen name="detail_icon_size">24dp</dimen>
+
+    <dimen name="current_main_temp_size">48sp</dimen>
+    <dimen name="current_feelslike_size">18sp</dimen>
+    <dimen name="current_location_size">28sp</dimen>
+    <dimen name="current_description">18sp</dimen>
+
+    <!-- hourly list item -->
+    <dimen name="hourly_item_icon_size">24dp</dimen>
 </resources>

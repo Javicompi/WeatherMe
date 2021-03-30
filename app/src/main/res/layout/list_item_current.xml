@@ -65,7 +65,7 @@
                 android:id="@+id/list_current_short_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{current.shortDescription}"
+                android:text="@{current.description}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                 android:textColor="@color/list_item_current_text_color"
                 android:textSize="@dimen/list_item_small_text_size"

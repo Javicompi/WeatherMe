@@ -2,20 +2,23 @@ package com.example.android.weatherme.utils
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
+import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 object BindingAdapters {
 
     @BindingAdapter("android:currentBackground")
     @JvmStatic
-    fun View.setCurrentBackground(icon: String) {
-        icon.let {
+    fun View.setCurrentBackground(icon: String?) {
+        icon?.let {
             val context = this.context
             if (icon == "_01d" || icon == "_02d") {
                 this.setBackgroundColor(context.getColor(R.color.list_item_current_background_dayclear))
@@ -34,17 +37,15 @@ object BindingAdapters {
     @BindingAdapter("android:currentIcon")
     @JvmStatic
     fun ImageView.setCurrentIcon(icon: String?) {
-        icon.let {
-            if (!icon.isNullOrEmpty()) {
-                val context = this.context
-                val resourceName = icon.replace("_", "i")
-                val resourceId = context.resIdByName(resourceName, "drawable")
-                this.setImageResource(resourceId)
-            }
+        icon?.let {
+            val context = this.context
+            val resourceName = icon.replace("_", "i")
+            val resourceId = context.resIdByName(resourceName, "drawable")
+            this.setImageResource(resourceId)
         }
     }
 
-    @BindingAdapter("android:currentBackground")
+    /*@BindingAdapter("android:currentBackground")
     @JvmStatic
     fun ImageView.setCurrentBackground(icon: String?) {
         icon.let {
@@ -55,7 +56,7 @@ object BindingAdapters {
                 this.setImageResource(resourceId)
             }
         }
-    }
+    }*/
 
     @BindingAdapter("android:fadeVisible")
     @JvmStatic
@@ -93,10 +94,24 @@ object BindingAdapters {
     @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
     @JvmStatic
     fun TextView.valueToDate(time: Long, offset: Int) {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeZone.rawOffset = offset
-        calendar.timeInMillis = time
-        val dateFormat = SimpleDateFormat("HH:mm", Locale.US)
-        text = dateFormat.format(calendar)
+        val date = Date(time)
+        date.time += offset.toLong()
+        val dateFormat = SimpleDateFormat("HH:mm")
+        dateFormat.timeZone = TimeZone.GMT_ZONE
+        text = dateFormat.format(date)
+    }
+
+    @BindingAdapter("android:maxMinTemp")
+    @JvmStatic
+    fun TextView.maxMinTemp(hourlys: List<HourlyEntity>?) {
+        if (hourlys != null) {
+            val temps = ArrayList<Int>()
+            for (hourly in hourlys) {
+                temps.add(hourly.temp)
+            }
+            val max = temps.maxOrNull() ?: 0
+            val min = temps.minOrNull() ?: 0
+            text = resources.getString(R.string.current_max_min, max, min)
+        }
     }
 }

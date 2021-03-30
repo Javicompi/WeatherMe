@@ -26,9 +26,9 @@ class CurrentViewModel @ViewModelInject constructor(
         }
     }
 
-    val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
-        it?.let {
-            it.cityName?.isNotEmpty() ?: false
+    val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) { value ->
+        value?.let {
+            value.cityName?.isNotEmpty() ?: false
         }
     }
 

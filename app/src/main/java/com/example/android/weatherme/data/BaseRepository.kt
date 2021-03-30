@@ -1,9 +1,8 @@
 package com.example.android.weatherme.data
 
+import android.util.Log
 import com.example.android.weatherme.data.network.api.Result
-import com.example.android.weatherme.data.network.models.ErrorResponse
 import com.squareup.moshi.JsonDataException
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -13,6 +12,7 @@ open class BaseRepository {
 
     suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher, apiCall: suspend () -> T): Result<T> {
         return withContext(dispatcher) {
+            Log.d("safeApiCall", apiCall.invoke().toString())
             try {
                 Result.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
@@ -21,41 +21,20 @@ open class BaseRepository {
                     is HttpException -> {
                         val code = throwable.code()
                         val message = throwable.message()
-                        //val errorResponse = convertErrorBody(throwable)
-                        val errorResponse = ErrorResponse(code, message)
-                        Result.GenericError(code, errorResponse)
+                        Result.GenericError(code, message)
                     }
                     is JsonDataException -> {
                         val code = 0
                         val message = throwable.message ?: "Error parsing the data"
-                        //val errorResponse = convertJsonException(throwable)
-                        val errorResponse = ErrorResponse(code, message)
-                        Result.GenericError(0, errorResponse)
+                        Result.GenericError(0, message)
                     }
                     else -> {
-                        Result.GenericError(null, null)
+                        val code = 0
+                        val message = throwable.message
+                        Result.GenericError(code, message)
                     }
                 }
             }
-        }
-    }
-
-    private fun convertErrorBody(throwable: HttpException): ErrorResponse? {
-        return try {
-            throwable.response()?.errorBody()?.source()?.let {
-                val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
-                moshiAdapter.fromJson(it)
-            }
-        } catch (exception: Exception) {
-            null
-        }
-    }
-
-    private fun convertJsonException(throwable: JsonDataException): ErrorResponse? {
-        return try {
-                ErrorResponse(0, throwable.localizedMessage ?: "Error parsing the data")
-            } catch (exception: Exception) {
-                return null
         }
     }
 }

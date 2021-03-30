@@ -9,6 +9,10 @@
             name="current"
             type="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
 
+        <variable
+            name="perHour"
+            type="com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,12 +38,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- android:text="@{@string/degrees_character(current.temp)}" -->
+
         <TextView
             android:id="@+id/detail_temperature"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@{@string/degrees_character(current.temp)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:maxMinTemp="@{perHour.hourlyEntities}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -62,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_percent(current.clouds)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -76,7 +82,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_humidity"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/medium_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_thermomether_ic"/>
 
@@ -85,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_percent(current.humidity)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -109,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{String.valueOf(current.pressure)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -123,7 +129,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_wind_speed"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/medium_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_humidity_ic"/>
 
@@ -132,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_speed(current.windSpeed)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -157,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:windDirectionString="@{current.windDegrees}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -171,7 +177,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_raindrops"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/medium_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_wind_speed_ic"/>
 
@@ -180,7 +186,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_mms(current.rainOneHour)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -204,7 +210,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_mms(current.snowOneHour)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -218,7 +224,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_sunrise"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/medium_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_raindrops_ic"/>
 
@@ -228,7 +234,7 @@
             android:layout_height="0dp"
             android:time="@{current.sunrise}"
             android:offset="@{current.timeZone}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -253,7 +259,7 @@
             android:layout_height="0dp"
             android:time="@{current.sunset}"
             android:offset="@{current.timeZone}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/large_margin"
             android:gravity="center_vertical"
@@ -261,6 +267,10 @@
             app:layout_constraintTop_toTopOf="@id/detail_sunrise_ic"
             app:layout_constraintBottom_toBottomOf="@id/detail_sunrise_ic"
             tools:text="18:46"/>
+
+        <include
+            android:id="@+id/hourly_recycler"
+            layout="@layout/list_hourly"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

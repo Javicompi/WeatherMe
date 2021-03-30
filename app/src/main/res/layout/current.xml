@@ -20,6 +20,8 @@
         android:layout_height="match_parent"
         android:id="@+id/current_layout">
 
+        <!-- android:currentBackground="@{current.icon}" -->
+
         <ImageView
             android:id="@+id/current_background"
             android:layout_width="0dp"
@@ -31,6 +33,58 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/f01d" />
+
+        <TextView
+            android:id="@+id/current_main_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/huge_margin"
+            android:text="@{@string/current_temp(current.temp)}"
+            android:textColor="@color/list_item_current_text_color"
+            android:textSize="@dimen/current_main_temp_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="16°" />
+
+        <TextView
+            android:id="@+id/current_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/huge_margin"
+            android:gravity="end"
+            android:text="@{current.cityName}"
+            android:textColor="@color/list_item_current_text_color"
+            android:textSize="@dimen/current_location_size"
+            app:layout_constraintBottom_toBottomOf="@id/current_main_temp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/current_main_temp"
+            app:layout_constraintTop_toTopOf="@id/current_main_temp"
+            tools:text="Gran Alacant" />
+
+        <TextView
+            android:id="@+id/current_feelslike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/current_feels_like(current.feelsLike)}"
+            android:textColor="@color/list_item_current_text_color"
+            android:textSize="@dimen/current_feelslike_size"
+            app:layout_constraintStart_toStartOf="@id/current_main_temp"
+            app:layout_constraintTop_toBottomOf="@id/current_main_temp"
+            tools:text="Feels like 14°"/>
+
+        <TextView
+            android:id="@+id/current_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/huge_margin"
+            android:gravity="end"
+            android:text="@{current.description}"
+            android:textColor="@color/list_item_current_text_color"
+            android:textSize="@dimen/current_description"
+            app:layout_constraintStart_toEndOf="@id/current_feelslike"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/current_feelslike"
+            tools:text="Clear sky"/>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:layout_width="match_parent"
@@ -53,7 +107,13 @@
                     android:src="@drawable/rounded_rectangle"
                     android:layout_margin="@dimen/medium_margin"/>
 
-                <HorizontalScrollView
+                <include
+                    android:id="@+id/details_current"
+                    layout="@layout/details_layout_current"
+                    app:current="@{current}"
+                    app:perHour="@{perHour}"/>
+
+                <!-- <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="none">
@@ -72,26 +132,9 @@
 
                     </LinearLayout>
 
-                </HorizontalScrollView>
+                </HorizontalScrollView> -->
 
             </LinearLayout>
-
-            <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:id="@+id/scrollview"
-                android:background="?android:colorBackground"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bottom_peek"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <include
-                    android:id="@+id/details_current"
-                    layout="@layout/details_layout_current"
-                    app:current="@{current}"/>
-
-            </ScrollView>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/current_fab"

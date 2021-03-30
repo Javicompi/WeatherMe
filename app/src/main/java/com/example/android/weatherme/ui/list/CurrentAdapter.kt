@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.databinding.ListItemCurrentBinding
 
-class CurrentAdapter(val clickListener: CurrentListener) :
+class CurrentAdapter(private val clickListener: CurrentListener) :
     ListAdapter<CurrentEntity, CurrentAdapter.ViewHolder>(CurrentDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -29,6 +29,7 @@ class CurrentAdapter(val clickListener: CurrentListener) :
             }
 
         companion object {
+
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemCurrentBinding.inflate(layoutInflater, parent, false)

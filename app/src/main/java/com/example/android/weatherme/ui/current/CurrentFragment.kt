@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentCurrentBinding
-import com.example.android.weatherme.ui.base.ChartFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CurrentFragment : ChartFragment() {
+class CurrentFragment : Fragment() {
 
     private val viewModel: CurrentViewModel by viewModels()
 
@@ -36,12 +36,12 @@ class CurrentFragment : ChartFragment() {
             viewModel.deleteEntry()
         }
 
-        val tempChart = binding.loadedCurrent.tempChartView
+        val adapter = HourlyAdapter()
+
+        binding.loadedCurrent.detailsCurrent.hourlyRecycler.hourlyRecycler.adapter = adapter
 
         viewModel.perHour.observe(viewLifecycleOwner, { perHour ->
-            perHour?.let {
-                setupTempChart(perHour, tempChart)
-            }
+            adapter.submitList(perHour.hourlyEntities)
         })
 
         viewModel.showSnackBar.observe(viewLifecycleOwner, { message ->

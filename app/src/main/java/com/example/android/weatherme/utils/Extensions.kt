@@ -9,7 +9,6 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
@@ -79,7 +78,7 @@ fun longToStringDate(time: Long, timeZone: String): String {
     val calendar = Calendar.getInstance()
     //calendar.timeZone = TimeZone.getTimeZone(timeZone)
     calendar.timeInMillis = time
-    val dateFormatter = SimpleDateFormat("HH:mm")
+    val dateFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
     dateFormatter.timeZone = TimeZone.getTimeZone(timeZone)
     return dateFormatter.format(calendar.timeInMillis)
 }

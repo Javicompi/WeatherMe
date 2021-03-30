@@ -18,6 +18,8 @@ object Constants {
 
     const val PREF_UNITS = "prefUnitsKey"
 
+    const val PREF_UNITS_DEFAULT = "standard"
+
     const val PREF_LAST_UPDATE = "prefLastUpdate"
 
     //TODO for testing, only 15 minutes
