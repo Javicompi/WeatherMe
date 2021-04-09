@@ -1,28 +1,27 @@
 package com.example.android.weatherme.ui.search
 
-import android.app.Application
-import android.content.SharedPreferences
-import androidx.lifecycle.AndroidViewModel
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
-class ResultSearchViewModel(app: Application) : AndroidViewModel(app) {
+class ResultSearchViewModel @ViewModelInject constructor(
+    private val repository: Repository
+) : ViewModel() {
 
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
     val navigateToCurrentFragment: SingleLiveEvent<Long> = SingleLiveEvent()
 
-    private val repository = Repository(
+    /*private val repository = Repository(
         WeatherDatabase.getDatabase(app),
         PreferenceManager.getDefaultSharedPreferences(app)
-    )
+    )*/
 
     private val _current: MutableLiveData<CurrentEntity> = MutableLiveData()
     val current: LiveData<CurrentEntity>
