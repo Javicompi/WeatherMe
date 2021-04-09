@@ -1,26 +1,26 @@
 package com.example.android.weatherme.ui.search
 
-import android.app.Application
 import android.location.Location
-import androidx.lifecycle.AndroidViewModel
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 import java.util.*
 
-class SearchViewModel(app: Application) : AndroidViewModel(app) {
+class SearchViewModel @ViewModelInject constructor(
+        private val repository: Repository
+) : ViewModel() {
 
-    private val repository = Repository(
+    /*private val repository = Repository(
         WeatherDatabase.getDatabase(app),
         PreferenceManager.getDefaultSharedPreferences(app)
-    )
+    )*/
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 

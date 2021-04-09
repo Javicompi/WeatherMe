@@ -7,22 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentResultSearchBinding
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ResultSearchFragment : Fragment() {
 
     private val arguments: ResultSearchFragmentArgs by navArgs()
 
-    private val viewModel: ResultSearchViewModel by lazy {
+    /*private val viewModel: ResultSearchViewModel by lazy {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(activity, ResultSearchViewModelFactory(activity.application))
                 .get(ResultSearchViewModel::class.java)
-    }
+    }*/
+
+    private val viewModel: ResultSearchViewModel by viewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater,

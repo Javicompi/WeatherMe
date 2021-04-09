@@ -8,7 +8,7 @@ class ResultSearchViewModelFactory(val app: Application) : ViewModelProvider.Fac
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ResultSearchViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ResultSearchViewModel(app) as T
+            return null as T//ResultSearchViewModel(app) as T
         }
         throw IllegalArgumentException("Unable to construct ResultSearchViewModel")
     }
