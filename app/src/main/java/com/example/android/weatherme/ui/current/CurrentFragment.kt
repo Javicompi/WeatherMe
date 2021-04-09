@@ -38,7 +38,7 @@ class CurrentFragment : Fragment() {
 
         val adapter = HourlyAdapter()
 
-        binding.loadedCurrent.detailsCurrent.hourlyRecycler.hourlyRecycler.adapter = adapter
+        binding.loadedCurrent.hourlyRecycler.adapter = adapter
 
         viewModel.perHour.observe(viewLifecycleOwner, { perHour ->
             adapter.submitList(perHour.hourlyEntities)

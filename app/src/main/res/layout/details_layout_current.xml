@@ -268,9 +268,5 @@
             app:layout_constraintBottom_toBottomOf="@id/detail_sunrise_ic"
             tools:text="18:46"/>
 
-        <include
-            android:id="@+id/hourly_recycler"
-            layout="@layout/list_hourly"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

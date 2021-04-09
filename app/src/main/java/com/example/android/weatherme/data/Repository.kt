@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.android.weatherme.data.database.CurrentWeatherDao
 import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.ApiResponse
 import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
@@ -29,6 +30,53 @@ class Repository @Inject constructor(
 ) : BaseRepository() {
 
     private val TAG = Repository::class.java.simpleName
+
+    fun loadCurrent(id: Long): LiveData<Resource<CurrentEntity>> {
+        return object : NetworkBoundResource<CurrentEntity, Current>(dbDispatcher) {
+            override fun saveCallResult(item: Current) {
+                currentWeatherDao.insertCurrent(item.toEntity())
+            }
+
+            override fun shouldFetch(data: CurrentEntity?): Boolean {
+                return data != null && shouldUpdate(data.deltaTime)
+            }
+
+            override fun loadFromDb(): LiveData<CurrentEntity> {
+                val cityId = if (id > 0) {
+                    id.also { preferencesHelper.setCurrentSelected(it) }
+                } else preferencesHelper.getCurrentSelected()
+                return currentWeatherDao.getCurrentByKey(cityId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<Current>> {
+                return weatherApiService.getCurrentById(id)
+            }
+        }.asLiveData()
+    }
+
+    fun loadPerHour(id: Long, lat: Double, lon: Double): LiveData<Resource<PerHourWithHourly>> {
+        return object : NetworkBoundResource<PerHourWithHourly, PerHour>(dbDispatcher) {
+            override fun saveCallResult(item: PerHour) {
+                val perHourEntity = item.toPerHourEntity(id)
+                val hourlyEntityList = item.toHourlyEntityList(id)
+                val perHourWithHourly = PerHourWithHourly(perHourEntity, hourlyEntityList)
+                perHourDao.insertPerHour(perHourWithHourly)
+            }
+
+            override fun shouldFetch(data: PerHourWithHourly?): Boolean {
+                return data != null && shouldUpdate(data.hourlyEntities[0].deltaTime)
+            }
+
+            override fun loadFromDb(): LiveData<PerHourWithHourly> {
+                val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
+                return perHourDao.getPerHourbyKey(cityId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<PerHour>> {
+                return weatherApiService.getNewPerHourByLatLon(lat, lon)
+            }
+        }.asLiveData()
+    }
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(dbDispatcher) {
         Log.d(TAG, "save current")
@@ -116,7 +164,7 @@ class Repository @Inject constructor(
     suspend fun updateData(forced: Boolean? = false) = withContext(dbDispatcher) {
         Log.d(TAG, "updateData")
         updateCurrents()
-        if (forced == true) {
+        if (forced == true || preferencesHelper.getAutUpdate()) {
             val perHourEntities = perHourDao.getRawPerHours()
             for (perHourWithHourly in perHourEntities) {
                 updatePerHour(perHourWithHourly)
@@ -134,7 +182,7 @@ class Repository @Inject constructor(
     private suspend fun shouldUpdatePerHour(cityId: Long) = withContext(dbDispatcher) {
         Log.d(TAG, "shouldUpdatePerHour")
         val rawHourly = perHourDao.getRawHourlyByKey(cityId)
-        if (rawHourly != null && shouldUpdate(rawHourly.hourlyEntities[0].deltaTime)) {
+        if (shouldUpdate(rawHourly.hourlyEntities[0].deltaTime)) {
             updatePerHour(rawHourly)
         }
     }

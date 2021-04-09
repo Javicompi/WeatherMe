@@ -12,6 +12,7 @@ data class HourlyEntity(
         val id: Long?,
         val cityId: Long,
         val deltaTime: Long,
+        val offset: Int,
         val temp: Int,
         val feelsLike: Int,
         val pressure: Int,

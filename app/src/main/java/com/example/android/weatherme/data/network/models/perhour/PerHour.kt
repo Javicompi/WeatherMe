@@ -3,7 +3,6 @@ package com.example.android.weatherme.data.network.models.perhour
 
 import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
-import com.example.android.weatherme.data.network.models.perhour.PerHour.*
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.util.*
@@ -82,6 +81,7 @@ fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
                 id = null,
                 cityId = cityId,
                 deltaTime = it.dt.toLong() * 1000,
+                offset = timezoneOffset,
                 temp = it.temp.roundToInt(),
                 feelsLike = it.temp.roundToInt(),
                 pressure = it.pressure,
@@ -103,31 +103,4 @@ fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
                 icon = it.weather[0].icon
         )
     }
-}
-
-fun Hourly.toHourlyEntity(id: Long, cityId: Long): HourlyEntity {
-    return HourlyEntity(
-            id = id,
-            cityId = cityId,
-            deltaTime = dt.toLong() * 1000,
-            temp = temp.roundToInt(),
-            feelsLike = feelsLike.roundToInt(),
-            pressure = pressure,
-            humidity = humidity,
-            dewPoint = dewPoint,
-            uvi = uvi,
-            clouds = clouds,
-            visibility = visibility,
-            windSpeed = windSpeed.roundToInt(),
-            windDegrees = windDeg,
-            pop = pop,
-            rainOneHour = rain?.oneHour ?: 0.0,
-            rainThreeHours = rain?.threeHours ?: 0.0,
-            snowOneHour = snow?.oneHour ?: 0.0,
-            snowThreeHours = snow?.threeHours ?: 0.0,
-            weatherId = weather[0].id,
-            shortDescription = weather[0].main.capitalize(Locale.getDefault()),
-            description = weather[0].description.capitalize(Locale.getDefault()),
-            icon = weather[0].icon
-    )
 }

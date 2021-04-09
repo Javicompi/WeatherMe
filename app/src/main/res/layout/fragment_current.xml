@@ -19,9 +19,9 @@
         <include
             android:id="@+id/loaded_current"
             layout="@layout/current"
-            app:current="@{viewModel.currentSelected}"
+            app:current="@{viewModel.currentSelected.data}"
             app:perHour="@{viewModel.perHour}"
-            android:fadeVisible="@{viewModel.setShowData}"/>
+            android:fadeVisible="@{viewModel.currentSelected.data != null}"/>
 
         <TextView
             android:id="@+id/no_data_current_textview"
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:textSize="20sp"
             android:text="@string/no_data_current"
-            android:fadeVisible="@{!viewModel.setShowData}"
+            android:fadeVisible="@{viewModel.currentSelected.data == null}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

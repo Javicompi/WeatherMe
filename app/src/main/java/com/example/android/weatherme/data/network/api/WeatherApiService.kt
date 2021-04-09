@@ -1,5 +1,7 @@
 package com.example.android.weatherme.data.network.api
 
+import androidx.lifecycle.LiveData
+import com.example.android.weatherme.data.database.entities.perhour.ApiResponse
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.utils.Constants
@@ -18,10 +20,24 @@ private val retrofit = Retrofit.Builder()
 interface WeatherApiService {
 
     @GET("weather?appid=${Constants.API_KEY}")
+    fun getCurrentById(
+            @Query("id") id: Long,
+            @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
+            @Query("lang") language: String = Locale.getDefault().language
+    ): LiveData<ApiResponse<Current>>
+
+    @GET("weather?appid=${Constants.API_KEY}")
+    fun getNewCurrentById(
+            @Query("id") id: Long,
+            @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
+            @Query("lang") language: String = Locale.getDefault().language
+    ): ApiResponse<Current>
+
+    @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherByName(
             @Query("q") location: String,
             @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
-            @Query("lang") language: String = Locale.getDefault().language//.toString().subSequence(0, 2).toString()
+            @Query("lang") language: String = Locale.getDefault().language
     ): Current
 
     @GET("weather?appid=${Constants.API_KEY}")
@@ -29,14 +45,14 @@ interface WeatherApiService {
             @Query("lat") latitude: Double,
             @Query("lon") longitude: Double,
             @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
-            @Query("lang") language: String = Locale.getDefault().language//.toString().subSequence(0, 2).toString()
+            @Query("lang") language: String = Locale.getDefault().language
     ): Current
 
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentWeatherById(
             @Query("id") id: Long,
             @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
-            @Query("lang") language: String = Locale.getDefault().language//.toString().subSequence(0, 2).toString()
+            @Query("lang") language: String = Locale.getDefault().language
     ): Current
 
     @GET("onecall?appid=${Constants.API_KEY}")
@@ -45,8 +61,17 @@ interface WeatherApiService {
             @Query("lon") longitude: Double,
             @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
             @Query("exclude") exclude: String = "current,minutely,daily,alerts",
-            @Query("lang") language: String = Locale.getDefault().language//.toString().subSequence(0, 2).toString()
+            @Query("lang") language: String = Locale.getDefault().language
     ): PerHour
+
+    @GET("onecall?appid=${Constants.API_KEY}")
+    fun getNewPerHourByLatLon(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
+        @Query("exclude") exclude: String = "current,minutely,daily,alerts",
+        @Query("lang") language: String = Locale.getDefault().language
+    ): LiveData<ApiResponse<PerHour>>
 }
 
 object WeatherApi {

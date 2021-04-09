@@ -26,6 +26,9 @@ interface CurrentWeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrent(currentEntity: CurrentEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCurrents(currents: List<CurrentEntity>)
+
     @Query("DELETE FROM currents WHERE `cityId` = :id")
     fun deleteCurrent(id: Long)
 

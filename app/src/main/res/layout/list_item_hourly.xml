@@ -9,10 +9,6 @@
             name="hourly"
             type="com.example.android.weatherme.data.database.entities.perhour.HourlyEntity" />
 
-        <variable
-            name="offset"
-            type="Integer" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/list_hourly_time"
             android:time="@{hourly.deltaTime}"
-            android:offset="@{offset}"
+            android:offset="@{hourly.offset}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
