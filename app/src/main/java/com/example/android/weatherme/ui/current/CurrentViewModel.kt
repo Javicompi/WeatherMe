@@ -1,6 +1,7 @@
 package com.example.android.weatherme.ui.current
 
 import android.app.Application
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import com.example.android.weatherme.data.Repository
@@ -8,12 +9,14 @@ import com.example.android.weatherme.data.database.WeatherDatabase
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
-class CurrentViewModel(app: Application) : AndroidViewModel(app) {
+class CurrentViewModel @ViewModelInject constructor(
+        private val repository: Repository
+) : ViewModel() {
 
-    private val repository = Repository(
+    /*private val repository = Repository(
         WeatherDatabase.getDatabase(app),
         PreferenceManager.getDefaultSharedPreferences(app)
-    )
+    )*/
 
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
