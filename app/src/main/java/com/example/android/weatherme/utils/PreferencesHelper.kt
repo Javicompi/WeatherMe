@@ -3,10 +3,11 @@ package com.example.android.weatherme.utils
 import android.content.Context
 import androidx.preference.PreferenceManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferencesHelper constructor(@ApplicationContext context: Context) {
+class PreferencesHelper @Inject constructor(@ApplicationContext context: Context) {
 
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
