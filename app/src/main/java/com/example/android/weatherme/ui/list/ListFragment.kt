@@ -5,17 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.weatherme.databinding.FragmentListBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
 
-    private val viewModel: ListViewModel by lazy {
+    /*private val viewModel: ListViewModel by lazy {
         val activity = requireNotNull(this.activity)
         ViewModelProvider(activity, ListViewModelFactory(activity.application))
             .get(ListViewModel::class.java)
-    }
+    }*/
+
+    private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater,
