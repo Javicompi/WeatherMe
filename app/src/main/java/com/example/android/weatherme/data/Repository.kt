@@ -34,10 +34,6 @@ class Repository(
         return database.currentWeatherDao().getCurrentByKey(key)
     }
 
-    fun getCurrentByKName(name: String): LiveData<CurrentEntity> {
-        return database.currentWeatherDao().getCurrentByName(name)
-    }
-
     suspend fun deleteCurrent(key: Long) = withContext(Dispatchers.IO) {
         database.currentWeatherDao().deleteCurrent(key)
     }
@@ -62,16 +58,6 @@ class Repository(
             return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherByLatLon(
                 latitude = location.latitude,
                 longitude = location.longitude,
-                units = units
-            )
-        }
-    }
-
-    suspend fun searchCurrentByCityId(id: Long): Result<Current> {
-        return safeApiCall(Dispatchers.IO) {
-            val units = preferences.getString(Constants.PREF_UNITS, "standard")
-            return@safeApiCall WeatherApi.retrofitService.getCurrentWeatherById(
-                id = id,
                 units = units
             )
         }
