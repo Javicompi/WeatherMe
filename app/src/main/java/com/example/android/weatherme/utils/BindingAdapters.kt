@@ -1,5 +1,6 @@
 package com.example.android.weatherme.utils
 
+import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.view.View
@@ -90,6 +91,7 @@ object BindingAdapters {
         rotation = (value + 180).toFloat()
     }
 
+    @SuppressLint("SimpleDateFormat")
     @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
     @JvmStatic
     fun TextView.valueToDate(time: Long, offset: Int) {
