@@ -74,9 +74,13 @@ dependencies {
     //Hamcrest
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
 
-    // Espresso dependencies
+    //Espresso dependencies
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
     //Room
     implementation "androidx.room:room-runtime:$roomVersion"
