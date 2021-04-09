@@ -23,11 +23,11 @@ class PreferencesHelper constructor(@ApplicationContext context: Context) {
     }
 
     fun setCurrentSelected(value: Long) {
-        prefs.edit().putLong(Constants.CURRENT_SELECTED, value).apply()
+        prefs.edit().putLong(Constants.PREF_CURRENT_SELECTED, value).apply()
     }
 
     fun getCurrentSelected(): Long {
-        return prefs.getLong(Constants.CURRENT_SELECTED, 0)
+        return prefs.getLong(Constants.PREF_CURRENT_SELECTED, 0)
     }
 
     fun setLastUpdate(time: Long) {
