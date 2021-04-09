@@ -5,23 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
+import androidx.work.*
 import com.example.android.weatherme.R
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.WeatherDatabase
+import com.example.android.weatherme.data.worker.RefreshDataWorker
 import com.example.android.weatherme.utils.Constants
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val TAG = SettingsFragment::class.java.simpleName
 
-    private lateinit var repository: Repository
+    @Inject
+    lateinit var repository: Repository
 
     private var automaticUpdate: Boolean = false
     private var automaticUpdateNew = automaticUpdate
@@ -69,8 +72,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (automaticUpdate != automaticUpdateNew) {
             if (automaticUpdateNew) {
                 Log.d(TAG, "automatic update changed, launch coroutine worker")
+                launchAutomaticUpdates()
             } else {
                 Log.d(TAG, "automatic update changed, cancel coroutine worker")
+                cancelAutomaticUpdates()
             }
         }
         if (units != unitsNew) {
@@ -82,12 +87,31 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     private suspend fun launchUpdates() {
-        withContext(Dispatchers.Main) {
-            repository = Repository(
-                WeatherDatabase.getDatabase(requireActivity()),
-                PreferenceManager.getDefaultSharedPreferences(requireActivity())
-            )
-            repository.updateCurrents()
-        }
+        repository.updateCurrents()
+    }
+
+    private fun launchAutomaticUpdates() {
+        Log.d(TAG, "launchAutomaticUpdates")
+        val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                //.setRequiresDeviceIdle(true)
+                .build()
+
+        val repeatingRequest =
+                PeriodicWorkRequestBuilder<RefreshDataWorker>(
+                        Constants.PERIODIC_REQUEST_DELAY_MINS, TimeUnit.MINUTES
+                ).setConstraints(constraints).build()
+
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+                RefreshDataWorker.WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                repeatingRequest
+        )
+    }
+
+    private fun cancelAutomaticUpdates() {
+        Log.d(TAG, "cancelAutomaticUpdates")
+        WorkManager.getInstance(requireContext()).cancelUniqueWork(RefreshDataWorker.WORK_NAME)
     }
 }
