@@ -1,7 +1,7 @@
 package com.example.android.weatherme.utils
 
 import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
+import android.icu.util.TimeZone
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -93,10 +93,10 @@ object BindingAdapters {
     @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
     @JvmStatic
     fun TextView.valueToDate(time: Long, offset: Int) {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.timeZone.rawOffset = offset
-        calendar.timeInMillis = time
-        val dateFormat = SimpleDateFormat("HH:mm", Locale.US)
-        text = dateFormat.format(calendar)
+        val date = Date(time)
+        date.time += offset.toLong()
+        val dateFormat = SimpleDateFormat("HH:mm")
+        dateFormat.timeZone = TimeZone.GMT_ZONE
+        text = dateFormat.format(date)
     }
 }
