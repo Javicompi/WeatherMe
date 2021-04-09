@@ -2,14 +2,27 @@ package com.example.android.weatherme
 
 import android.app.Application
 import android.util.Log
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import com.example.android.weatherme.data.worker.RefreshDataWorker
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class WeatherMeApplication : Application() {
+@HiltAndroidApp
+class WeatherMeApplication : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+    }
 
     val applicationScope = CoroutineScope(Dispatchers.Default)
 
@@ -21,7 +34,7 @@ class WeatherMeApplication : Application() {
     private fun delayedInit() {
         Log.d("Application", "delayedInt")
         applicationScope.launch {
-            setUpdatingWork()
+            //setUpdatingWork()
         }
     }
 
