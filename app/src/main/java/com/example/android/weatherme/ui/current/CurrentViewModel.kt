@@ -1,29 +1,24 @@
 package com.example.android.weatherme.ui.current
 
-import android.app.Application
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import androidx.preference.PreferenceManager
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.WeatherDatabase
+import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class CurrentViewModel @ViewModelInject constructor(
-        private val repository: Repository
+        private val repository: Repository,
+        @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
-    /*private val repository = Repository(
-        WeatherDatabase.getDatabase(app),
-        PreferenceManager.getDefaultSharedPreferences(app)
-    )*/
 
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
-    val loadNewCurrent: SingleLiveEvent<Long> = SingleLiveEvent()
 
-    val currentSelected = loadNewCurrent.switchMap { value ->
-        repository.getCurrentByKey(value)
+    val currentSelected: LiveData<CurrentEntity> =
+        savedStateHandle.getLiveData<Long>("cityId").switchMap { cityId ->
+            repository.getCurrentByKey(cityId)
     }
 
     val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
@@ -31,6 +26,10 @@ class CurrentViewModel @ViewModelInject constructor(
     }
 
     val setShowLoading: MutableLiveData<Boolean> = MutableLiveData()
+
+    fun loadCurrent(cityId: Long) {
+        savedStateHandle["cityId"] = cityId
+    }
 
     fun deleteCurrent() {
         viewModelScope.launch {

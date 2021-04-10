@@ -57,7 +57,8 @@ class CurrentFragment : Fragment() {
         super.onStart()
         arguments.let {
             if (it.selectedCurrent > 0) {
-                viewModel.loadNewCurrent.value = it.selectedCurrent
+                //viewModel.loadNewCurrent.value = it.selectedCurrent
+                viewModel.loadCurrent(it.selectedCurrent)
             }
         }
     }
