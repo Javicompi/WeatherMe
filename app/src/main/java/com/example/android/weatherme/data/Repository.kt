@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-        private val dbDispatcher: CoroutineDispatcher,
+        private val ioDispatcher: CoroutineDispatcher,
         private val currentWeatherDao: CurrentWeatherDao,
         private val weatherApiService: WeatherApiService,
         private val preferencesHelper: PreferencesHelper
@@ -22,7 +22,7 @@ class Repository @Inject constructor(
 
     suspend fun saveCurrent(current: CurrentEntity): Long {
         var id: Long
-        withContext(dbDispatcher) {
+        withContext(ioDispatcher) {
             id = currentWeatherDao.insertCurrent(current)
         }
         return id
@@ -36,16 +36,16 @@ class Repository @Inject constructor(
         return currentWeatherDao.getCurrentByKey(key)
     }
 
-    suspend fun deleteCurrent(key: Long) = withContext(dbDispatcher) {
+    suspend fun deleteCurrent(key: Long) = withContext(ioDispatcher) {
         currentWeatherDao.deleteCurrent(key)
     }
 
-    suspend fun deleteCurrents() = withContext(dbDispatcher) {
+    suspend fun deleteCurrents() = withContext(ioDispatcher) {
         currentWeatherDao.deleteCurrents()
     }
 
     suspend fun searchCurrentByName(name: String): Result<Current> {
-        return safeApiCall(dbDispatcher) {
+        return safeApiCall(ioDispatcher) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByName(
                 location = name,
@@ -55,7 +55,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun searchCurrentByLatLon(location: Location): Result<Current> {
-        return safeApiCall(dbDispatcher) {
+        return safeApiCall(ioDispatcher) {
             val units = preferencesHelper.getUnits()
             return@safeApiCall weatherApiService.getCurrentWeatherByLatLon(
                 latitude = location.latitude,
@@ -66,7 +66,7 @@ class Repository @Inject constructor(
     }
 
     suspend fun updateCurrents() {
-        withContext(dbDispatcher) {
+        withContext(ioDispatcher) {
             val units = preferencesHelper.getUnits()
             val cityIds = currentWeatherDao.getCityIds()
             val currents = cityIds.map { id ->
