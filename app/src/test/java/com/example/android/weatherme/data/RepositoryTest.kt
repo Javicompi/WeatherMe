@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 @MediumTest
 class RepositoryTest {
 
-    private lateinit var repository: Repository
+    /*private lateinit var repository: Repository
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -48,5 +48,5 @@ class RepositoryTest {
         retrieved as CurrentEntity
         //Check is the same item
         assertThat(retrieved.cityId, `is`(current.cityId))
-    }
+    }*/
 }

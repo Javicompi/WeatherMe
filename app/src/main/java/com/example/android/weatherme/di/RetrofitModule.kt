@@ -2,6 +2,7 @@ package com.example.android.weatherme.di
 
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.utils.Constants
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +20,7 @@ object RetrofitModule {
     fun provideRetrofit(): Retrofit.Builder {
         return Retrofit.Builder()
                 .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(NetworkResponseAdapterFactory())
                 .baseUrl(Constants.BASE_URL)
     }
 

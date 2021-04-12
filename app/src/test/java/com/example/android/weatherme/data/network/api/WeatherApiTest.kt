@@ -1,6 +1,6 @@
 package com.example.android.weatherme.data.network.api
 
-import com.example.android.weatherme.data.network.models.current.Current
+import com.haroldadmin.cnradapter.invoke
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
@@ -28,5 +28,15 @@ class WeatherApiTest : TestCase() {
             "es"
         )
         assertThat(result.name, `is`("Gran Alacant"))
+    }
+
+    @Test
+    fun testApiResponseByName() = runBlocking {
+        val result = WeatherApi.retrofitService.getCurrentResponseByName(
+            "gran alacant",
+            "metric",
+            "es"
+        )
+        assertThat(result.invoke()?.name, `is`("Gran Alacant"))
     }
 }

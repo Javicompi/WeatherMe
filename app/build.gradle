@@ -110,4 +110,7 @@ dependencies {
 
     //Location
     implementation "com.google.android.gms:play-services-location:17.1.0"
+
+    //NetworkResponseAdapter
+    implementation "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
 }
