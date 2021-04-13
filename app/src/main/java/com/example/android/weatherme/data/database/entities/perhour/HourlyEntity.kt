@@ -1,4 +1,4 @@
-package com.example.android.weatherme.data.network.models.perhour
+package com.example.android.weatherme.data.database.entities.perhour
 
 import android.os.Parcelable
 import androidx.room.Entity
