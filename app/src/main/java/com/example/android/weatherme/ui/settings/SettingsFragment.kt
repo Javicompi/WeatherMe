@@ -2,7 +2,6 @@ package com.example.android.weatherme.ui.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -13,6 +12,7 @@ import com.example.android.weatherme.data.worker.RefreshDataWorker
 import com.example.android.weatherme.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,8 +20,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private val TAG = SettingsFragment::class.java.simpleName
 
     @Inject
     lateinit var repository: Repository
@@ -43,7 +41,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
         unitsPreference = findPreference(Constants.PREF_UNITS)!!
         units = unitsPreference.value
         unitsNew = units
-        preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onResume() {
@@ -53,12 +50,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == resources.getString(R.string.pref_automatic_update_key)) {
-            Log.d(TAG, "automatic updates changed")
             automaticUpdateNew = sharedPreferences.getBoolean(key, false)
         } else if (key == resources.getString(R.string.pref_units_key)) {
-            Log.d(TAG, "units changed")
-            unitsNew =
-                sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
+            unitsNew = sharedPreferences.getString(key, getString(R.string.pref_units_standard)).toString()
         }
     }
 
@@ -71,27 +65,19 @@ class SettingsFragment : PreferenceFragmentCompat(),
         super.onStop()
         if (automaticUpdate != automaticUpdateNew) {
             if (automaticUpdateNew) {
-                Log.d(TAG, "automatic update changed, launch coroutine worker")
                 launchAutomaticUpdates()
             } else {
-                Log.d(TAG, "automatic update changed, cancel coroutine worker")
                 cancelAutomaticUpdates()
             }
         }
         if (units != unitsNew) {
-            Log.d(TAG, "units changed, launch repository refresh")
-            GlobalScope.launch {
-                launchUpdates()
+            GlobalScope.launch(NonCancellable) {
+                repository.updateCurrents(forceUpdate = true)
             }
         }
     }
 
-    private suspend fun launchUpdates() {
-        repository.updateCurrents()
-    }
-
     private fun launchAutomaticUpdates() {
-        Log.d(TAG, "launchAutomaticUpdates")
         val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresBatteryNotLow(true)
@@ -111,7 +97,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     private fun cancelAutomaticUpdates() {
-        Log.d(TAG, "cancelAutomaticUpdates")
         WorkManager.getInstance(requireContext()).cancelUniqueWork(RefreshDataWorker.WORK_NAME)
     }
 }
