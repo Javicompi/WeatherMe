@@ -16,7 +16,7 @@ class WeatherApiTest : TestCase() {
                 "gran alacant",
                 "metric",
                 "es"
-            )
+        )
         assert(result is NetworkResponse.Success)
         assertThat(result.invoke()?.name, `is`("Gran Alacant"))
     }
@@ -24,10 +24,10 @@ class WeatherApiTest : TestCase() {
     @Test
     fun testApiCurrentByLatLon() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentResponseByLatLon(
-            38.232394006633555,
-            -0.5470151195289806,
-            "metric",
-            "es"
+                38.232394006633555,
+                -0.5470151195289806,
+                "metric",
+                "es"
         )
         assert(result is NetworkResponse.Success)
         assertThat(result.invoke()?.name, `is`("Gran Alacant"))
@@ -36,11 +36,23 @@ class WeatherApiTest : TestCase() {
     @Test
     fun testApiCurrentById() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentResponseById(
-            6697298,
-            "metric",
-            "es"
+                6697298,
+                "metric",
+                "es"
         )
         assert(result is NetworkResponse.Success)
         assertThat(result.invoke()?.name, `is`("Gran Alacant"))
+    }
+
+    @Test
+    fun testApiPerHourByLatLon() = runBlocking {
+        val result = WeatherApi.retrofitService.getPerHourByLatLon(
+                38.232394006633555,
+                -0.5470151195289806,
+                "metric",
+                "es"
+        )
+        assert(result is NetworkResponse.Success)
+        assert(result.invoke()?.hourly?.isNotEmpty() == true)
     }
 }
