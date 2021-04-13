@@ -55,11 +55,6 @@ class CurrentFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        arguments.let {
-            if (it.selectedCurrent > 0) {
-                //viewModel.loadNewCurrent.value = it.selectedCurrent
-                viewModel.loadCurrent(it.selectedCurrent)
-            }
-        }
+        viewModel.loadCurrent(arguments.selectedCurrent)
     }
 }
