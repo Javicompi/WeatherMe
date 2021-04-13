@@ -34,4 +34,5 @@ ext {
     retrofitVersion = '2.9.0'
     gsonVersion= '2.8.6'
     hiltVersion = '2.28-alpha'
+    moshiVersion = '1.12.0'
 }
