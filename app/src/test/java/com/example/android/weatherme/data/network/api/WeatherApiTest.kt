@@ -1,5 +1,6 @@
 package com.example.android.weatherme.data.network.api
 
+import com.haroldadmin.cnradapter.NetworkResponse
 import com.haroldadmin.cnradapter.invoke
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
@@ -11,32 +12,35 @@ class WeatherApiTest : TestCase() {
 
     @Test
     fun testApiByName() = runBlocking {
-        val result = WeatherApi.retrofitService.getCurrentWeatherByName(
+        val result = WeatherApi.retrofitService.getCurrentResponseByName(
                 "gran alacant",
                 "metric",
                 "es"
             )
-        assertThat(result.name, `is`("Gran Alacant"))
+        assert(result is NetworkResponse.Success)
+        assertThat(result.invoke()?.name, `is`("Gran Alacant"))
     }
 
     @Test
     fun testApiByLatLon() = runBlocking {
-        val result = WeatherApi.retrofitService.getCurrentWeatherByLatLon(
+        val result = WeatherApi.retrofitService.getCurrentResponseByLatLon(
             38.232394006633555,
             -0.5470151195289806,
             "metric",
             "es"
         )
-        assertThat(result.name, `is`("Gran Alacant"))
+        assert(result is NetworkResponse.Success)
+        assertThat(result.invoke()?.name, `is`("Gran Alacant"))
     }
 
     @Test
     fun testApiResponseByName() = runBlocking {
-        val result = WeatherApi.retrofitService.getCurrentResponseByName(
-            "gran alacant",
+        val result = WeatherApi.retrofitService.getCurrentResponseById(
+            6697298,
             "metric",
             "es"
         )
+        assert(result is NetworkResponse.Success)
         assertThat(result.invoke()?.name, `is`("Gran Alacant"))
     }
 }
