@@ -12,7 +12,7 @@ import retrofit2.HttpException
 class RefreshDataWorker @WorkerInject constructor(
         @Assisted context: Context,
         @Assisted params: WorkerParameters,
-        private val repository: Repository
+        val repository: Repository
 ) : CoroutineWorker(context, params) {
 
     companion object {
