@@ -20,6 +20,7 @@
     <string name="location_not_found">Unable to get the location</string>
     <string name="location_error">Error getting the location</string>
     <string name="no_internet_connection">Unable to connect to internet</string>
+    <string name="unknown_error">Unknown error</string>
 
     <!-- Current Search ViewModel -->
     <string name="error_saving">Error trying to save it</string>
@@ -31,7 +32,7 @@
     <string name="current_layout_title">%s, %s</string>
     <string name="current_percent">%d%%</string>
     <string name="current_speed">%dm/s</string>
-    <string name="current_mms">%dmm</string>
+    <string name="current_mms">%.1fmm</string>
     
     <!-- Wind directions -->
     <string name="north">N</string>
