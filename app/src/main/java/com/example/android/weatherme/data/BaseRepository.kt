@@ -16,7 +16,7 @@ open class BaseRepository {
                 Result.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
                 when (throwable) {
-                    is IOException -> Result.NetworkError
+                    is IOException -> Result.NetworkError(null)
                     is HttpException -> {
                         val code = throwable.code()
                         val errorResponse = convertErrorBody(throwable)
