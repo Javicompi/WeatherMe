@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -86,6 +87,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-work:1.0.0-alpha01'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hiltVersion"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
     //Room
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -97,10 +100,11 @@ dependencies {
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 
     //Moshi
-    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
