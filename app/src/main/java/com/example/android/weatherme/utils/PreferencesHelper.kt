@@ -31,8 +31,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         return prefs.getLong(Constants.PREF_CURRENT_SELECTED, 0)
     }
 
-    fun setLastUpdate(time: Long) {
-        prefs.edit().putLong(Constants.PREF_LAST_UPDATE, time).apply()
+    fun setLastUpdate() {
+        prefs.edit().putLong(Constants.PREF_LAST_UPDATE, System.currentTimeMillis()).apply()
     }
 
     fun getLastUpdate(): Long {
