@@ -2,7 +2,7 @@ package com.example.android.weatherme.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.android.weatherme.data.database.CurrentWeatherDao
+import com.example.android.weatherme.data.database.CurrentDao
 import com.example.android.weatherme.data.database.WeatherDatabase
 import dagger.Module
 import dagger.Provides
@@ -26,7 +26,7 @@ object RoomModule {
     }
 
     @Provides
-    fun provideCurrentWeatherDao(database: WeatherDatabase): CurrentWeatherDao {
+    fun provideCurrentWeatherDao(database: WeatherDatabase): CurrentDao {
         return database.currentWeatherDao()
     }
 }
