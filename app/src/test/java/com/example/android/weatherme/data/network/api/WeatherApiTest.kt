@@ -11,7 +11,7 @@ import org.junit.Test
 class WeatherApiTest : TestCase() {
 
     @Test
-    fun testApiByName() = runBlocking {
+    fun testApiCurrentByName() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentResponseByName(
                 "gran alacant",
                 "metric",
@@ -22,7 +22,7 @@ class WeatherApiTest : TestCase() {
     }
 
     @Test
-    fun testApiByLatLon() = runBlocking {
+    fun testApiCurrentByLatLon() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentResponseByLatLon(
             38.232394006633555,
             -0.5470151195289806,
@@ -34,7 +34,7 @@ class WeatherApiTest : TestCase() {
     }
 
     @Test
-    fun testApiResponseByName() = runBlocking {
+    fun testApiCurrentById() = runBlocking {
         val result = WeatherApi.retrofitService.getCurrentResponseById(
             6697298,
             "metric",
