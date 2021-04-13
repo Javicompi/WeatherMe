@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
                 showSnackBar(R.string.no_internet_connection)
             } else {
                 val searchText = binding.searchEdittext.text.toString()
-                viewModel.searchByName(searchText)
+                viewModel.searchLocation(name = searchText)
             }
         }
 
@@ -88,7 +88,7 @@ class SearchFragment : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 stopLocationUpdates()
                 if (locationResult != null && locationResult.locations.isNotEmpty()) {
-                    viewModel.searchByLocation(locationResult.locations[0])
+                    viewModel.searchLocation(location = locationResult.locations[0])
                 } else {
                     showSnackBar(resourceId = R.string.location_not_found)
                 }
@@ -123,7 +123,7 @@ class SearchFragment : Fragment() {
             locationResult.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     lastKnownLocation = task.result
-                    viewModel.searchByLocation(lastKnownLocation)
+                    viewModel.searchLocation(location = lastKnownLocation)
                 } else {
                     startLocationUpdates()
                 }
