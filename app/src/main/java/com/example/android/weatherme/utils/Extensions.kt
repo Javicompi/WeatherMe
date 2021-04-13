@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 //Animate changing the view visibility
 fun View.fadeIn() {
@@ -62,4 +63,9 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
         return resources.getIdentifier(it, resType, packageName)
     }
     throw Resources.NotFoundException()
+}
+
+fun shouldUpdate(time: Long): Boolean {
+    val difference = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
+    return System.currentTimeMillis() - difference > time
 }
