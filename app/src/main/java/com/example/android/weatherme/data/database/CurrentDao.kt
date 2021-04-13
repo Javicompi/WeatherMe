@@ -8,16 +8,22 @@ import androidx.room.Query
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 
 @Dao
-interface CurrentWeatherDao {
+interface CurrentDao {
 
     @Query("SELECT * FROM currents")
     fun getCurrents(): LiveData<List<CurrentEntity>>
+
+    @Query("SELECT * FROM currents")
+    fun getRawCurrents(): List<CurrentEntity>
 
     @Query("SELECT * FROM currents WHERE cityName = :cityName")
     fun getCurrentByName(cityName: String): LiveData<CurrentEntity>
 
     @Query("SELECT * FROM currents WHERE `cityId` = :id")
     fun getCurrentByKey(id: Long): LiveData<CurrentEntity>
+
+    @Query("SELECT deltaTime FROM currents WHERE cityId = :cityId")
+    fun getCurrentDeltaTime(cityId: Long): Long
 
     @Query("SELECT * FROM currents LIMIT 1")
     fun getFirstCurrent(): LiveData<CurrentEntity>
