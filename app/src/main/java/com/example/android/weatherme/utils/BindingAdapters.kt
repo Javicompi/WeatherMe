@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
 import java.util.*
+import kotlin.math.roundToInt
 
 object BindingAdapters {
 
@@ -78,10 +79,9 @@ object BindingAdapters {
     @BindingAdapter("android:windDirectionString")
     @JvmStatic
     fun TextView.degreesToString(value: Int) {
-        var degrees = value
-        if (degrees > 360) { degrees -= 360 }
         val degreesArray = resources.getStringArray(R.array.wind_directions_strings)
-        val index = ((degrees / 22.5).toInt())
+        var index = (value / 22.5).roundToInt()
+        if (index == 16) {index = 0 }
         text = degreesArray[index]
     }
 
