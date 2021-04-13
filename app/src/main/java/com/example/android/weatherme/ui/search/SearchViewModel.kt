@@ -17,11 +17,6 @@ class SearchViewModel @ViewModelInject constructor(
         private val repository: Repository
 ) : ViewModel() {
 
-    /*private val repository = Repository(
-        WeatherDatabase.getDatabase(app),
-        PreferenceManager.getDefaultSharedPreferences(app)
-    )*/
-
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
     val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
@@ -29,38 +24,25 @@ class SearchViewModel @ViewModelInject constructor(
 
     val current: SingleLiveEvent<Current> = SingleLiveEvent()
 
-    fun searchByName(name: String) {
+    fun searchLocation(name: String? = null, location: Location? = null) {
         showLoading.postValue(true)
         viewModelScope.launch {
-            when (val result = repository.searchCurrentByName(name)) {
-                is Result.Success -> {
-                    current.postValue(result.value)
-                }
-                is Result.GenericError -> {
-                    val errorMessage = result.error?.message?.capitalize(Locale.getDefault())
-                    showSnackBar.postValue(errorMessage)
-                }
-                is Result.NetworkError -> {
-                    showSnackBarInt.postValue(R.string.connectivity_error)
-                }
+            val result = if (!name.isNullOrEmpty()) {
+                repository.searchCurrentByName(name)
+            } else {
+                repository.searchCurrentByLocation(location!!)
             }
-            showLoading.postValue(false)
-        }
-    }
-
-    fun searchByLocation(location: Location) {
-        showLoading.postValue(true)
-        viewModelScope.launch {
-            when (val result = repository.searchCurrentByLatLon(location)) {
+            when (result) {
                 is Result.Success -> {
                     current.postValue(result.value)
                 }
                 is Result.GenericError -> {
-                    val errorMessage = result.error?.message?.capitalize(Locale.getDefault())
-                    showSnackBar.postValue(errorMessage)
+                    val errorMessage = result.error?.message ?: R.string.unknown_error
+                    showSnackBar.postValue(errorMessage.toString().capitalize(Locale.getDefault()))
                 }
                 is Result.NetworkError -> {
-                    showSnackBarInt.postValue(R.string.connectivity_error)
+                    val errorMessage = result.message ?: R.string.connectivity_error
+                    showSnackBar.postValue(errorMessage.toString().capitalize(Locale.getDefault()))
                 }
             }
             showLoading.postValue(false)
