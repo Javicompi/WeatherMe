@@ -1,7 +1,7 @@
 package com.example.android.weatherme.di
 
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.CurrentWeatherDao
+import com.example.android.weatherme.data.database.CurrentDao
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.utils.PreferencesHelper
 import dagger.Module
@@ -18,15 +18,15 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideRepository(
-            @IoDispatcher
+        @IoDispatcher
             dbDispatcher: CoroutineDispatcher,
-            currentWeatherDao: CurrentWeatherDao,
-            weatherApiService: WeatherApiService,
-            preferencesHelper: PreferencesHelper
+        currentDao: CurrentDao,
+        weatherApiService: WeatherApiService,
+        preferencesHelper: PreferencesHelper
     ): Repository {
         return Repository(
                 dbDispatcher,
-                currentWeatherDao,
+                currentDao,
                 weatherApiService,
                 preferencesHelper
         )
