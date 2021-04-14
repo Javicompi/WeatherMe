@@ -23,12 +23,8 @@ class Repository @Inject constructor(
     private val preferencesHelper: PreferencesHelper
 ) : BaseRepository() {
 
-    suspend fun saveCurrent(current: CurrentEntity): Long {
-        var id: Long
-        withContext(ioDispatcher) {
-            id = currentDao.insertCurrent(current)
-        }
-        return id
+    suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
+        return@withContext currentDao.insertCurrent(current)
     }
 
     fun getCurrents(): LiveData<List<CurrentEntity>> {
