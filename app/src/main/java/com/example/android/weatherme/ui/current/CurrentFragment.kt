@@ -45,8 +45,10 @@ class CurrentFragment : Fragment() {
             Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
         })
 
-        viewModel.currentSelected.observe(viewLifecycleOwner, {
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = it.cityName
+        viewModel.currentSelected.observe(viewLifecycleOwner, { current ->
+            current?.let {
+                (requireActivity() as AppCompatActivity).supportActionBar?.title = it.cityName
+            }
         })
 
         return binding.root
