@@ -24,21 +24,22 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_list,
-                R.id.navigation_current,
-                R.id.navigation_search,
-                R.id.navigation_settings
-            )
+                setOf(
+                        R.id.navigation_list,
+                        R.id.navigation_current,
+                        R.id.navigation_upcoming,
+                        R.id.navigation_search,
+                        R.id.navigation_settings
+                )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
