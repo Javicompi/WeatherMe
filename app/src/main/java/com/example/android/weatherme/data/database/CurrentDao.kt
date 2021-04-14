@@ -25,20 +25,11 @@ interface CurrentDao {
     @Query("SELECT deltaTime FROM currents WHERE cityId = :cityId")
     fun getCurrentDeltaTime(cityId: Long): Long
 
-    @Query("SELECT * FROM currents LIMIT 1")
-    fun getFirstCurrent(): LiveData<CurrentEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrent(currentEntity: CurrentEntity): Long
 
     @Query("DELETE FROM currents WHERE `cityId` = :id")
     fun deleteCurrent(id: Long)
-
-    @Query("DELETE FROM currents")
-    fun deleteCurrents()
-
-    @Query("SELECT COUNT() FROM currents WHERE cityName = :cityName")
-    fun count(cityName: String): Int
 
     @Query("SELECT cityId FROM currents")
     fun getCityIds(): List<Long>
