@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,6 +49,10 @@ class CurrentFragment : Fragment() {
 
         viewModel.showSnackBarInt.observe(viewLifecycleOwner, {
             Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
+        })
+
+        viewModel.currentSelected.observe(viewLifecycleOwner, {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = it.cityName
         })
 
         return binding.root
