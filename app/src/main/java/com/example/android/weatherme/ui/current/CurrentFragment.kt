@@ -17,12 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CurrentFragment : Fragment() {
 
-    /*private val viewModel: CurrentViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(activity, CurrentViewModelFactory(activity.application))
-                .get(CurrentViewModel::class.java)
-    }*/
-
     private val viewModel: CurrentViewModel by viewModels()
 
     private val arguments: CurrentFragmentArgs by navArgs()
