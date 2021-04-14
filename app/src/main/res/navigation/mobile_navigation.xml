@@ -31,6 +31,13 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_upcoming"
+        android:name="com.example.android.weatherme.ui.upcoming.UpcomingFragment"
+        android:label="@string/title_upcoming"
+        tools:layout="@layout/fragment_upcoming">
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.android.weatherme.ui.search.SearchFragment"
         android:label="@string/title_search"
