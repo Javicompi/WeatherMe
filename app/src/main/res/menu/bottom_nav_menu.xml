@@ -12,6 +12,11 @@
         android:title="@string/title_current" />
 
     <item
+        android:id="@+id/navigation_upcoming"
+        android:icon="@drawable/ic_upcoming"
+        android:title="@string/title_upcoming" />
+
+    <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/ic_search_black"
         android:title="@string/title_search" />

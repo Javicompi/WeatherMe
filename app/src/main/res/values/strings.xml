@@ -2,6 +2,7 @@
     <string name="app_name">WeatherMe</string>
     <string name="title_list">Locations</string>
     <string name="title_current">Current</string>
+    <string name="title_upcoming">Upcoming</string>
     <string name="title_search">Search</string>
     <string name="title_result">Result</string>
     
