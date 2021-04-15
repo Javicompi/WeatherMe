@@ -3,6 +3,7 @@ package com.example.android.weatherme.di
 import android.content.Context
 import androidx.room.Room
 import com.example.android.weatherme.data.database.CurrentDao
+import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.WeatherDatabase
 import dagger.Module
 import dagger.Provides
@@ -27,6 +28,11 @@ object RoomModule {
 
     @Provides
     fun provideCurrentWeatherDao(database: WeatherDatabase): CurrentDao {
-        return database.currentWeatherDao()
+        return database.currentDao()
+    }
+
+    @Provides
+    fun providePerHourDao(database: WeatherDatabase): PerHourDao {
+        return database.perHourDao()
     }
 }
