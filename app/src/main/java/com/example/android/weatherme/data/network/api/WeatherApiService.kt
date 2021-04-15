@@ -30,14 +30,14 @@ interface WeatherApiService {
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentResponseById(
             @Query("id") id: Long,
-            @Query("units") units: String? = "metric",
+            @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
             @Query("lang") language: String = Locale.getDefault().language
     ): NetworkResponse<Current, ErrorResponse>
 
     @GET("weather?appid=${Constants.API_KEY}")
     suspend fun getCurrentResponseByName(
             @Query("q") location: String,
-            @Query("units") units: String? = "metric",
+            @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
             @Query("lang") language: String = Locale.getDefault().language
     ): NetworkResponse<Current, ErrorResponse>
 
@@ -45,7 +45,7 @@ interface WeatherApiService {
     suspend fun getCurrentResponseByLatLon(
             @Query("lat") latitude: Double,
             @Query("lon") longitude: Double,
-            @Query("units") units: String? = "metric",
+            @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
             @Query("lang") language: String = Locale.getDefault().language
     ): NetworkResponse<Current, ErrorResponse>
 
