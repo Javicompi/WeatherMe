@@ -4,11 +4,15 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.CurrentDao
+import com.example.android.weatherme.data.database.PerHourDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
+import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
+import com.example.android.weatherme.data.network.models.perhour.toPerHourEntity
 import com.example.android.weatherme.utils.PreferencesHelper
 import com.example.android.weatherme.utils.shouldUpdate
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -19,12 +23,15 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     private val currentDao: CurrentDao,
+    private val perHourDao: PerHourDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
 ) : BaseRepository() {
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
-        return@withContext currentDao.insertCurrent(current)
+        val id = currentDao.insertCurrent(current)
+        updatePerHour(current)
+        return@withContext id
     }
 
     fun getCurrents(): LiveData<List<CurrentEntity>> {
@@ -119,15 +126,35 @@ class Repository @Inject constructor(
         val currents = currentDao.getRawCurrents()
         for (current in currents) {
             if (forceUpdate || shouldUpdate(current.deltaTime)) {
-                val newValue = weatherApiService.getCurrentResponseById(
+                val newCurrent = weatherApiService.getCurrentResponseById(
                         id = current.cityId,
                         units = units
                 )
-                if (newValue is NetworkResponse.Success) {
-                    currentDao.insertCurrent(newValue.body.toEntity())
+                if (newCurrent is NetworkResponse.Success) {
+                    currentDao.insertCurrent(newCurrent.body.toEntity())
                 }
+            }
+            if (forceUpdate) {
+                updatePerHour(current)
             }
         }
         preferencesHelper.setLastUpdate()
+    }
+
+    private suspend fun updatePerHour(current: CurrentEntity) = withContext(ioDispatcher) {
+        val units = preferencesHelper.getUnits()
+        val lat = current.latitude
+        val lon = current.longitude
+        val newValue = weatherApiService.getPerHourByLatLon(
+                latitude = lat,
+                longitude = lon,
+                units = units
+        )
+        if (newValue is NetworkResponse.Success) {
+            val perHour = newValue.body.toPerHourEntity(current.cityId)
+            val hourlys = newValue.body.toHourlyEntityList(current.cityId)
+            val perHourWithHourly = PerHourWithHourly(perHour, hourlys)
+            perHourDao.updatePerHourByKey(perHourWithHourly)
+        }
     }
 }
