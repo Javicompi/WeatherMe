@@ -11,7 +11,11 @@ interface PerHourDao {
 
     @Transaction
     @Query("SELECT * FROM perHours WHERE `cityId` = :id")
-    fun getPerHourbyKey(id: Long): LiveData<PerHourWithHourly>
+    fun getPerHourByKey(id: Long): LiveData<PerHourWithHourly>
+
+    @Transaction
+    @Query("SELECT * FROM perHours WHERE `cityId` =:id")
+    fun getRawPerHourByKey(id: Long): PerHourWithHourly
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerHour(perHourEntity: PerHourEntity): Long
