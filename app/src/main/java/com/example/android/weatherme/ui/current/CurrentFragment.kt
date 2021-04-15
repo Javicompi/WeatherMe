@@ -47,7 +47,8 @@ class CurrentFragment : Fragment() {
 
         viewModel.currentSelected.observe(viewLifecycleOwner, { current ->
             current?.let {
-                (requireActivity() as AppCompatActivity).supportActionBar?.title = it.cityName
+                val title = "${it.cityName}, ${it.country}"
+                (requireActivity() as AppCompatActivity).supportActionBar?.title = title
             }
         })
 
