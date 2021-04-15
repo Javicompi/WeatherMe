@@ -5,11 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 
-@Database(entities = [CurrentEntity::class], version = 1, exportSchema = false)
+@Database(
+        entities = [CurrentEntity::class, PerHourEntity::class, HourlyEntity::class],
+        version = 1,
+        exportSchema = false
+)
 abstract class WeatherDatabase : RoomDatabase() {
 
-    abstract fun currentWeatherDao(): CurrentDao
+    abstract fun currentDao(): CurrentDao
+
+    abstract fun perHourDao(): PerHourDao
 
     companion object {
         @Volatile
