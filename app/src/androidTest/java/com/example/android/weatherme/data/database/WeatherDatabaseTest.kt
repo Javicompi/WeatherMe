@@ -35,8 +35,8 @@ class WeatherDatabaseTest {
     @Test
     fun insertCurrentAndKey() = runBlocking {
         val current = createCurrent().toEntity()
-        val key = database.currentWeatherDao().insertCurrent(current)
-        val retrieved = database.currentWeatherDao().getCurrentByKey(key)
+        val key = database.currentDao().insertCurrent(current)
+        val retrieved = database.currentDao().getCurrentByKey(key)
         assertThat(retrieved.value, `is`(notNullValue()))
         assertThat(retrieved.value, `is`(current.cityName))
     }
@@ -44,26 +44,26 @@ class WeatherDatabaseTest {
     @Test
     fun insertCurrentAndRetrieveByName() = runBlocking {
         val current = createCurrent().toEntity()
-        database.currentWeatherDao().insertCurrent(current)
-        val retrieved = database.currentWeatherDao().getCurrentByName(current.cityName!!)
+        database.currentDao().insertCurrent(current)
+        val retrieved = database.currentDao().getCurrentByName(current.cityName!!)
         assertThat(retrieved.value?.cityName, `is`(current.cityName))
     }
 
     @Test
     fun insertCurrentsAndRetrieveAll() = runBlocking {
         val current = createCurrent().toEntity()
-        database.currentWeatherDao().insertCurrent(current)
+        database.currentDao().insertCurrent(current)
         val alternative = createCurrent().toEntity()
-        database.currentWeatherDao().insertCurrent(alternative)
-        val currents = database.currentWeatherDao().getCurrents()
+        database.currentDao().insertCurrent(alternative)
+        val currents = database.currentDao().getCurrents()
         assertThat(currents.value, `is`(2))
     }
 
     @Test
     fun retrieveIds() = runBlocking {
         val current = createCurrent().toEntity()
-        database.currentWeatherDao().insertCurrent(current)
-        val ids = database.currentWeatherDao().getCityIds()
+        database.currentDao().insertCurrent(current)
+        val ids = database.currentDao().getCityIds()
         assertThat(ids, not(emptyList()))
         assertThat(ids.size, `is`(1))
     }
