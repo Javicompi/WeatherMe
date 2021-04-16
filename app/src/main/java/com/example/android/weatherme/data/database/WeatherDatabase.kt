@@ -6,10 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
-import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 
 @Database(
-        entities = [CurrentEntity::class, PerHourEntity::class, HourlyEntity::class],
+        entities = [CurrentEntity::class, HourlyEntity::class],
         version = 1,
         exportSchema = false
 )
