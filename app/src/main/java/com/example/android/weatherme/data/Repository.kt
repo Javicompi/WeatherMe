@@ -26,7 +26,7 @@ class Repository @Inject constructor(
     private val perHourDao: PerHourDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
-) : BaseRepository() {
+) {
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
         val id = currentDao.insertCurrent(current)
