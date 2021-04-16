@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.view.View
@@ -69,6 +71,14 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
 fun shouldUpdate(time: Long): Boolean {
     val difference = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
     return System.currentTimeMillis() - difference > time
+}
+
+fun longToStringTime(time: Long, offset: Int): String {
+    val date = Date(time)
+    date.time += offset.toLong()
+    val dateFormat = SimpleDateFormat("HH:mm")
+    dateFormat.timeZone = TimeZone.GMT_ZONE
+    return dateFormat.format(date)
 }
 
 fun createDefaultHourlys(current: CurrentEntity): List<HourlyEntity> {

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
+import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -100,5 +101,30 @@ object BindingAdapters {
         val dateFormat = SimpleDateFormat("HH:mm")
         dateFormat.timeZone = TimeZone.GMT_ZONE
         text = dateFormat.format(date)
+    }
+
+    @BindingAdapter("android:set_sun_ic")
+    @JvmStatic
+    fun ImageView.setSunIc(current: CurrentEntity?) {
+        current?.let {
+            if (current.deltaTime > current.sunrise && current.deltaTime < current.sunset) {
+                setImageResource(R.drawable.ic_sunset)
+            } else {
+                setImageResource(R.drawable.ic_sunrise)
+            }
+        }
+    }
+
+    @BindingAdapter("android:set_sun_time")
+    @JvmStatic
+    fun TextView.setSunTime(current: CurrentEntity?) {
+        current?.let {
+            val time = if (current.deltaTime > current.sunrise && current.deltaTime < current.sunset) {
+                current.sunset
+            } else {
+                current.sunrise
+            }
+            text = longToStringTime(time, current.timeZone)
+        }
     }
 }
