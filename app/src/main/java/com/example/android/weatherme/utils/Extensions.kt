@@ -10,6 +10,8 @@ import android.net.NetworkCapabilities
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -43,7 +45,6 @@ fun isInternetAvailable(context: Context): Boolean {
         actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
         actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
         actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
         else -> false
     }
 }
@@ -68,4 +69,34 @@ fun Context.resIdByName(resIdName: String?, resType: String): Int {
 fun shouldUpdate(time: Long): Boolean {
     val difference = TimeUnit.MINUTES.toMillis(Constants.PERIODIC_REQUEST_DELAY_MINS)
     return System.currentTimeMillis() - difference > time
+}
+
+fun createDefaultHourlys(current: CurrentEntity): List<HourlyEntity> {
+    val hourlyList = arrayListOf<HourlyEntity>()
+    val hourlyEntity = HourlyEntity(
+            id = null,
+            cityId = current.cityId,
+            lat = current.latitude,
+            lon = current.longitude,
+            deltaTime = 0,
+            timezone = "",
+            offset = current.timeZone,
+            temp = 0,
+            feelsLike = 0,
+            pressure = 0,
+            humidity = 0,
+            dewPoint = 0.0,
+            uvi = 0.0,
+            clouds = 0,
+            visibility = 0,
+            windSpeed = 0,
+            windDegrees = 0,
+            pop = 0.0,
+            weatherId = 0,
+            shortDescription = "",
+            description = "",
+            icon = ""
+    )
+    hourlyList.add(hourlyEntity)
+    return hourlyList
 }
