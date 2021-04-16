@@ -17,7 +17,7 @@ abstract class WeatherDatabase : RoomDatabase() {
 
     abstract fun currentDao(): CurrentDao
 
-    abstract fun perHourDao(): PerHourDao
+    abstract fun hourlyDao(): HourlyDao
 
     companion object {
         @Volatile
