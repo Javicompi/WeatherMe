@@ -11,7 +11,10 @@ data class HourlyEntity(
         @PrimaryKey(autoGenerate = true)
         val id: Long?,
         val cityId: Long,
+        val lat: Double,
+        val lon: Double,
         val deltaTime: Long,
+        val timezone: String,
         val offset: Int,
         val temp: Int,
         val feelsLike: Int,
