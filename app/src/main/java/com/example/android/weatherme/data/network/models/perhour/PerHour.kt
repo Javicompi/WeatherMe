@@ -1,7 +1,6 @@
 package com.example.android.weatherme.data.network.models.perhour
 
 import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
-import com.example.android.weatherme.data.database.entities.perhour.PerHourEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.util.*
@@ -64,22 +63,15 @@ data class PerHour(
     }
 }
 
-fun PerHour.toPerHourEntity(id: Long): PerHourEntity {
-    return PerHourEntity(
-            cityId = id,
-            lat = lat,
-            lon = lon,
-            timezone = timezone,
-            timezoneOffset = timezoneOffset.toLong() * 1000
-    )
-}
-
 fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
     return hourly.map {
         HourlyEntity(
                 id = null,
                 cityId = cityId,
+                lat = lat,
+                lon = lon,
                 deltaTime = it.dt.toLong() * 1000,
+                timezone = timezone,
                 offset = timezoneOffset,
                 temp = it.temp.roundToInt(),
                 feelsLike = it.temp.roundToInt(),
