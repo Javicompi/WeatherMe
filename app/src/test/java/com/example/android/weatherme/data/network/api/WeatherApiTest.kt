@@ -49,10 +49,20 @@ class WeatherApiTest : TestCase() {
         val result = WeatherApi.retrofitService.getPerHourByLatLon(
                 38.232394006633555,
                 -0.5470151195289806,
-                "metric",
-                "es"
+                "metric"
         )
         assert(result is NetworkResponse.Success)
         assert(result.invoke()?.hourly?.isNotEmpty() == true)
+    }
+
+    @Test
+    fun testApiDailyByLatLon() = runBlocking {
+        val result = WeatherApi.retrofitService.getDailyByLatLon(
+            38.232394006633555,
+            -0.5470151195289806,
+            "metric"
+        )
+        assert(result is NetworkResponse.Success)
+        assert(result.invoke()?.daily?.isNotEmpty() == true)
     }
 }
