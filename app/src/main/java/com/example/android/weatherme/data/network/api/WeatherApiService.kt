@@ -2,6 +2,7 @@ package com.example.android.weatherme.data.network.api
 
 import com.example.android.weatherme.data.network.models.ErrorResponse
 import com.example.android.weatherme.data.network.models.current.Current
+import com.example.android.weatherme.data.network.models.daily.PerDay
 import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.utils.Constants
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -57,6 +58,15 @@ interface WeatherApiService {
             @Query("exclude") exclude: String = "current,minutely,daily,alerts",
             @Query("lang") language: String = Locale.getDefault().language
     ): NetworkResponse<PerHour, ErrorResponse>
+
+    @GET("onecall?appid=${Constants.API_KEY}")
+    suspend fun getDailyByLatLon(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("units") units: String? = Constants.PREF_UNITS_DEFAULT,
+        @Query("exclude") exclude: String = "current,minutely,hourly,alerts",
+        @Query("lang") language: String = Locale.getDefault().language
+    ): NetworkResponse<PerDay, ErrorResponse>
 }
 
 object WeatherApi {

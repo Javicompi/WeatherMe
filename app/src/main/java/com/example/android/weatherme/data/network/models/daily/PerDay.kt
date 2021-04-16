@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Daily(
+data class PerDay(
     val lat: Double,
     val lon: Double,
     val timezone: String,
@@ -37,7 +37,7 @@ data class Daily(
         val windGust: Double? = null,
         val weather: List<Weather>,
         val clouds: Int,
-        val pop: Int,
+        val pop: Double,
         val rain: Double? = null,
         val snow: Double? = null,
         val uvi: Double
