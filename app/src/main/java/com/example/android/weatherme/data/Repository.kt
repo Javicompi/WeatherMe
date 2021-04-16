@@ -4,16 +4,15 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.CurrentDao
-import com.example.android.weatherme.data.database.PerHourDao
+import com.example.android.weatherme.data.database.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.perhour.PerHourWithHourly
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
-import com.example.android.weatherme.data.network.models.perhour.toPerHourEntity
 import com.example.android.weatherme.utils.PreferencesHelper
+import com.example.android.weatherme.utils.createDefaultHourlys
 import com.example.android.weatherme.utils.shouldUpdate
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,16 +20,17 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-    private val ioDispatcher: CoroutineDispatcher,
-    private val currentDao: CurrentDao,
-    private val perHourDao: PerHourDao,
-    private val weatherApiService: WeatherApiService,
-    private val preferencesHelper: PreferencesHelper
+        private val ioDispatcher: CoroutineDispatcher,
+        private val currentDao: CurrentDao,
+        private val hourlyDao: HourlyDao,
+        private val weatherApiService: WeatherApiService,
+        private val preferencesHelper: PreferencesHelper
 ) {
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
         val id = currentDao.insertCurrent(current)
-        updatePerHour(current)
+        val defauldHourlys = createDefaultHourlys(current)
+        hourlyDao.insertHourlys(defauldHourlys)
         return@withContext id
     }
 
@@ -58,6 +58,7 @@ class Repository @Inject constructor(
 
     suspend fun deleteCurrent(key: Long) = withContext(ioDispatcher) {
         currentDao.deleteCurrent(key)
+        hourlyDao.deleteHourlys(key)
         preferencesHelper.setCurrentSelected(0)
     }
 
@@ -151,10 +152,8 @@ class Repository @Inject constructor(
                 units = units
         )
         if (newValue is NetworkResponse.Success) {
-            val perHour = newValue.body.toPerHourEntity(current.cityId)
             val hourlys = newValue.body.toHourlyEntityList(current.cityId)
-            val perHourWithHourly = PerHourWithHourly(perHour, hourlys)
-            perHourDao.updatePerHourByKey(perHourWithHourly)
+            hourlyDao.updateHourlysByKey(hourlys)
         }
     }
 }
