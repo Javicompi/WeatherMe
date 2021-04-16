@@ -27,35 +27,12 @@
             app:layout_constraintGuide_percent="0.5"/>
 
         <ImageView
-            android:id="@+id/detail_thermomether_ic"
-            android:layout_width="@dimen/detail_icon_size"
-            android:layout_height="@dimen/detail_icon_size"
-            android:src="@drawable/ic_thermometer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/detail_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="@{@string/degrees_character(current.temp)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/detail_thermomether_ic"
-            app:layout_constraintStart_toEndOf="@id/detail_thermomether_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
-            tools:text="17°" />
-
-        <ImageView
             android:id="@+id/detail_cloud_ic"
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_cloud"
-            app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
-            android:layout_marginStart="@dimen/large_margin"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/detail_cloud"
@@ -66,10 +43,34 @@
             android:textColor="@color/current_text_color"
             android:layout_marginStart="@dimen/medium_margin"
             android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/detail_thermomether_ic"
-            app:layout_constraintStart_toEndOf="@+id/detail_cloud_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
+            app:layout_constraintBottom_toBottomOf="@id/detail_cloud_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_cloud_ic"
+            app:layout_constraintTop_toTopOf="@id/detail_cloud_ic"
             tools:text="80%" />
+
+        <ImageView
+            android:id="@+id/detail_sun_ic"
+            android:layout_width="@dimen/detail_icon_size"
+            android:layout_height="@dimen/detail_icon_size"
+            android:set_sun_ic="@{current}"
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@id/detail_sun_ic"
+            android:layout_marginStart="@dimen/large_margin"
+            tools:src="@drawable/ic_sunrise"/>
+
+        <TextView
+            android:id="@+id/detail_sun"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:set_sun_time="@{current}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@color/current_text_color"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/detail_sun_ic"
+            app:layout_constraintStart_toEndOf="@+id/detail_sun_ic"
+            app:layout_constraintTop_toTopOf="@id/detail_sun_ic"
+            tools:text="07:24" />
 
         <ImageView
             android:id="@+id/detail_humidity_ic"
@@ -78,7 +79,7 @@
             android:src="@drawable/ic_humidity"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_thermomether_ic"/>
+            app:layout_constraintTop_toBottomOf="@id/detail_cloud_ic"/>
 
         <TextView
             android:id="@+id/detail_humidity"
