@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/medium_margin"
         android:paddingBottom="@dimen/medium_margin"
-        android:paddingStart="@dimen/large_margin"
-        android:paddingEnd="@dimen/large_margin">
+        android:paddingStart="@dimen/medium_margin"
+        android:paddingEnd="@dimen/medium_margin">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -27,50 +27,59 @@
             app:layout_constraintGuide_percent="0.5"/>
 
         <ImageView
+            android:id="@+id/detail_thermomether_ic"
+            android:layout_width="@dimen/detail_icon_size"
+            android:layout_height="@dimen/detail_icon_size"
+            android:src="@drawable/ic_thermometer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/feels_like_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_feels_like"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_thermomether_ic" />
+
+        <TextView
+            android:id="@+id/detail_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@{@string/degrees_character(current.feelsLike)}"
+            style="@style/CurrentDetailSubtitle"
+            app:layout_constraintTop_toBottomOf="@id/feels_like_textview"
+            app:layout_constraintStart_toEndOf="@id/detail_thermomether_ic"
+            tools:text="17°" />
+
+        <ImageView
             android:id="@+id/detail_cloud_ic"
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_cloud"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
+            android:layout_marginStart="@dimen/large_margin"/>
+
+        <TextView
+            android:id="@+id/cloud_cover_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_cloud_cover"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_cloud_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_cloud_ic" />
 
         <TextView
             android:id="@+id/detail_cloud"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_percent(current.clouds)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/detail_cloud_ic"
-            app:layout_constraintStart_toEndOf="@id/detail_cloud_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_cloud_ic"
+            style="@style/CurrentDetailSubtitle"
+            app:layout_constraintStart_toEndOf="@+id/detail_cloud_ic"
+            app:layout_constraintTop_toBottomOf="@id/cloud_cover_textview"
             tools:text="80%" />
-
-        <ImageView
-            android:id="@+id/detail_sun_ic"
-            android:layout_width="@dimen/detail_icon_size"
-            android:layout_height="@dimen/detail_icon_size"
-            android:set_sun_ic="@{current}"
-            app:layout_constraintStart_toEndOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="@id/detail_sun_ic"
-            android:layout_marginStart="@dimen/large_margin"
-            tools:src="@drawable/ic_sunrise"/>
-
-        <TextView
-            android:id="@+id/detail_sun"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:set_sun_time="@{current}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@id/detail_sun_ic"
-            app:layout_constraintStart_toEndOf="@+id/detail_sun_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_sun_ic"
-            tools:text="07:24" />
 
         <ImageView
             android:id="@+id/detail_humidity_ic"
@@ -79,20 +88,25 @@
             android:src="@drawable/ic_humidity"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_cloud_ic"/>
+            app:layout_constraintTop_toBottomOf="@id/detail_thermomether_ic" />
+
+        <TextView
+            android:id="@+id/humidity_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_humidity"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_humidity_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_humidity_ic" />
 
         <TextView
             android:id="@+id/detail_humidity"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_percent(current.humidity)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_humidity_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_humidity_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_humidity_ic"
+            app:layout_constraintTop_toBottomOf="@id/humidity_textview"
             tools:text="50%"/>
 
         <ImageView
@@ -106,17 +120,22 @@
             android:layout_marginStart="@dimen/large_margin"/>
 
         <TextView
+            android:id="@+id/pressure_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_pressure"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_pressure_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_pressure_ic" />
+
+        <TextView
             android:id="@+id/detail_pressure"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{String.valueOf(current.pressure)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_pressure_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_humidity_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_humidity_ic"
+            app:layout_constraintTop_toBottomOf="@id/pressure_textview"
             tools:text="1020"/>
 
         <ImageView
@@ -129,17 +148,22 @@
             app:layout_constraintTop_toBottomOf="@id/detail_humidity_ic"/>
 
         <TextView
+            android:id="@+id/wind_speed_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_wind_speed"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_wind_speed_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_wind_speed_ic" />
+
+        <TextView
             android:id="@+id/detail_wind_speed"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_speed(current.windSpeed)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_wind_speed_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_wind_speed_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_wind_speed_ic"
+            app:layout_constraintTop_toBottomOf="@id/wind_speed_textview"
             tools:text="3" />
 
         <ImageView
@@ -154,17 +178,22 @@
             android:windDirection="@{current.windDegrees}"/>
 
         <TextView
+            android:id="@+id/wind_direction_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_wind_direction"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_wind_direction_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_wind_direction_ic"/>
+
+        <TextView
             android:id="@+id/detail_wind_direction"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:windDirectionString="@{current.windDegrees}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_wind_direction_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_wind_speed_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_wind_speed_ic"
+            app:layout_constraintTop_toBottomOf="@id/wind_direction_textview"
             tools:text="90"/>
 
         <ImageView
@@ -177,18 +206,23 @@
             app:layout_constraintTop_toBottomOf="@id/detail_wind_speed_ic"/>
 
         <TextView
+            android:id="@+id/rain_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_rain"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_raindrops_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_raindrops_ic"/>
+
+        <TextView
             android:id="@+id/detail_raindrops"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_mms(current.rainOneHour)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_raindrops_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_raindrops_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_raindrops_ic"
-            tools:text="1mm" />
+            app:layout_constraintTop_toBottomOf="@id/rain_textview"
+            tools:text="1 mm" />
 
         <ImageView
             android:id="@+id/detail_snowflake_ic"
@@ -201,18 +235,23 @@
             android:layout_marginStart="@dimen/large_margin"/>
 
         <TextView
+            android:id="@+id/snow_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_snow"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_snowflake_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_snowflake_ic"/>
+
+        <TextView
             android:id="@+id/detail_snowflake"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@{@string/current_mms(current.snowOneHour)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_snowflake_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_raindrops_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_raindrops_ic"
-            tools:text="2mm"/>
+            app:layout_constraintTop_toBottomOf="@id/snow_textview"
+            tools:text="2 mm"/>
 
         <ImageView
             android:id="@+id/detail_sunrise_ic"
@@ -224,18 +263,23 @@
             app:layout_constraintTop_toBottomOf="@id/detail_raindrops_ic"/>
 
         <TextView
+            android:id="@+id/sunrise_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_sunrise"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_sunrise_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_sunrise_ic"/>
+
+        <TextView
             android:id="@+id/detail_sunrise"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:time="@{current.sunrise}"
             android:offset="@{current.timeZone}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_sunrise_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_sunrise_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_sunrise_ic"
+            app:layout_constraintTop_toBottomOf="@id/sunrise_textview"
             tools:text="07:46" />
 
         <ImageView
@@ -249,18 +293,23 @@
             android:layout_marginStart="@dimen/large_margin"/>
 
         <TextView
+            android:id="@+id/sunset_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/current_sunset"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintTop_toTopOf="@id/detail_sunset_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_sunset_ic"/>
+
+        <TextView
             android:id="@+id/detail_sunset"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:time="@{current.sunset}"
             android:offset="@{current.timeZone}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-            android:textColor="@color/current_text_color"
-            android:layout_marginStart="@dimen/medium_margin"
-            android:gravity="center_vertical"
+            style="@style/CurrentDetailSubtitle"
             app:layout_constraintStart_toEndOf="@id/detail_sunset_ic"
-            app:layout_constraintTop_toTopOf="@id/detail_sunrise_ic"
-            app:layout_constraintBottom_toBottomOf="@id/detail_sunrise_ic"
+            app:layout_constraintTop_toBottomOf="@id/sunset_textview"
             tools:text="18:46"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

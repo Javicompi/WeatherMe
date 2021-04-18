@@ -34,6 +34,16 @@
     <string name="current_percent">%d %%</string>
     <string name="current_speed">%d m/s</string>
     <string name="current_mms">%.1f mm</string>
+    <string name="current_feels_like">Feels like</string>
+    <string name="current_cloud_cover">Cloud cover</string>
+    <string name="current_humidity">Humidity</string>
+    <string name="current_pressure">Pressure</string>
+    <string name="current_wind_speed">Wind speed</string>
+    <string name="current_wind_direction">Wind direction</string>
+    <string name="current_rain">Rain</string>
+    <string name="current_snow">Snow</string>
+    <string name="current_sunrise">Sunrise</string>
+    <string name="current_sunset">Sunset</string>
     
     <!-- Wind directions -->
     <string name="north">N</string>
