@@ -18,5 +18,5 @@
     <dimen name="list_item_corner_radius">4dp</dimen>
     <dimen name="list_item_small_text_size">28sp</dimen>
 
-    <dimen name="detail_icon_size">40dp</dimen>
+    <dimen name="detail_icon_size">44dp</dimen>
 </resources>
