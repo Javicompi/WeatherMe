@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="CurrentDetailTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/current_text_color</item>
+        <item name="android:layout_marginStart">@dimen/medium_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CurrentDetailSubtitle" parent="CurrentDetailTitle">
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
