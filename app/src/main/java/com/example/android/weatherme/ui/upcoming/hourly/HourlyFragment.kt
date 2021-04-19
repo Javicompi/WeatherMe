@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.android.weatherme.R
+import com.example.android.weatherme.databinding.FragmentHourlyBinding
 
 class HourlyFragment : Fragment() {
 
@@ -13,7 +14,10 @@ class HourlyFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_hourly, container, false)
+    ): View {
+        val binding = FragmentHourlyBinding.inflate(inflater)
+        binding.lifecycleOwner = this
+
+        return binding.root
     }
 }
