@@ -17,9 +17,9 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_height"
+        android:layout_height="@dimen/list_item_current_height"
         android:layout_margin="@dimen/list_item_current_margin_bottom"
-        app:cardCornerRadius="@dimen/list_item_corner_radius">
+        app:cardCornerRadius="@dimen/list_item_current_corner_radius">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,9 +30,9 @@
 
             <ImageView
                 android:id="@+id/list_current_icon"
-                android:layout_width="@dimen/list_item_icon_size"
-                android:layout_height="@dimen/list_item_icon_size"
-                android:currentIcon="@{current.icon}"
+                android:layout_width="@dimen/list_item_current_icon_size"
+                android:layout_height="@dimen/list_item_current_icon_size"
+                android:weatherIcon="@{current.icon}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/i01d"/>
@@ -56,7 +56,7 @@
                 android:text="@{@string/degrees_character(current.temp)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                 android:textColor="@color/list_item_current_text_color"
-                android:textSize="@dimen/list_item_small_text_size"
+                android:textSize="@dimen/list_item_current_small_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="18°"/>
@@ -68,7 +68,7 @@
                 android:text="@{current.shortDescription}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                 android:textColor="@color/list_item_current_text_color"
-                android:textSize="@dimen/list_item_small_text_size"
+                android:textSize="@dimen/list_item_current_small_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="Clear sky"/>
