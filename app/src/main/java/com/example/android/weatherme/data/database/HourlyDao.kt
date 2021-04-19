@@ -16,7 +16,7 @@ interface HourlyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHourlys(hourlys: List<HourlyEntity>): List<Long>
 
-    @Query("DELETE FROM hourlys WHERE `cityId` = :id")
+    @Query("DELETE FROM hourlys WHERE cityId = :id")
     fun deleteHourlys(id: Long)
 
     @Transaction
@@ -24,4 +24,7 @@ interface HourlyDao {
         deleteHourlys(hourlys[0].cityId)
         insertHourlys(hourlys)
     }
+
+    @Query("SELECT deltaTime FROM hourlys WHERE cityId =:cityId ORDER BY deltaTime ASC ")
+    fun getHourlyDeltaTime(cityId: Long): Long
 }

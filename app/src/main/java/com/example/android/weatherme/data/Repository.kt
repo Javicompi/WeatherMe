@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.CurrentDao
 import com.example.android.weatherme.data.database.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.current.Current
@@ -29,8 +30,8 @@ class Repository @Inject constructor(
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
         val id = currentDao.insertCurrent(current)
-        val defauldHourlys = createDefaultHourlys(current)
-        hourlyDao.insertHourlys(defauldHourlys)
+        val defaultHourlys = createDefaultHourlys(current)
+        hourlyDao.insertHourlys(defaultHourlys)
         return@withContext id
     }
 
@@ -40,6 +41,17 @@ class Repository @Inject constructor(
             val lastUpdate = preferencesHelper.getLastUpdate()
             if (!preferencesHelper.getAutUpdate() && shouldUpdate(lastUpdate)) {
                 updateCurrents()
+            }
+        }
+    }
+
+    fun getHourlys(): LiveData<List<HourlyEntity>> {
+        return liveData {
+            val cityId = preferencesHelper.getCurrentSelected()
+            emitSource(hourlyDao.getHourlysByKey(cityId))
+            val lastUpdate = hourlyDao.getHourlyDeltaTime(cityId)
+            if (!preferencesHelper.getAutUpdate() && shouldUpdate(lastUpdate)) {
+                updatePerHour(cityId)
             }
         }
     }
@@ -113,6 +125,13 @@ class Repository @Inject constructor(
         }
     }
 
+    private suspend fun shouldUpdateHourlys(cityId: Long) = withContext(ioDispatcher) {
+        val deltaTime = hourlyDao.getHourlyDeltaTime(cityId)
+        if (shouldUpdate(deltaTime)) {
+            updatePerHour(cityId)
+        }
+    }
+
     private suspend fun updateCurrent(cityId: Long) = withContext(ioDispatcher) {
         val units = preferencesHelper.getUnits()
         val current = weatherApiService.getCurrentResponseById(id = cityId, units = units)
@@ -136,14 +155,15 @@ class Repository @Inject constructor(
                 }
             }
             if (forceUpdate) {
-                updatePerHour(current)
+                updatePerHour(current.cityId)
             }
         }
         preferencesHelper.setLastUpdate()
     }
 
-    private suspend fun updatePerHour(current: CurrentEntity) = withContext(ioDispatcher) {
+    private suspend fun updatePerHour(cityId: Long) = withContext(ioDispatcher) {
         val units = preferencesHelper.getUnits()
+        val current = currentDao.getRawCurrentByKey(cityId)
         val lat = current.latitude
         val lon = current.longitude
         val newValue = weatherApiService.getPerHourByLatLon(
