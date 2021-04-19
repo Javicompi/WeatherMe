@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="hourly"
+            type="com.example.android.weatherme.data.database.entities.perhour.HourlyEntity" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_margin">
+
+        <TextView
+            android:id="@+id/list_hourly_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:time="@{hourly.deltaTime}"
+            android:offset="@{hourly.offset}"
+            style="@style/CurrentDetailTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="09:00"/>
+
+        <TextView
+            android:id="@+id/list_hourly_temp_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:text="@{@string/degrees_character(hourly.temp)}"
+            style="@style/CurrentDetailSubtitle"
+            android:textSize="@dimen/list_item_hourly_temp_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/list_hourly_time_textview"
+            tools:text="18°"/>
+
+        <TextView
+            android:id="@+id/list_hourly_description_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:text="@{hourly.shortDescription}"
+            style="@style/CurrentDetailSubtitle"
+            android:textSize="@dimen/list_item_hourly_description_text_size"
+            app:layout_constraintStart_toEndOf="@id/list_hourly_temp_textview"
+            app:layout_constraintBottom_toBottomOf="@id/list_hourly_temp_textview"
+            tools:text="Sunny"/>
+
+        <ImageView
+            android:id="@+id/list_item_hourly_arrow"
+            android:layout_width="@dimen/list_item_hourly_arrow_size"
+            android:layout_height="@dimen/list_item_hourly_arrow_size"
+            android:src="@drawable/ic_arrow_down_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/list_item_hourly_icon"
+            android:layout_width="@dimen/list_item_hourly_icon_size"
+            android:layout_height="@dimen/list_item_hourly_icon_size"
+            android:layout_marginEnd="@dimen/medium_margin"
+            android:weatherIcon="@{hourly.icon}"
+            app:tint="#89000000"
+            app:layout_constraintEnd_toStartOf="@id/list_item_hourly_arrow"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/i01d"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

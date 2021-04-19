@@ -9,14 +9,19 @@
     <dimen name="button_height">60dp</dimen>
     <dimen name="bottom_navigation_view_height">56dp</dimen>
 
-    <dimen name="list_item_height">150dp</dimen>
-    <dimen name="list_item_icon_size">75dp</dimen>
+    <dimen name="list_item_current_height">150dp</dimen>
+    <dimen name="list_item_current_icon_size">72dp</dimen>
     <dimen name="list_item_current_margin">16dp</dimen>
     <dimen name="list_item_current_margin_bottom">8dp</dimen>
     <dimen name="list_item_current_padding">16dp</dimen>
     <dimen name="list_item_current_location_text">32sp</dimen>
-    <dimen name="list_item_corner_radius">4dp</dimen>
-    <dimen name="list_item_small_text_size">28sp</dimen>
+    <dimen name="list_item_current_corner_radius">4dp</dimen>
+    <dimen name="list_item_current_small_text_size">28sp</dimen>
+
+    <dimen name="list_item_hourly_icon_size">48dp</dimen>
+    <dimen name="list_item_hourly_arrow_size">24dp</dimen>
+    <dimen name="list_item_hourly_temp_text_size">24sp</dimen>
+    <dimen name="list_item_hourly_description_text_size">18sp</dimen>
 
     <dimen name="detail_icon_size">44dp</dimen>
 </resources>
