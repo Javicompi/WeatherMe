@@ -19,8 +19,11 @@ interface CurrentDao {
     @Query("SELECT * FROM currents WHERE cityName = :cityName")
     fun getCurrentByName(cityName: String): LiveData<CurrentEntity>
 
-    @Query("SELECT * FROM currents WHERE `cityId` = :id")
-    fun getCurrentByKey(id: Long): LiveData<CurrentEntity>
+    @Query("SELECT * FROM currents WHERE cityId = :cityId")
+    fun getCurrentByKey(cityId: Long): LiveData<CurrentEntity>
+
+    @Query("SELECT * FROM currents WHERE cityId = :cityId")
+    fun getRawCurrentByKey(cityId: Long): CurrentEntity
 
     @Query("SELECT deltaTime FROM currents WHERE cityId = :cityId")
     fun getCurrentDeltaTime(cityId: Long): Long
@@ -28,8 +31,8 @@ interface CurrentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrent(currentEntity: CurrentEntity): Long
 
-    @Query("DELETE FROM currents WHERE `cityId` = :id")
-    fun deleteCurrent(id: Long)
+    @Query("DELETE FROM currents WHERE `cityId` = :cityId")
+    fun deleteCurrent(cityId: Long)
 
     @Query("SELECT cityId FROM currents")
     fun getCityIds(): List<Long>
