@@ -33,9 +33,9 @@ object BindingAdapters {
         }
     }
 
-    @BindingAdapter("android:currentIcon")
+    @BindingAdapter("android:weatherIcon")
     @JvmStatic
-    fun ImageView.setCurrentIcon(icon: String?) {
+    fun ImageView.setWeatherIcon(icon: String?) {
         icon.let {
             if (!icon.isNullOrEmpty()) {
                 val context = this.context
@@ -95,36 +95,11 @@ object BindingAdapters {
     @SuppressLint("SimpleDateFormat")
     @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
     @JvmStatic
-    fun TextView.valueToDate(time: Long, offset: Int) {
+    fun TextView.valuetoTimeString(time: Long, offset: Int) {
         val date = Date(time)
         date.time += offset.toLong()
         val dateFormat = SimpleDateFormat("HH:mm")
         dateFormat.timeZone = TimeZone.GMT_ZONE
         text = dateFormat.format(date)
-    }
-
-    @BindingAdapter("android:set_sun_ic")
-    @JvmStatic
-    fun ImageView.setSunIc(current: CurrentEntity?) {
-        current?.let {
-            if (current.deltaTime > current.sunrise && current.deltaTime < current.sunset) {
-                setImageResource(R.drawable.ic_sunset)
-            } else {
-                setImageResource(R.drawable.ic_sunrise)
-            }
-        }
-    }
-
-    @BindingAdapter("android:set_sun_time")
-    @JvmStatic
-    fun TextView.setSunTime(current: CurrentEntity?) {
-        current?.let {
-            val time = if (current.deltaTime > current.sunrise && current.deltaTime < current.sunset) {
-                current.sunset
-            } else {
-                current.sunrise
-            }
-            text = longToStringTime(time, current.timeZone)
-        }
     }
 }
