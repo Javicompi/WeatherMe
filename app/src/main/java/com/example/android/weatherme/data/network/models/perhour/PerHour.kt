@@ -72,7 +72,7 @@ fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
                 lon = lon,
                 deltaTime = it.dt.toLong() * 1000,
                 timezone = timezone,
-                offset = timezoneOffset,
+                offset = timezoneOffset * 1000,
                 temp = it.temp.roundToInt(),
                 feelsLike = it.temp.roundToInt(),
                 pressure = it.pressure,
@@ -91,7 +91,7 @@ fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
                 weatherId = it.weather[0].id,
                 shortDescription = it.weather[0].main.capitalize(Locale.getDefault()),
                 description = it.weather[0].description.capitalize(Locale.getDefault()),
-                icon = it.weather[0].icon
+                icon = "_" + it.weather[0].icon
         )
     }
 }
