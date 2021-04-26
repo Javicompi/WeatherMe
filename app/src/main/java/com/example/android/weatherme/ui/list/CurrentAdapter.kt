@@ -9,24 +9,24 @@ import com.example.android.weatherme.data.database.entities.current.CurrentEntit
 import com.example.android.weatherme.databinding.ListItemCurrentBinding
 
 class CurrentAdapter(val clickListener: CurrentListener) :
-    ListAdapter<CurrentEntity, CurrentAdapter.ViewHolder>(CurrentDiffCallback()) {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), clickListener)
-    }
+        ListAdapter<CurrentEntity, CurrentAdapter.ViewHolder>(CurrentDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemCurrentBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position), clickListener)
+    }
 
-            fun bind(item: CurrentEntity, clickListener: CurrentListener) {
-                binding.current = item
-                binding.clickListener = clickListener
-                binding.executePendingBindings()
-            }
+    class ViewHolder private constructor(val binding: ListItemCurrentBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: CurrentEntity, clickListener: CurrentListener) {
+            binding.current = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
+        }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
