@@ -13,6 +13,7 @@ class HourlyViewModel @ViewModelInject constructor(
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
     val hourlyList = MediatorLiveData<List<HourlyEntity>>()
+    //val hourlyList = repository.getHourlys()
 
     val showData = hourlyList.map { hourlys ->
         hourlys.isNotEmpty()
