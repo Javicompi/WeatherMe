@@ -16,8 +16,7 @@ import com.example.android.weatherme.utils.PreferencesHelper
 import com.example.android.weatherme.utils.createDefaultHourlys
 import com.example.android.weatherme.utils.shouldUpdate
 import com.haroldadmin.cnradapter.NetworkResponse
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -49,12 +48,23 @@ class Repository @Inject constructor(
         return liveData {
             val cityId = preferencesHelper.getCurrentSelected()
             emitSource(hourlyDao.getHourlysByKey(cityId))
-            val lastUpdate = hourlyDao.getHourlyDeltaTime(cityId)
-            if (!preferencesHelper.getAutUpdate() && shouldUpdate(lastUpdate)) {
-                updatePerHour(cityId)
-            }
+            shouldUpdateHourlys(cityId)
         }
     }
+
+    /*fun getHourlys(): LiveData<List<HourlyEntity>> {
+        val mediatorLiveData = MediatorLiveData<List<HourlyEntity>>()
+        val cityId = preferencesHelper.getCurrentSelected()
+        mediatorLiveData.addSource(hourlyDao.getHourlysByKey(cityId)) { hourlyList ->
+            val updateTime = hourlyList[0].deltaTime
+            if (shouldUpdate(updateTime)) {
+                CoroutineScope(ioDispatcher).launch {
+                    updatePerHour(cityId)
+                }
+            }
+        }
+        return mediatorLiveData
+    }*/
 
     fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
         val cityId = if (key > 0) {
