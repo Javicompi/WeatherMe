@@ -13,9 +13,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_hourly_height"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/list_item_current_margin_bottom"
-        app:cardCornerRadius="@dimen/cardview_default_radius">
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        android:animateLayoutChanges="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -78,6 +79,18 @@
                 app:layout_constraintEnd_toStartOf="@id/list_item_hourly_arrow"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/i01d"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/list_item_hourly_details"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_item_hourly_height"
+                app:layout_constraintTop_toBottomOf="@id/list_hourly_temp_textview"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone">
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
