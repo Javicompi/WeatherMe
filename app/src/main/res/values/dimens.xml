@@ -19,7 +19,7 @@
     <dimen name="list_item_current_small_text_size">28sp</dimen>
 
     <dimen name="list_item_hourly_height">100dp</dimen>
-    <dimen name="list_item_hourly_icon_size">48dp</dimen>
+    <dimen name="list_item_hourly_icon_size">64dp</dimen>
     <dimen name="list_item_hourly_arrow_size">24dp</dimen>
     <dimen name="list_item_hourly_temp_text_size">24sp</dimen>
     <dimen name="list_item_hourly_description_text_size">18sp</dimen>
