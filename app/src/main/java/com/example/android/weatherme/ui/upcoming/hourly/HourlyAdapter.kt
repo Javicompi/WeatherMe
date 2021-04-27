@@ -1,6 +1,7 @@
 package com.example.android.weatherme.ui.upcoming.hourly
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,11 +11,24 @@ import com.example.android.weatherme.databinding.ListItemHourlyBinding
 
 class HourlyAdapter : ListAdapter<HourlyEntity, HourlyAdapter.ViewHolder>(HourlyDiffCallback()) {
 
+    private var expandedPosition = -1
+    private var prevExpandedPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val isExpanded = position == expandedPosition
+        holder.binding.listItemHourlyDetails.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        holder.itemView.isActivated = isExpanded
+        if (isExpanded) prevExpandedPosition = position
+        holder.itemView.setOnClickListener {
+            expandedPosition = if (isExpanded) -1 else position
+            notifyItemChanged(prevExpandedPosition)
+            notifyItemChanged(expandedPosition)
+
+        }
         holder.bind(getItem(position))
     }
 
