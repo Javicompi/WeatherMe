@@ -23,7 +23,7 @@
     <dimen name="list_item_hourly_arrow_size">24dp</dimen>
     <dimen name="list_item_hourly_temp_text_size">24sp</dimen>
     <dimen name="list_item_hourly_description_text_size">18sp</dimen>
-    <dimen name="list_item_hourly_details_icon_size">48dp</dimen>
+    <dimen name="list_item_hourly_details_icon_size">40dp</dimen>
     <dimen name="list_item_hourly_details_text_size">16sp</dimen>
 
     <dimen name="detail_icon_size">44dp</dimen>
