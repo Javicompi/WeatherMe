@@ -35,4 +35,9 @@ class HourlyFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadHourlys()
+    }
 }

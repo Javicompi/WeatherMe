@@ -19,12 +19,8 @@ class ListViewModel @ViewModelInject constructor(
         it.isNotEmpty()
     }
 
-    init {
-        loadCurrentList()
-    }
-
-    private fun loadCurrentList() {
-        showLoading.postValue(true)
+    fun loadCurrentList() {
+        showLoading.value = true
         viewModelScope.launch {
             currentList.addSource(repository.getCurrents()) {
                 currentList.value = it

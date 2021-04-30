@@ -39,4 +39,9 @@ class ListFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadCurrentList()
+    }
 }

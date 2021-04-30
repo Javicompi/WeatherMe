@@ -13,18 +13,13 @@ class HourlyViewModel @ViewModelInject constructor(
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
 
     val hourlyList = MediatorLiveData<List<HourlyEntity>>()
-    //val hourlyList = repository.getHourlys()
 
     val showData = hourlyList.map { hourlys ->
         hourlys.isNotEmpty()
     }
 
-    init {
-        loadHourlys()
-    }
-
-    private fun loadHourlys() {
-        showLoading.postValue(true)
+    fun loadHourlys() {
+        showLoading.value = true
         viewModelScope.launch {
             hourlyList.addSource(repository.getHourlys()) {
                 hourlyList.value = it
