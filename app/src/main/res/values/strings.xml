@@ -28,6 +28,7 @@
 
     <!-- List Item -->
     <string name="degrees_character">%s°</string>
+    <string name="uv_index">UV index</string>
 
     <!-- Current Layout -->
     <string name="current_layout_title">%s, %s</string>
