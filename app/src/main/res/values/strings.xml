@@ -64,6 +64,13 @@
     <string name="north_west">NW</string>
     <string name="north_north_west">NNW</string>
     
+    <!-- UV index -->
+    <string name="uvi_low">LOW</string>
+    <string name="uvi_medium">MEDIUM</string>
+    <string name="uvi_high">HIGH</string>
+    <string name="uvi_very_high">VERY HIGH</string>
+    <string name="uvi_extreme">EXTREME</string>
+    
     <!-- Preferences -->
     <string name="title_settings">Settings</string>
     <string name="pref_automatic_update_key">prefAutomaticUpdateKey</string>
