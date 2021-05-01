@@ -117,6 +117,16 @@
                     app:layout_constraintTop_toTopOf="@id/list_item_hourly_details_uvi_icon"
                     app:layout_constraintStart_toEndOf="@id/list_item_hourly_details_uvi_icon"/>
 
+                <TextView
+                    android:id="@+id/list_item_hourly_details_uvi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:uvi="@{hourly.uvi}"
+                    style="@style/HourlyDetailSubtitle"
+                    app:layout_constraintTop_toBottomOf="@id/list_item_hourly_details_uvi_title"
+                    app:layout_constraintStart_toEndOf="@id/list_item_hourly_details_uvi_icon"
+                    tools:text="MEDIUM"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

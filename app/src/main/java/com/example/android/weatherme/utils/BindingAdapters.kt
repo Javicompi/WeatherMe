@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.weatherme.R
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -95,11 +94,29 @@ object BindingAdapters {
     @SuppressLint("SimpleDateFormat")
     @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
     @JvmStatic
-    fun TextView.valuetoTimeString(time: Long, offset: Int) {
+    fun TextView.valueToTimeString(time: Long, offset: Int) {
         val date = Date(time)
         date.time += offset.toLong()
         val dateFormat = SimpleDateFormat("HH:mm")
         dateFormat.timeZone = TimeZone.GMT_ZONE
         text = dateFormat.format(date)
+    }
+
+    @BindingAdapter("android:uvi")
+    @JvmStatic
+    fun TextView.valueToUviString(value: Double?) {
+        value?.let {
+            text = if (it.roundToInt() <= 2) {
+                resources.getString(R.string.uvi_low)
+            } else if (it.roundToInt() <= 5) {
+                resources.getString(R.string.uvi_medium)
+            } else if (it.roundToInt() <= 7) {
+                resources.getString(R.string.uvi_high)
+            } else if (it.roundToInt() <= 10) {
+                resources.getString(R.string.uvi_very_high)
+            } else {
+                resources.getString(R.string.uvi_extreme)
+            }
+        }
     }
 }
