@@ -106,16 +106,13 @@ object BindingAdapters {
     @JvmStatic
     fun TextView.valueToUviString(value: Double?) {
         value?.let {
-            text = if (it.roundToInt() <= 2) {
-                resources.getString(R.string.uvi_low)
-            } else if (it.roundToInt() <= 5) {
-                resources.getString(R.string.uvi_medium)
-            } else if (it.roundToInt() <= 7) {
-                resources.getString(R.string.uvi_high)
-            } else if (it.roundToInt() <= 10) {
-                resources.getString(R.string.uvi_very_high)
-            } else {
-                resources.getString(R.string.uvi_extreme)
+            text = when {
+                it == 0.0 -> resources.getString(R.string.uvi_zero)
+                it <= 2.0 -> resources.getString(R.string.uvi_low)
+                it <= 5.0 -> resources.getString(R.string.uvi_medium)
+                it <= 7.0 -> resources.getString(R.string.uvi_high)
+                it <= 10.0 -> resources.getString(R.string.uvi_very_high)
+                else -> resources.getString(R.string.uvi_extreme)
             }
         }
     }

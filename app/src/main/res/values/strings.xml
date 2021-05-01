@@ -65,6 +65,7 @@
     <string name="north_north_west">NNW</string>
     
     <!-- UV index -->
+    <string name="uvi_zero">- -</string>
     <string name="uvi_low">LOW</string>
     <string name="uvi_medium">MEDIUM</string>
     <string name="uvi_high">HIGH</string>
