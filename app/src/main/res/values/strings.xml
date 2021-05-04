@@ -45,6 +45,10 @@
     <string name="current_snow">Snow</string>
     <string name="current_sunrise">Sunrise</string>
     <string name="current_sunset">Sunset</string>
+
+    <!-- Hourly item -->
+    <string name="hourly_pop">Chance of rain</string>
+    <string name="hourly_wind">Wind</string>
     
     <!-- Wind directions -->
     <string name="north">N</string>

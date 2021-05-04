@@ -18,4 +18,5 @@
 
     <!-- Current details -->
     <color name="current_text_color">#89000000</color>
+    <color name="current_detail_icon_color">#89000000</color>
 </resources>
