@@ -66,11 +66,11 @@
     
     <!-- UV index -->
     <string name="uvi_zero">- -</string>
-    <string name="uvi_low">LOW</string>
-    <string name="uvi_medium">MEDIUM</string>
-    <string name="uvi_high">HIGH</string>
-    <string name="uvi_very_high">VERY HIGH</string>
-    <string name="uvi_extreme">EXTREME</string>
+    <string name="uvi_low">Low</string>
+    <string name="uvi_medium">Medium</string>
+    <string name="uvi_high">High</string>
+    <string name="uvi_very_high">Very high</string>
+    <string name="uvi_extreme">Extreme</string>
     
     <!-- Preferences -->
     <string name="title_settings">Settings</string>
