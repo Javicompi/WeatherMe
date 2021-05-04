@@ -31,6 +31,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_thermometer"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,6 +59,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_cloud"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@id/detail_thermomether_ic"
             android:layout_marginStart="@dimen/large_margin"/>
@@ -77,7 +79,7 @@
             android:layout_height="0dp"
             android:text="@{@string/current_percent(current.clouds)}"
             style="@style/CurrentDetailSubtitle"
-            app:layout_constraintStart_toEndOf="@+id/detail_cloud_ic"
+            app:layout_constraintStart_toEndOf="@id/detail_cloud_ic"
             app:layout_constraintTop_toBottomOf="@id/cloud_cover_textview"
             tools:text="80%" />
 
@@ -86,6 +88,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_humidity"
+            app:tint="@color/current_detail_icon_color"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_thermomether_ic" />
@@ -114,6 +117,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_barometer"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/detail_humidity_ic"
             app:layout_constraintBottom_toBottomOf="@id/detail_humidity_ic"
@@ -143,6 +147,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_wind_speed"
+            app:tint="@color/current_detail_icon_color"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_humidity_ic"/>
@@ -171,6 +176,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_wind_direction"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/detail_wind_speed_ic"
             app:layout_constraintBottom_toBottomOf="@id/detail_wind_speed_ic"
@@ -201,6 +207,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_raindrops"
+            app:tint="@color/current_detail_icon_color"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_wind_speed_ic"/>
@@ -229,6 +236,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_snowflake"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/detail_raindrops_ic"
             app:layout_constraintBottom_toBottomOf="@id/detail_raindrops_ic"
@@ -258,6 +266,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_sunrise"
+            app:tint="@color/current_detail_icon_color"
             android:layout_marginTop="@dimen/large_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_raindrops_ic"/>
@@ -287,6 +296,7 @@
             android:layout_width="@dimen/detail_icon_size"
             android:layout_height="@dimen/detail_icon_size"
             android:src="@drawable/ic_sunset"
+            app:tint="@color/current_detail_icon_color"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/detail_sunrise_ic"
             app:layout_constraintBottom_toBottomOf="@id/detail_sunrise_ic"
