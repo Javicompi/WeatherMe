@@ -1,6 +1,7 @@
 package com.example.android.weatherme.data
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.CurrentDao
@@ -9,8 +10,10 @@ import com.example.android.weatherme.data.database.entities.current.CurrentEntit
 import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
+import com.example.android.weatherme.data.network.models.ErrorResponse
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
+import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
 import com.example.android.weatherme.utils.PreferencesHelper
 import com.example.android.weatherme.utils.createDefaultHourlys
@@ -44,38 +47,85 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getHourlys(): LiveData<List<HourlyEntity>> {
-        return liveData {
-            val cityId = preferencesHelper.getCurrentSelected()
-            emitSource(hourlyDao.getHourlysByKey(cityId))
-            shouldUpdateHourlys(cityId)
-        }
-    }
+    fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
 
-    /*fun getHourlys(): LiveData<List<HourlyEntity>> {
-        val mediatorLiveData = MediatorLiveData<List<HourlyEntity>>()
-        val cityId = preferencesHelper.getCurrentSelected()
-        mediatorLiveData.addSource(hourlyDao.getHourlysByKey(cityId)) { hourlyList ->
-            val updateTime = hourlyList[0].deltaTime
-            if (shouldUpdate(updateTime)) {
-                CoroutineScope(ioDispatcher).launch {
-                    updatePerHour(cityId)
+        return object : NetworkBoundResource<CurrentEntity, NetworkResponse<Current, ErrorResponse>>() {
+
+            override fun processResponse(response: NetworkResponse<Current, ErrorResponse>): CurrentEntity {
+                Log.d("NetworkBoundResource", "processResponse")
+                return (response as NetworkResponse.Success).body.toEntity()
+            }
+
+            override suspend fun saveResult(item: CurrentEntity): Unit = withContext(ioDispatcher) {
+                Log.d("NetworkBoundResource", "saveResult")
+                currentDao.insertCurrent(item)
+            }
+
+            override fun shouldFetch(data: CurrentEntity?): Boolean {
+                Log.d("NetworkBoundResource", "shouldFetch")
+                return if (data != null && !preferencesHelper.getAutUpdate()) {
+                    shouldUpdate(data.deltaTime)
+                } else {
+                    false
                 }
             }
-        }
-        return mediatorLiveData
-    }*/
 
-    fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
-        val cityId = if (key > 0) {
-            key.also { preferencesHelper.setCurrentSelected(it) }
-        } else {
-            preferencesHelper.getCurrentSelected()
-        }
-        return liveData {
-            emitSource(currentDao.getCurrentByKey(cityId))
-            shouldUpdateCurrent(cityId)
-        }
+            override suspend fun loadFromDb(): CurrentEntity = withContext(ioDispatcher) {
+                Log.d("NetworkBoundResource", "loadFromDb")
+                val id = if (key > 0) {
+                    key.also { preferencesHelper.setCurrentSelected(it) }
+                } else {
+                    preferencesHelper.getCurrentSelected()
+                }
+                return@withContext currentDao.getRawCurrentByKey(id)
+            }
+
+            override suspend fun createCall(data: CurrentEntity): NetworkResponse<Current, ErrorResponse> {
+                Log.d("NetworkBoundResource", "createCall")
+                val units = preferencesHelper.getUnits()
+                return weatherApiService.getCurrentResponseById(id = data.cityId, units = units)
+            }
+        }.asLiveData()
+    }
+
+    fun getHourlys(): LiveData<List<HourlyEntity>> {
+
+        return object : NetworkBoundResource<List<HourlyEntity>, NetworkResponse<PerHour, ErrorResponse>>() {
+
+            override fun processResponse(response: NetworkResponse<PerHour, ErrorResponse>): List<HourlyEntity> {
+                Log.d("NetworkBoundResource", "processResponse")
+                val id = preferencesHelper.getCurrentSelected()
+                return (response as NetworkResponse.Success).body.toHourlyEntityList(id)
+            }
+
+            override suspend fun saveResult(item: List<HourlyEntity>): Unit = withContext(ioDispatcher) {
+                Log.d("NetworkBoundResource", "saveResult")
+                hourlyDao.updateHourlysByKey(item)
+            }
+
+            override fun shouldFetch(data: List<HourlyEntity>?): Boolean {
+                Log.d("NetworkBoundResource", "shouldFetch")
+                return if (!data.isNullOrEmpty()) {
+                    shouldUpdate(data[0].deltaTime)
+                } else {
+                    false
+                }
+            }
+
+            override suspend fun loadFromDb(): List<HourlyEntity> = withContext(ioDispatcher) {
+                Log.d("NetworkBoundResource", "loadFromDb")
+                val id = preferencesHelper.getCurrentSelected()
+                return@withContext hourlyDao.getRawHourlysByKey(id)
+            }
+
+            override suspend fun createCall(data: List<HourlyEntity>): NetworkResponse<PerHour, ErrorResponse> {
+                Log.d("NetworkBoundResource", "createCall")
+                val lat = data[0].lat
+                val lon = data[0].lon
+                val units = preferencesHelper.getUnits()
+                return weatherApiService.getPerHourByLatLon(latitude = lat, longitude = lon, units = units)
+            }
+        }.asLiveData()
     }
 
     suspend fun deleteCurrent(key: Long) = withContext(ioDispatcher) {
@@ -125,29 +175,6 @@ class Repository @Inject constructor(
             is NetworkResponse.UnknownError -> {
                 Result.GenericError()
             }
-        }
-    }
-
-    private suspend fun shouldUpdateCurrent(cityId: Long) = withContext(ioDispatcher) {
-        val deltaTime = currentDao.getCurrentDeltaTime(cityId)
-        if (shouldUpdate(deltaTime)) {
-            updateCurrent(cityId)
-        }
-    }
-
-    private suspend fun shouldUpdateHourlys(cityId: Long) = withContext(ioDispatcher) {
-        val deltaTime = hourlyDao.getHourlyDeltaTime(cityId)
-        if (shouldUpdate(deltaTime)) {
-            updatePerHour(cityId)
-        }
-    }
-
-    private suspend fun updateCurrent(cityId: Long) = withContext(ioDispatcher) {
-        val units = preferencesHelper.getUnits()
-        val current = weatherApiService.getCurrentResponseById(id = cityId, units = units)
-        if (current is NetworkResponse.Success) {
-            val entity = current.body.toEntity()
-            currentDao.insertCurrent(entity)
         }
     }
 
