@@ -26,7 +26,7 @@ data class HourlyEntity(
         val visibility: Int,
         val windSpeed: Int,
         val windDegrees: Int,
-        val pop: Double,
+        val pop: Int,
         val rainOneHour: Double = 0.0,
         val rainThreeHours: Double = 0.0,
         val snowOneHour: Double = 0.0,

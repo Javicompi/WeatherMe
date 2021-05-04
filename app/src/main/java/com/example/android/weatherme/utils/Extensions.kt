@@ -101,7 +101,7 @@ fun createDefaultHourlys(current: CurrentEntity): List<HourlyEntity> {
             visibility = 0,
             windSpeed = 0,
             windDegrees = 0,
-            pop = 0.0,
+            pop = 0,
             weatherId = 0,
             shortDescription = "",
             description = "",

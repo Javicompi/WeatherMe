@@ -83,7 +83,7 @@ fun PerHour.toHourlyEntityList(cityId: Long): List<HourlyEntity> {
                 visibility = it.visibility,
                 windSpeed = it.windSpeed.roundToInt(),
                 windDegrees = it.windDeg,
-                pop = it.pop,
+                pop = (it.pop * 100).toInt(),
                 rainOneHour = it.rain?.oneHour ?: 0.0,
                 rainThreeHours = it.rain?.threeHours ?: 0.0,
                 snowOneHour = it.snow?.oneHour ?: 0.0,
