@@ -2,7 +2,7 @@ package com.example.android.weatherme.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 
 @Dao
 interface HourlyDao {

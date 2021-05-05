@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.weatherme.R
-import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import com.example.android.weatherme.databinding.ListItemHourlyBinding
 
 class HourlyAdapter : ListAdapter<HourlyEntity, HourlyAdapter.ViewHolder>(HourlyDiffCallback()) {

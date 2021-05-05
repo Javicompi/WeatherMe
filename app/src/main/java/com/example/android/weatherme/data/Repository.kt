@@ -7,7 +7,7 @@ import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.CurrentDao
 import com.example.android.weatherme.data.database.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.ErrorResponse

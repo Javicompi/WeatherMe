@@ -97,7 +97,7 @@ object BindingAdapters {
     fun TextView.valueToTimeString(time: Long, offset: Int) {
         val date = Date(time)
         date.time += offset.toLong()
-        val dateFormat = SimpleDateFormat("HH:mm")
+        val dateFormat = SimpleDateFormat("EEE, HH:mm")
         dateFormat.timeZone = TimeZone.GMT_ZONE
         text = dateFormat.format(date)
     }

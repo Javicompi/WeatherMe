@@ -3,7 +3,7 @@ package com.example.android.weatherme.ui.upcoming.hourly
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
-import com.example.android.weatherme.data.database.entities.perhour.HourlyEntity
+import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import kotlinx.coroutines.launch
 
 class HourlyViewModel @ViewModelInject constructor(
