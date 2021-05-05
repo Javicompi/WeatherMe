@@ -23,11 +23,11 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class Repository @Inject constructor(
-        private val ioDispatcher: CoroutineDispatcher,
-        private val currentDao: CurrentDao,
-        private val hourlyDao: HourlyDao,
-        private val weatherApiService: WeatherApiService,
-        private val preferencesHelper: PreferencesHelper
+    private val ioDispatcher: CoroutineDispatcher,
+    private val currentDao: CurrentDao,
+    private val hourlyDao: HourlyDao,
+    private val weatherApiService: WeatherApiService,
+    private val preferencesHelper: PreferencesHelper
 ) {
 
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
@@ -49,7 +49,8 @@ class Repository @Inject constructor(
 
     fun getCurrentByKey(key: Long): LiveData<CurrentEntity> {
 
-        return object : NetworkBoundResource<CurrentEntity, NetworkResponse<Current, ErrorResponse>>() {
+        return object :
+            NetworkBoundResource<CurrentEntity, NetworkResponse<Current, ErrorResponse>>() {
 
             override fun processResponse(response: NetworkResponse<Current, ErrorResponse>): CurrentEntity {
                 Log.d("NetworkBoundResource", "processResponse")
@@ -90,7 +91,8 @@ class Repository @Inject constructor(
 
     fun getHourlys(): LiveData<List<HourlyEntity>> {
 
-        return object : NetworkBoundResource<List<HourlyEntity>, NetworkResponse<PerHour, ErrorResponse>>() {
+        return object :
+            NetworkBoundResource<List<HourlyEntity>, NetworkResponse<PerHour, ErrorResponse>>() {
 
             override fun processResponse(response: NetworkResponse<PerHour, ErrorResponse>): List<HourlyEntity> {
                 Log.d("NetworkBoundResource", "processResponse")
@@ -98,10 +100,11 @@ class Repository @Inject constructor(
                 return (response as NetworkResponse.Success).body.toHourlyEntityList(id)
             }
 
-            override suspend fun saveResult(item: List<HourlyEntity>): Unit = withContext(ioDispatcher) {
-                Log.d("NetworkBoundResource", "saveResult")
-                hourlyDao.updateHourlysByKey(item)
-            }
+            override suspend fun saveResult(item: List<HourlyEntity>): Unit =
+                withContext(ioDispatcher) {
+                    Log.d("NetworkBoundResource", "saveResult")
+                    hourlyDao.updateHourlysByKey(item)
+                }
 
             override fun shouldFetch(data: List<HourlyEntity>?): Boolean {
                 Log.d("NetworkBoundResource", "shouldFetch")
@@ -123,7 +126,11 @@ class Repository @Inject constructor(
                 val lat = data[0].lat
                 val lon = data[0].lon
                 val units = preferencesHelper.getUnits()
-                return weatherApiService.getPerHourByLatLon(latitude = lat, longitude = lon, units = units)
+                return weatherApiService.getPerHourByLatLon(
+                    latitude = lat,
+                    longitude = lon,
+                    units = units
+                )
             }
         }.asLiveData()
     }
@@ -137,7 +144,7 @@ class Repository @Inject constructor(
     suspend fun searchCurrentByName(name: String): Result<Current> = withContext(ioDispatcher) {
         val units = preferencesHelper.getUnits()
         val response = weatherApiService.getCurrentResponseByName(location = name, units = units)
-        return@withContext when(response) {
+        return@withContext when (response) {
             is NetworkResponse.Success -> {
                 Result.Success(response.body)
             }
@@ -153,30 +160,31 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun searchCurrentByLocation(location: Location): Result<Current> = withContext(ioDispatcher) {
-        val units = preferencesHelper.getUnits()
-        val lat = location.latitude
-        val lon = location.longitude
-        val response = weatherApiService.getCurrentResponseByLatLon(
+    suspend fun searchCurrentByLocation(location: Location): Result<Current> =
+        withContext(ioDispatcher) {
+            val units = preferencesHelper.getUnits()
+            val lat = location.latitude
+            val lon = location.longitude
+            val response = weatherApiService.getCurrentResponseByLatLon(
                 latitude = lat,
                 longitude = lon,
                 units = units
-        )
-        return@withContext when(response) {
-            is NetworkResponse.Success -> {
-                Result.Success(response.body)
-            }
-            is NetworkResponse.NetworkError -> {
-                Result.NetworkError(response.error.localizedMessage)
-            }
-            is NetworkResponse.ServerError -> {
-                Result.GenericError(response.code, response.body)
-            }
-            is NetworkResponse.UnknownError -> {
-                Result.GenericError()
+            )
+            return@withContext when (response) {
+                is NetworkResponse.Success -> {
+                    Result.Success(response.body)
+                }
+                is NetworkResponse.NetworkError -> {
+                    Result.NetworkError(response.error.localizedMessage)
+                }
+                is NetworkResponse.ServerError -> {
+                    Result.GenericError(response.code, response.body)
+                }
+                is NetworkResponse.UnknownError -> {
+                    Result.GenericError()
+                }
             }
         }
-    }
 
     suspend fun updateCurrents(forceUpdate: Boolean = false) = withContext(ioDispatcher) {
         val units = preferencesHelper.getUnits()
@@ -184,8 +192,8 @@ class Repository @Inject constructor(
         for (current in currents) {
             if (forceUpdate || shouldUpdate(current.deltaTime)) {
                 val newCurrent = weatherApiService.getCurrentResponseById(
-                        id = current.cityId,
-                        units = units
+                    id = current.cityId,
+                    units = units
                 )
                 if (newCurrent is NetworkResponse.Success) {
                     currentDao.insertCurrent(newCurrent.body.toEntity())
@@ -204,9 +212,9 @@ class Repository @Inject constructor(
         val lat = current.latitude
         val lon = current.longitude
         val newValue = weatherApiService.getPerHourByLatLon(
-                latitude = lat,
-                longitude = lon,
-                units = units
+            latitude = lat,
+            longitude = lon,
+            units = units
         )
         if (newValue is NetworkResponse.Success) {
             val hourlys = newValue.body.toHourlyEntityList(current.cityId)
