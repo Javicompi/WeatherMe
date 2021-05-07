@@ -3,8 +3,11 @@
     <string name="title_list">Locations</string>
     <string name="title_current">Current</string>
     <string name="title_upcoming">Upcoming</string>
+    <string name="title_weather">Weather</string>
     <string name="title_search">Search</string>
     <string name="title_result">Result</string>
+    <string name="title_48_hours">48 hours</string>
+    <string name="title_7_days">7 days</string>
     
     <!-- List Fragment -->
     <string name="no_data_list">No elements to show</string>

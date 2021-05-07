@@ -11,8 +11,8 @@
         android:label="@string/title_list"
         tools:layout="@layout/fragment_list" >
         <action
-            android:id="@+id/action_navigation_list_to_navigation_current"
-            app:destination="@id/navigation_current"
+            android:id="@+id/action_navigation_list_to_navigation_weather"
+            app:destination="@id/navigation_weather"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
@@ -31,10 +31,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_upcoming"
-        android:name="com.example.android.weatherme.ui.upcoming.UpcomingFragment"
+        android:id="@+id/navigation_weather"
+        android:name="com.example.android.weatherme.ui.weather.WeatherFragment"
         android:label="@string/title_upcoming"
-        tools:layout="@layout/fragment_upcoming">
+        tools:layout="@layout/fragment_weather">
+        <argument
+            android:name="selectedCurrent"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 
     <fragment
@@ -44,7 +48,7 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_navigation_search_to_resultSearchFragment"
-            app:destination="@id/resultSearchFragment"
+            app:destination="@id/navigation_result_search"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:launchSingleTop="false"
@@ -53,23 +57,31 @@
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
-        android:id="@+id/resultSearchFragment"
+        android:id="@+id/navigation_result_search"
         android:name="com.example.android.weatherme.ui.search.ResultSearchFragment"
         android:label="@string/title_result" >
         <argument
             android:name="current"
             app:argType="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
         <action
-            android:id="@+id/action_resultSearchFragment_to_navigation_current"
-            app:destination="@id/navigation_current"
+            android:id="@+id/action_resultSearchFragment_to_navigation_weather"
+            app:destination="@id/navigation_weather"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_open_enter"
-            app:popExitAnim="@anim/fragment_open_exit"
-            app:popUpTo="@id/navigation_current" />
+            app:popExitAnim="@anim/fragment_open_exit" />
     </fragment>
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.example.android.weatherme.ui.settings.SettingsFragment"
         android:label="@string/title_settings" />
+    <fragment
+        android:id="@+id/hourlyFragment"
+        android:name="com.example.android.weatherme.ui.weather.hourly.HourlyFragment"
+        android:label="HourlyFragment" >
+        <argument
+            android:name="selectedCurrent"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

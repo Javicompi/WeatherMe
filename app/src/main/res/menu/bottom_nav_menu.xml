@@ -7,14 +7,9 @@
         android:title="@string/title_list" />
 
     <item
-        android:id="@+id/navigation_current"
+        android:id="@+id/navigation_weather"
         android:icon="@drawable/ic_current_black"
-        android:title="@string/title_current" />
-
-    <item
-        android:id="@+id/navigation_upcoming"
-        android:icon="@drawable/ic_upcoming"
-        android:title="@string/title_upcoming" />
+        android:title="@string/title_weather" />
 
     <item
         android:id="@+id/navigation_search"

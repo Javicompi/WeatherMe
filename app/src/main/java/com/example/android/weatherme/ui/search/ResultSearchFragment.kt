@@ -20,12 +20,6 @@ class ResultSearchFragment : Fragment() {
 
     private val arguments: ResultSearchFragmentArgs by navArgs()
 
-    /*private val viewModel: ResultSearchViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(activity, ResultSearchViewModelFactory(activity.application))
-                .get(ResultSearchViewModel::class.java)
-    }*/
-
     private val viewModel: ResultSearchViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,7 +42,7 @@ class ResultSearchFragment : Fragment() {
             Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
         })
         viewModel.navigateToCurrentFragment.observe(viewLifecycleOwner, { id ->
-            val action = ResultSearchFragmentDirections.actionResultSearchFragmentToNavigationCurrent(id)
+            val action = ResultSearchFragmentDirections.actionResultSearchFragmentToNavigationWeather(id)
             findNavController().navigate(action)
         })
 

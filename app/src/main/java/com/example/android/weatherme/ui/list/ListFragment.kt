@@ -25,7 +25,7 @@ class ListFragment : Fragment() {
         binding.viewModel = viewModel
 
         val adapter = CurrentAdapter(CurrentListener { current ->
-            val action = ListFragmentDirections.actionNavigationListToNavigationCurrent(current.cityId)
+            val action = ListFragmentDirections.actionNavigationListToNavigationWeather(current.cityId)
             findNavController().navigate(action)
         })
 
