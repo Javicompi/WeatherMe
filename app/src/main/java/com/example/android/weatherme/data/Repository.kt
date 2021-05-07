@@ -89,15 +89,15 @@ class Repository @Inject constructor(
         }.asLiveData()
     }
 
-    fun getHourlys(): LiveData<List<HourlyEntity>> {
+    fun getHourlys(id: Long): LiveData<List<HourlyEntity>> {
 
         return object :
             NetworkBoundResource<List<HourlyEntity>, NetworkResponse<PerHour, ErrorResponse>>() {
 
             override fun processResponse(response: NetworkResponse<PerHour, ErrorResponse>): List<HourlyEntity> {
                 Log.d("NetworkBoundResource", "processResponse")
-                val id = preferencesHelper.getCurrentSelected()
-                return (response as NetworkResponse.Success).body.toHourlyEntityList(id)
+                val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
+                return (response as NetworkResponse.Success).body.toHourlyEntityList(cityId)
             }
 
             override suspend fun saveResult(item: List<HourlyEntity>): Unit =
@@ -117,8 +117,8 @@ class Repository @Inject constructor(
 
             override suspend fun loadFromDb(): List<HourlyEntity> = withContext(ioDispatcher) {
                 Log.d("NetworkBoundResource", "loadFromDb")
-                val id = preferencesHelper.getCurrentSelected()
-                return@withContext hourlyDao.getRawHourlysByKey(id)
+                val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
+                return@withContext hourlyDao.getRawHourlysByKey(cityId)
             }
 
             override suspend fun createCall(data: List<HourlyEntity>): NetworkResponse<PerHour, ErrorResponse> {
