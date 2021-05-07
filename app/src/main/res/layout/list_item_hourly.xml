@@ -29,7 +29,7 @@
                 android:id="@+id/list_hourly_time_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:time="@{hourly.deltaTime}"
+                android:toDate="@{hourly.deltaTime}"
                 android:offset="@{hourly.offset}"
                 style="@style/CurrentDetailTitle"
                 android:textColor="@color/list_item_current_text_color"

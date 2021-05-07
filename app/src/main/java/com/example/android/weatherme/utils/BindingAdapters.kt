@@ -92,12 +92,23 @@ object BindingAdapters {
     }
 
     @SuppressLint("SimpleDateFormat")
-    @BindingAdapter(value = ["android:time", "android:offset"], requireAll = true)
+    @BindingAdapter(value = ["android:toDate", "android:offset"], requireAll = true)
+    @JvmStatic
+    fun TextView.valueToDateString(time: Long, offset: Int) {
+        val date = Date(time)
+        date.time += offset.toLong()
+        val dateFormat = SimpleDateFormat("EEE, HH:mm")
+        dateFormat.timeZone = TimeZone.GMT_ZONE
+        text = dateFormat.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @BindingAdapter(value = ["android:toTime", "android:offset"], requireAll = true)
     @JvmStatic
     fun TextView.valueToTimeString(time: Long, offset: Int) {
         val date = Date(time)
         date.time += offset.toLong()
-        val dateFormat = SimpleDateFormat("EEE, HH:mm")
+        val dateFormat = SimpleDateFormat("HH:mm")
         dateFormat.timeZone = TimeZone.GMT_ZONE
         text = dateFormat.format(date)
     }
