@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.example.android.weatherme.ui.upcoming.hourly.HourlyViewModel" />
+            type="com.example.android.weatherme.ui.weather.hourly.HourlyViewModel" />
 
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.upcoming.daily.DailyFragment">
+        tools:context=".ui.weather.daily.DailyFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hourly_recycler"
