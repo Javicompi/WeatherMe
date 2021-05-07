@@ -1,4 +1,4 @@
-package com.example.android.weatherme.ui.upcoming.hourly
+package com.example.android.weatherme.ui.weather.hourly
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.LayoutInflater

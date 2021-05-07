@@ -1,4 +1,4 @@
-package com.example.android.weatherme.ui.upcoming.daily
+package com.example.android.weatherme.ui.weather.daily
 
 import android.os.Bundle
 import android.view.LayoutInflater
