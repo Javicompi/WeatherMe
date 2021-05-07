@@ -17,7 +17,7 @@ class HourlyViewModel @ViewModelInject constructor(
     }
 
     val showData = hourlyList.map { hourlys ->
-        hourlys.isNotEmpty()
+        hourlys.isNotEmpty() && hourlys.size > 1
     }
 
     fun loadHourlys(cityId: Long) {
