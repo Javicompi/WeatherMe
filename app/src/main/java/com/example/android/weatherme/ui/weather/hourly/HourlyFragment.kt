@@ -1,4 +1,4 @@
-package com.example.android.weatherme.ui.upcoming.hourly
+package com.example.android.weatherme.ui.weather.hourly
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.android.weatherme.R
+import androidx.navigation.fragment.navArgs
 import com.example.android.weatherme.databinding.FragmentHourlyBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class HourlyFragment : Fragment() {
 
     private val viewModel: HourlyViewModel by viewModels()
+
+    private val arguments: HourlyFragmentArgs by navArgs()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -38,6 +40,6 @@ class HourlyFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.loadHourlys()
+        viewModel.loadHourlys(arguments.selectedCurrent)
     }
 }
