@@ -22,7 +22,7 @@ class CurrentViewModel @ViewModelInject constructor(
     }
 
     val setShowData: LiveData<Boolean> = currentSelected.map { current ->
-        current.cityName?.isNotEmpty() ?: false
+        current?.cityName?.isNotEmpty() ?: false
     }
 
     val setShowLoading: MutableLiveData<Boolean> = MutableLiveData()
