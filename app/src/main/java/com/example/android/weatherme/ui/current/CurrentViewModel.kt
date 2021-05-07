@@ -21,8 +21,8 @@ class CurrentViewModel @ViewModelInject constructor(
             repository.getCurrentByKey(cityId)
     }
 
-    val setShowData: LiveData<Boolean> = Transformations.map(currentSelected) {
-        it != null && it.cityName?.isNotEmpty() ?: false
+    val setShowData: LiveData<Boolean> = currentSelected.map { current ->
+        current.cityName?.isNotEmpty() ?: false
     }
 
     val setShowLoading: MutableLiveData<Boolean> = MutableLiveData()
@@ -33,7 +33,10 @@ class CurrentViewModel @ViewModelInject constructor(
 
     fun deleteCurrent() {
         viewModelScope.launch {
-            currentSelected.value?.let { repository.deleteCurrent(it.cityId) }
+            currentSelected.value?.let {
+                repository.deleteCurrent(it.cityId)
+                savedStateHandle["cityId"] = 0L
+            }
         }
     }
 }
