@@ -1,8 +1,10 @@
 package com.example.android.weatherme.data.network.models.daily
 
 
+import com.example.android.weatherme.data.database.entities.daily.DailyEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlin.math.roundToInt
 
 @JsonClass(generateAdapter = true)
 data class PerDay(
@@ -66,6 +68,50 @@ data class PerDay(
             val main: String,
             val description: String,
             val icon: String
+        )
+    }
+}
+
+fun PerDay.toDailyEntityList(cityId: Long): List<DailyEntity> {
+    return daily.map {
+        DailyEntity(
+            id = null,
+            cityId = cityId,
+            lat = lat,
+            lon = lon,
+            deltaTime = it.dt.toLong() * 1000,
+            timezone = timezone,
+            offset = timezoneOffset,
+            sunrise = it.sunrise.toLong() * 1000,
+            sunset = it.sunset.toLong() * 1000,
+            moonrise = it.moonrise.toLong() * 1000,
+            moonset = it.moonset.toLong() * 1000,
+            moonPhase = it.moonPhase,
+            tempMax = it.temp.max.roundToInt(),
+            tempMin = it.temp.min.roundToInt(),
+            tempMorn = it.temp.morn.roundToInt(),
+            tempDay = it.temp.day.roundToInt(),
+            tempNight = it.temp.night.roundToInt(),
+            tempEve = it.temp.eve.roundToInt(),
+            feelsLikeMorn = it.feelsLike.morn.roundToInt(),
+            feelsLikeDay = it.feelsLike.day.roundToInt(),
+            feelsLikeNight = it.feelsLike.night.roundToInt(),
+            feelsLikeEve = it.feelsLike.eve.roundToInt(),
+            pressure = it.pressure,
+            humidity = it.humidity,
+            dewPoint = it.dewPoint,
+            windSpeed = it.windSpeed.roundToInt(),
+            windDegrees = it.windDeg,
+            windGust = it.windGust?.toInt() ?: 0,
+            clouds = it.clouds,
+            pop = (it.pop * 100).roundToInt(),
+            rain = it.rain ?: 0.0,
+            snow = it.snow ?: 0.0,
+            uvi = it.uvi,
+            weatherId = it.weather[0].id,
+            description = it.weather[0].description,
+            shortDescription = it.weather[0].main,
+            icon = "_" + it.weather[0].icon
         )
     }
 }
