@@ -13,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.daily.DailyEntity
 import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -109,4 +110,49 @@ fun createDefaultHourlys(current: CurrentEntity): List<HourlyEntity> {
     )
     hourlyList.add(hourlyEntity)
     return hourlyList
+}
+
+fun createDefaultDailys(current: CurrentEntity): List<DailyEntity> {
+    val dailyList = arrayListOf<DailyEntity>()
+    val dailyEntity = DailyEntity(
+        id = null,
+        cityId = current.cityId,
+        lat = current.latitude,
+        lon = current.longitude,
+        deltaTime = 0,
+        timezone = "",
+        offset = current.timeZone,
+        sunrise = 0,
+        sunset = 0,
+        moonrise = 0,
+        moonset = 0,
+        moonPhase = 0.0,
+        tempMax = 0,
+        tempMin = 0,
+        tempMorn = 0,
+        tempDay = 0,
+        tempNight = 0,
+        tempEve = 0,
+        feelsLikeMorn = 0,
+        feelsLikeDay = 0,
+        feelsLikeNight = 0,
+        feelsLikeEve = 0,
+        pressure = 0,
+        humidity = 0,
+        dewPoint = 0.0,
+        windSpeed = 0,
+        windDegrees = 0,
+        windGust = 0,
+        clouds = 0,
+        pop = 0,
+        rain = 0.0,
+        snow = 0.0,
+        uvi = 0.0,
+        weatherId = 0,
+        description = "",
+        shortDescription = "",
+        icon = ""
+    )
+    dailyList.add(dailyEntity)
+    return dailyList
 }
