@@ -4,8 +4,8 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.example.android.weatherme.data.database.CurrentDao
-import com.example.android.weatherme.data.database.HourlyDao
+import com.example.android.weatherme.data.database.daos.CurrentDao
+import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result

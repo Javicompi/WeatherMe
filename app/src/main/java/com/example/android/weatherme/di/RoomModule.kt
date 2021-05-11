@@ -2,8 +2,8 @@ package com.example.android.weatherme.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.android.weatherme.data.database.CurrentDao
-import com.example.android.weatherme.data.database.HourlyDao
+import com.example.android.weatherme.data.database.daos.CurrentDao
+import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.database.WeatherDatabase
 import dagger.Module
 import dagger.Provides

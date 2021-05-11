@@ -1,4 +1,4 @@
-package com.example.android.weatherme.data.database
+package com.example.android.weatherme.data.database.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
