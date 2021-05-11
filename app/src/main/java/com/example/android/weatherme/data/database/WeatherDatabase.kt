@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.android.weatherme.data.database.daos.CurrentDao
+import com.example.android.weatherme.data.database.daos.DailyDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
 import com.example.android.weatherme.data.database.entities.daily.DailyEntity
@@ -20,6 +21,8 @@ abstract class WeatherDatabase : RoomDatabase() {
     abstract fun currentDao(): CurrentDao
 
     abstract fun hourlyDao(): HourlyDao
+
+    abstract fun dailyDao(): DailyDao
 
     companion object {
         @Volatile
