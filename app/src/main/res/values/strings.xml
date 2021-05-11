@@ -31,6 +31,7 @@
 
     <!-- List Item -->
     <string name="degrees_character">%s°</string>
+    <string name="degrees_max_temp">${degrees_character}/</string>
     <string name="uv_index">UV index</string>
 
     <!-- Current Layout -->
