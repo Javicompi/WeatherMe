@@ -103,6 +103,17 @@ object BindingAdapters {
     }
 
     @SuppressLint("SimpleDateFormat")
+    @BindingAdapter(value = ["android:toWeekDay", "android:offset"], requireAll = true)
+    @JvmStatic
+    fun TextView.valueToWeekDayString(time: Long, offset: Int) {
+        val date = Date(time)
+        date.time += offset.toLong()
+        val dateFormat = SimpleDateFormat("EEEEE")
+        dateFormat.timeZone = TimeZone.GMT_ZONE
+        text = dateFormat.format(date)
+    }
+
+    @SuppressLint("SimpleDateFormat")
     @BindingAdapter(value = ["android:toTime", "android:offset"], requireAll = true)
     @JvmStatic
     fun TextView.valueToTimeString(time: Long, offset: Int) {
