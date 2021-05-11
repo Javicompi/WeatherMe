@@ -103,19 +103,15 @@ class Repository @Inject constructor(
             NetworkBoundResource<List<HourlyEntity>, NetworkResponse<PerHour, ErrorResponse>>() {
 
             override fun processResponse(response: NetworkResponse<PerHour, ErrorResponse>): List<HourlyEntity> {
-                Log.d("NetworkBoundResource", "processResponse")
                 val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
                 return (response as NetworkResponse.Success).body.toHourlyEntityList(cityId)
             }
 
-            override suspend fun saveResult(hourlys: List<HourlyEntity>): Unit =
-                withContext(ioDispatcher) {
-                    Log.d("NetworkBoundResource", "saveResult")
-                    hourlyDao.updateHourlysByKey(hourlys)
+            override suspend fun saveResult(item: List<HourlyEntity>) = withContext(ioDispatcher) {
+                    hourlyDao.updateHourlysByKey(item)
                 }
 
             override fun shouldFetch(data: List<HourlyEntity>?): Boolean {
-                Log.d("NetworkBoundResource", "shouldFetch")
                 return if (!data.isNullOrEmpty()) {
                     shouldUpdate(data[0].deltaTime)
                 } else {
@@ -151,8 +147,8 @@ class Repository @Inject constructor(
                 return (response as NetworkResponse.Success).body.toDailyEntityList(cityId)
             }
 
-            override suspend fun saveResult(dailys: List<DailyEntity>) = withContext(ioDispatcher) {
-                dailyDao.updateDailysByKey(dailys)
+            override suspend fun saveResult(item: List<DailyEntity>) = withContext(ioDispatcher) {
+                dailyDao.updateDailysByKey(item)
             }
 
             override fun shouldFetch(data: List<DailyEntity>?): Boolean {
