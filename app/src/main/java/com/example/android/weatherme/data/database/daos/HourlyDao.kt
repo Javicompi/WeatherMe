@@ -10,7 +10,7 @@ interface HourlyDao {
     @Query("SELECT * FROM hourlys WHERE `cityId` = :id")
     fun getHourlysByKey(id: Long): LiveData<List<HourlyEntity>>
 
-    @Query("SELECT * FROM hourlys WHERE `cityId` =:id")
+    @Query("SELECT * FROM hourlys WHERE `cityId` = :id")
     fun getRawHourlysByKey(id: Long): List<HourlyEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -25,6 +25,6 @@ interface HourlyDao {
         insertHourlys(hourlys)
     }
 
-    @Query("SELECT deltaTime FROM hourlys WHERE cityId =:cityId ORDER BY deltaTime ASC ")
+    @Query("SELECT deltaTime FROM hourlys WHERE cityId = :cityId ORDER BY deltaTime ASC ")
     fun getHourlyDeltaTime(cityId: Long): Long
 }
