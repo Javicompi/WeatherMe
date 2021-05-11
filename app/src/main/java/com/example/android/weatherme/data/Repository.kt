@@ -5,14 +5,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.daos.CurrentDao
+import com.example.android.weatherme.data.database.daos.DailyDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.daily.DailyEntity
 import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.ErrorResponse
 import com.example.android.weatherme.data.network.models.current.Current
 import com.example.android.weatherme.data.network.models.current.toEntity
+import com.example.android.weatherme.data.network.models.daily.PerDay
+import com.example.android.weatherme.data.network.models.daily.toDailyEntityList
 import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
 import com.example.android.weatherme.utils.PreferencesHelper
@@ -26,6 +30,7 @@ class Repository @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     private val currentDao: CurrentDao,
     private val hourlyDao: HourlyDao,
+    private val dailyDao: DailyDao,
     private val weatherApiService: WeatherApiService,
     private val preferencesHelper: PreferencesHelper
 ) {
@@ -100,10 +105,10 @@ class Repository @Inject constructor(
                 return (response as NetworkResponse.Success).body.toHourlyEntityList(cityId)
             }
 
-            override suspend fun saveResult(item: List<HourlyEntity>): Unit =
+            override suspend fun saveResult(hourlys: List<HourlyEntity>): Unit =
                 withContext(ioDispatcher) {
                     Log.d("NetworkBoundResource", "saveResult")
-                    hourlyDao.updateHourlysByKey(item)
+                    hourlyDao.updateHourlysByKey(hourlys)
                 }
 
             override fun shouldFetch(data: List<HourlyEntity>?): Boolean {
@@ -132,6 +137,45 @@ class Repository @Inject constructor(
                     units = units
                 )
             }
+        }.asLiveData()
+    }
+
+    fun getDailys(id: Long): LiveData<List<DailyEntity>> {
+        return object :
+            NetworkBoundResource<List<DailyEntity>, NetworkResponse<PerDay, ErrorResponse>>() {
+            override fun processResponse(response: NetworkResponse<PerDay, ErrorResponse>): List<DailyEntity> {
+                val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
+                return (response as NetworkResponse.Success).body.toDailyEntityList(cityId)
+            }
+
+            override suspend fun saveResult(dailys: List<DailyEntity>) = withContext(ioDispatcher) {
+                dailyDao.updateDailysByKey(dailys)
+            }
+
+            override fun shouldFetch(data: List<DailyEntity>?): Boolean {
+                return if (!data.isNullOrEmpty()) {
+                    shouldUpdate(data[0].deltaTime)
+                } else {
+                    false
+                }
+            }
+
+            override suspend fun loadFromDb(): List<DailyEntity> = withContext(ioDispatcher) {
+                val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
+                return@withContext dailyDao.getRawDailysByKey(cityId)
+            }
+
+            override suspend fun createCall(data: List<DailyEntity>): NetworkResponse<PerDay, ErrorResponse> {
+                val lat = data[0].lat
+                val lon = data[0].lon
+                val units = preferencesHelper.getUnits()
+                return weatherApiService.getDailyByLatLon(
+                    latitude = lat,
+                    longitude = lon,
+                    units = units
+                )
+            }
+
         }.asLiveData()
     }
 
