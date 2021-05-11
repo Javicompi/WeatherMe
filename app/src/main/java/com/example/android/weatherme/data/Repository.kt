@@ -20,6 +20,7 @@ import com.example.android.weatherme.data.network.models.daily.toDailyEntityList
 import com.example.android.weatherme.data.network.models.perhour.PerHour
 import com.example.android.weatherme.data.network.models.perhour.toHourlyEntityList
 import com.example.android.weatherme.utils.PreferencesHelper
+import com.example.android.weatherme.utils.createDefaultDailys
 import com.example.android.weatherme.utils.createDefaultHourlys
 import com.example.android.weatherme.utils.shouldUpdate
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -38,7 +39,9 @@ class Repository @Inject constructor(
     suspend fun saveCurrent(current: CurrentEntity): Long = withContext(ioDispatcher) {
         val id = currentDao.insertCurrent(current)
         val defaultHourlys = createDefaultHourlys(current)
+        val defaultDailys = createDefaultDailys(current)
         hourlyDao.insertHourlys(defaultHourlys)
+        dailyDao.insertDailys(defaultDailys)
         return@withContext id
     }
 
@@ -182,6 +185,7 @@ class Repository @Inject constructor(
     suspend fun deleteCurrent(key: Long) = withContext(ioDispatcher) {
         currentDao.deleteCurrent(key)
         hourlyDao.deleteHourlys(key)
+        dailyDao.deleteDailys(key)
         preferencesHelper.setCurrentSelected(0)
     }
 
@@ -244,13 +248,14 @@ class Repository @Inject constructor(
                 }
             }
             if (forceUpdate) {
-                updatePerHour(current.cityId)
+                updateHourly(current.cityId)
+                updateDaily(current.cityId)
             }
         }
         preferencesHelper.setLastUpdate()
     }
 
-    private suspend fun updatePerHour(cityId: Long) = withContext(ioDispatcher) {
+    private suspend fun updateHourly(cityId: Long) = withContext(ioDispatcher) {
         val units = preferencesHelper.getUnits()
         val current = currentDao.getRawCurrentByKey(cityId)
         val lat = current.latitude
@@ -263,6 +268,22 @@ class Repository @Inject constructor(
         if (newValue is NetworkResponse.Success) {
             val hourlys = newValue.body.toHourlyEntityList(current.cityId)
             hourlyDao.updateHourlysByKey(hourlys)
+        }
+    }
+
+    private suspend fun updateDaily(cityId: Long) {
+        val units = preferencesHelper.getUnits()
+        val current = currentDao.getRawCurrentByKey(cityId)
+        val lat = current.latitude
+        val lon = current.longitude
+        val newValue = weatherApiService.getDailyByLatLon(
+            latitude = lat,
+            longitude = lon,
+            units = units
+        )
+        if (newValue is NetworkResponse.Success) {
+            val dailys = newValue.body.toDailyEntityList(current.cityId)
+            dailyDao.updateDailysByKey(dailys)
         }
     }
 }
