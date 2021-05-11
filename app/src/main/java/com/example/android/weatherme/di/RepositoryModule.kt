@@ -2,6 +2,7 @@ package com.example.android.weatherme.di
 
 import com.example.android.weatherme.data.Repository
 import com.example.android.weatherme.data.database.daos.CurrentDao
+import com.example.android.weatherme.data.database.daos.DailyDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.utils.PreferencesHelper
@@ -23,6 +24,7 @@ object RepositoryModule {
         dbDispatcher: CoroutineDispatcher,
         currentDao: CurrentDao,
         hourlyDao: HourlyDao,
+        dailyDao: DailyDao,
         weatherApiService: WeatherApiService,
         preferencesHelper: PreferencesHelper
     ): Repository {
@@ -30,6 +32,7 @@ object RepositoryModule {
                 dbDispatcher,
                 currentDao,
                 hourlyDao,
+                dailyDao,
                 weatherApiService,
                 preferencesHelper
         )

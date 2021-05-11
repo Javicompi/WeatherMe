@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.android.weatherme.data.database.daos.CurrentDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
 import com.example.android.weatherme.data.database.WeatherDatabase
+import com.example.android.weatherme.data.database.daos.DailyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,12 +28,17 @@ object RoomModule {
     }
 
     @Provides
-    fun provideCurrentWeatherDao(database: WeatherDatabase): CurrentDao {
+    fun provideCurrentDao(database: WeatherDatabase): CurrentDao {
         return database.currentDao()
     }
 
     @Provides
-    fun providePerHourDao(database: WeatherDatabase): HourlyDao {
+    fun provideHourlyDao(database: WeatherDatabase): HourlyDao {
         return database.hourlyDao()
+    }
+
+    @Provides
+    fun provideDailyDao(database: WeatherDatabase): DailyDao {
+        return database.dailyDao()
     }
 }
