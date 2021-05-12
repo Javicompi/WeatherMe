@@ -27,6 +27,15 @@ class DailyFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val adapter = DailyAdapter()
+        binding.dailyRecyclerview.adapter = adapter
+
+        viewModel.dailyList.observe(viewLifecycleOwner, { dailyList ->
+            dailyList.let {
+                adapter.submitList(dailyList)
+            }
+        })
+
         return binding.root
     }
 
