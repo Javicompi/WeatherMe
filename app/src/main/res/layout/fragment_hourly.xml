@@ -14,7 +14,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.weather.daily.DailyFragment">
+        tools:context=".ui.weather.hourly.HourlyFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hourly_recycler"
@@ -33,11 +33,7 @@
             android:layout_gravity="center"
             android:textSize="20sp"
             android:text="@string/no_data_list"
-            android:fadeVisible="@{!viewModel.showData}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:fadeVisible="@{!viewModel.showData}"/>
 
     </FrameLayout>
 
