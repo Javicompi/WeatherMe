@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.CurrentEntity
 import com.example.android.weatherme.databinding.ListItemCurrentBinding
 
 class CurrentAdapter(val clickListener: CurrentListener) :

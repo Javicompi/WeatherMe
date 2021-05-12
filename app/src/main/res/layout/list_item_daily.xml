@@ -7,7 +7,7 @@
 
         <variable
             name="daily"
-            type="com.example.android.weatherme.data.database.entities.daily.DailyEntity" />
+            type="com.example.android.weatherme.data.database.entities.DailyEntity" />
 
     </data>
 

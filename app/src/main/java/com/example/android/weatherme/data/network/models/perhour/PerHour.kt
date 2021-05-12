@@ -1,6 +1,6 @@
 package com.example.android.weatherme.data.network.models.perhour
 
-import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
+import com.example.android.weatherme.data.database.entities.HourlyEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.util.*

@@ -62,7 +62,7 @@
         android:label="@string/title_result" >
         <argument
             android:name="current"
-            app:argType="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
+            app:argType="com.example.android.weatherme.data.database.entities.CurrentEntity" />
         <action
             android:id="@+id/action_resultSearchFragment_to_navigation_weather"
             app:destination="@id/navigation_weather"

@@ -1,6 +1,6 @@
 package com.example.android.weatherme.data.network.models.current
 
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.CurrentEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import java.util.*

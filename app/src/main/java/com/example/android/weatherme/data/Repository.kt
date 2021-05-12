@@ -7,9 +7,9 @@ import androidx.lifecycle.liveData
 import com.example.android.weatherme.data.database.daos.CurrentDao
 import com.example.android.weatherme.data.database.daos.DailyDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.daily.DailyEntity
-import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
+import com.example.android.weatherme.data.database.entities.CurrentEntity
+import com.example.android.weatherme.data.database.entities.DailyEntity
+import com.example.android.weatherme.data.database.entities.HourlyEntity
 import com.example.android.weatherme.data.network.api.Result
 import com.example.android.weatherme.data.network.api.WeatherApiService
 import com.example.android.weatherme.data.network.models.ErrorResponse
@@ -120,13 +120,11 @@ class Repository @Inject constructor(
             }
 
             override suspend fun loadFromDb(): List<HourlyEntity> = withContext(ioDispatcher) {
-                Log.d("NetworkBoundResource", "loadFromDb")
                 val cityId = if (id > 0) id else preferencesHelper.getCurrentSelected()
                 return@withContext hourlyDao.getRawHourlysByKey(cityId)
             }
 
             override suspend fun createCall(data: List<HourlyEntity>): NetworkResponse<PerHour, ErrorResponse> {
-                Log.d("NetworkBoundResource", "createCall")
                 val lat = data[0].lat
                 val lon = data[0].lon
                 val units = preferencesHelper.getUnits()

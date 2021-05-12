@@ -7,9 +7,9 @@ import androidx.room.RoomDatabase
 import com.example.android.weatherme.data.database.daos.CurrentDao
 import com.example.android.weatherme.data.database.daos.DailyDao
 import com.example.android.weatherme.data.database.daos.HourlyDao
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
-import com.example.android.weatherme.data.database.entities.daily.DailyEntity
-import com.example.android.weatherme.data.database.entities.hourly.HourlyEntity
+import com.example.android.weatherme.data.database.entities.CurrentEntity
+import com.example.android.weatherme.data.database.entities.DailyEntity
+import com.example.android.weatherme.data.database.entities.HourlyEntity
 
 @Database(
         entities = [CurrentEntity::class, HourlyEntity::class, DailyEntity::class],

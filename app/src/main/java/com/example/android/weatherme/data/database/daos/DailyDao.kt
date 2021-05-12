@@ -2,7 +2,7 @@ package com.example.android.weatherme.data.database.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.android.weatherme.data.database.entities.daily.DailyEntity
+import com.example.android.weatherme.data.database.entities.DailyEntity
 
 @Dao
 interface DailyDao {

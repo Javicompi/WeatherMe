@@ -1,7 +1,7 @@
 package com.example.android.weatherme.data.network.models.daily
 
 
-import com.example.android.weatherme.data.database.entities.daily.DailyEntity
+import com.example.android.weatherme.data.database.entities.DailyEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlin.math.roundToInt

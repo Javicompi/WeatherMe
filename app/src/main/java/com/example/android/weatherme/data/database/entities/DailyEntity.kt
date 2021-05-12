@@ -1,4 +1,4 @@
-package com.example.android.weatherme.data.database.entities.daily
+package com.example.android.weatherme.data.database.entities
 
 import android.os.Parcelable
 import androidx.room.Entity

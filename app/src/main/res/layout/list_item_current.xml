@@ -11,7 +11,7 @@
         
         <variable
             name="current"
-            type="com.example.android.weatherme.data.database.entities.current.CurrentEntity" />
+            type="com.example.android.weatherme.data.database.entities.CurrentEntity" />
 
     </data>
 

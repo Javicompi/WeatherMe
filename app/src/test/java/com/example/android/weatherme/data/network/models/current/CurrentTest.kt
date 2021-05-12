@@ -1,7 +1,7 @@
 package com.example.android.weatherme.data.network.models.current
 
 import com.example.android.weatherme.data.createCurrent
-import com.example.android.weatherme.data.database.entities.current.CurrentEntity
+import com.example.android.weatherme.data.database.entities.CurrentEntity
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.isA
 import org.hamcrest.MatcherAssert.assertThat
