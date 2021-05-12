@@ -57,28 +57,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/list_daily_max_temp_textview"
+                android:id="@+id/list_daily_max_min_temp_textview"
                 android:layout_marginTop="@dimen/medium_margin"
-                android:text="@{@string/degrees_max_temp(daily.tempMax)}"
+                android:text="@{@string/degrees_max_min_temp(daily.tempMax, daily.tempMin)}"
                 style="@style/CurrentDetailSubtitle"
                 android:textColor="@color/list_item_current_text_color"
                 android:textSize="@dimen/list_item_hourly_temp_text_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/list_daily_time_textview"
-                tools:text="20°/"/>
-
-            <TextView
-                android:id="@+id/list_daily_min_temp_textview"
-                style="@style/CurrentDetailSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/list_item_daily_negative_margin"
-                android:text="@{@string/degrees_character(daily.tempMin)}"
-                android:textColor="@color/list_item_current_text_color"
-                android:textSize="@dimen/list_item_hourly_temp_text_size"
-                app:layout_constraintBottom_toBottomOf="@+id/list_daily_max_temp_textview"
-                app:layout_constraintStart_toEndOf="@id/list_daily_max_temp_textview"
-                tools:text="14°"/>
+                tools:text="20°/14°"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,8 +77,8 @@
                 style="@style/CurrentDetailSubtitle"
                 android:textColor="@color/list_item_current_text_color"
                 android:textSize="@dimen/list_item_hourly_description_text_size"
-                app:layout_constraintStart_toEndOf="@id/list_daily_min_temp_textview"
-                app:layout_constraintBottom_toBottomOf="@id/list_daily_min_temp_textview"
+                app:layout_constraintStart_toEndOf="@id/list_daily_max_min_temp_textview"
+                app:layout_constraintBottom_toBottomOf="@id/list_daily_max_min_temp_textview"
                 tools:text="Sunny"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -101,7 +88,7 @@
                 android:paddingStart="@dimen/medium_margin"
                 android:paddingEnd="@dimen/medium_margin"
                 android:paddingTop="@dimen/medium_margin"
-                app:layout_constraintTop_toBottomOf="@id/list_daily_max_temp_textview"
+                app:layout_constraintTop_toBottomOf="@id/list_daily_max_min_temp_textview"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:visibility="gone"
                 tools:visibility="visible">
