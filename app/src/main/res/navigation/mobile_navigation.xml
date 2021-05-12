@@ -84,4 +84,13 @@
             app:argType="long"
             android:defaultValue="0L" />
     </fragment>
+    <fragment
+        android:id="@+id/dailyFragment"
+        android:name="com.example.android.weatherme.ui.weather.daily.DailyFragment"
+        android:label="DailyFragment">
+        <argument
+            android:name="selectedCurrent"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>
