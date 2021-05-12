@@ -6,8 +6,8 @@ import androidx.lifecycle.*
 import com.example.android.weatherme.data.Repository
 
 class HourlyViewModel @ViewModelInject constructor(
-        private val repository: Repository,
-        @Assisted private val savedStateHandle: SavedStateHandle
+    private val repository: Repository,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val showLoading: MutableLiveData<Boolean> = MutableLiveData()
