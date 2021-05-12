@@ -1,12 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.android.weatherme.ui.weather.daily.DailyViewModel"/>
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Daily Fragment"/>
+        tools:context=".ui.weather.daily.DailyFragment">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/daily_recyclerview"
+            android:fadeVisible="@{viewModel.showData}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:padding="@dimen/small_margin"
+            android:clipToPadding="false"
+            tools:listitem="@layout/list_item_daily"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/no_data_dailys_textview"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:text="@string/no_data_list"
+            android:fadeVisible="@{!viewModel.showData}"/>
+
+    </FrameLayout>
+</layout>
