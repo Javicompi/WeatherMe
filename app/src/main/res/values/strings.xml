@@ -31,8 +31,10 @@
 
     <!-- List Item -->
     <string name="degrees_character">%s°</string>
-    <string name="degrees_max_temp">${degrees_character}/</string>
+    <string name="degrees_max_min_temp">%s°/%s°</string>
     <string name="uv_index">UV index</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
 
     <!-- Current Layout -->
     <string name="current_layout_title">%s, %s</string>

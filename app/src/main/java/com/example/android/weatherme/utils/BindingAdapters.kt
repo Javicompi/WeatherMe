@@ -108,9 +108,21 @@ object BindingAdapters {
     fun TextView.valueToWeekDayString(time: Long, offset: Int) {
         val date = Date(time)
         date.time += offset.toLong()
-        val dateFormat = SimpleDateFormat("EEEEE")
-        dateFormat.timeZone = TimeZone.GMT_ZONE
-        text = dateFormat.format(date)
+        val today = Calendar.getInstance()
+        val savedDate = Calendar.getInstance()
+        savedDate.time = date
+        if (today.get(Calendar.DAY_OF_YEAR) == savedDate.get(Calendar.DAY_OF_YEAR)) {
+            text = resources.getString(R.string.today)
+        } else {
+            today.add(Calendar.DAY_OF_YEAR, 1)
+            if (today.get(Calendar.DAY_OF_YEAR) == savedDate.get(Calendar.DAY_OF_YEAR)) {
+                text = resources.getString(R.string.tomorrow)
+            } else {
+                val dateFormat = SimpleDateFormat("EEEE")
+                dateFormat.timeZone = TimeZone.GMT_ZONE
+                text = dateFormat.format(date).capitalize(Locale.getDefault())
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

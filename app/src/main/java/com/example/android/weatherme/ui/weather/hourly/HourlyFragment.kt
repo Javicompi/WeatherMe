@@ -31,7 +31,7 @@ class HourlyFragment : Fragment() {
 
         viewModel.hourlyList.observe(viewLifecycleOwner, { hourlyList ->
             hourlyList.let {
-                adapter.submitList(hourlyList)
+                adapter.submitList(it)
             }
         })
 
