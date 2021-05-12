@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.android.weatherme.R
 import com.example.android.weatherme.databinding.FragmentHourlyBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +27,8 @@ class HourlyFragment : Fragment() {
         val binding = FragmentHourlyBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        val columnCount = resources.getInteger(R.integer.grid_column_count)
+        binding.hourlyRecycler.layoutManager = GridLayoutManager(activity, columnCount)
 
         val adapter = HourlyAdapter()
         binding.hourlyRecycler.adapter = adapter
