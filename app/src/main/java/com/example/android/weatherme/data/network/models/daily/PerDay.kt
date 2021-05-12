@@ -81,7 +81,7 @@ fun PerDay.toDailyEntityList(cityId: Long): List<DailyEntity> {
             lon = lon,
             deltaTime = it.dt.toLong() * 1000,
             timezone = timezone,
-            offset = timezoneOffset,
+            offset = timezoneOffset * 1000,
             sunrise = it.sunrise.toLong() * 1000,
             sunset = it.sunset.toLong() * 1000,
             moonrise = it.moonrise.toLong() * 1000,
