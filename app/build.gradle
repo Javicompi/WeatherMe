@@ -50,15 +50,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment:2.3.5'
-    implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.preference:preference-ktx:1.1.1"
 
     // AndroidX Test - JVM testing
     testImplementation "androidx.test:core-ktx:1.3.0"
@@ -75,7 +75,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.3.0'
     androidTestImplementation "androidx.test.ext:junit-ktx:1.1.2"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "androidx.work:work-testing:2.5.0"
+    androidTestImplementation "androidx.work:work-testing:2.6.0-alpha02"
 
     //Hamcrest
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
@@ -98,9 +98,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
-    //Datastore
-    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha06"
-
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
@@ -116,7 +113,7 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.5.0"
 
     //Location
-    implementation "com.google.android.gms:play-services-location:17.1.0"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
 
     //NetworkResponseAdapter
     implementation "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
